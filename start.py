@@ -13,7 +13,6 @@ load_dotenv()
 
 # Quart app
 app = Quart(__name__)
-config = None
 
 # Async setup function to load configs and create secrets
 @app.before_serving
@@ -24,6 +23,7 @@ async def setup_app():
     configuration_manager = ConfigurationManager() # Configuration manager for the application
     webhook_secret = await secret_manager.get_or_create_webhook_secret()
     app.secret_key = await secret_manager.get_or_create_app_secret()
+    global config
     config = await configuration_manager.load_config()
 
     # Mastodon client
