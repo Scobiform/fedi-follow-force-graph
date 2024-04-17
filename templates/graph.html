@@ -38,8 +38,8 @@ function generateGraphData(userId, userName, userAvatar, followers, followings) 
     const followerNodes = followers.map(f => ({ id: f.id, username: f.username, type: 'follower', avatar: f.avatar }));
     const followingNodes = followings.map(f => ({ id: f.id, username: f.username, type: 'following', avatar: f.avatar }));
     nodes.push(...followerNodes, ...followingNodes);
-    const links = followerNodes.map(f => ({ source: user.id, target: f.id }))
-                        .concat(followingNodes.map(f => ({ source: user.id, target: f.id })));
+    const links = followerNodes.map(f => ({ source: userId, target: f.id }))
+                        .concat(followingNodes.map(f => ({ source: userId, target: f.id })));
     return { nodes, links };
 }
 
