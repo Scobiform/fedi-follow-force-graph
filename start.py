@@ -22,7 +22,7 @@ async def setup_app():
     secret_manager = await SecretManager.create() # Secret manager for the application
     global configuration_manager
     configuration_manager = ConfigurationManager() # Configuration manager for the application
-    webhook_secret = secret_manager.get_or_create_webhook_secret()
+    webhook_secret = await secret_manager.get_or_create_webhook_secret()
     app.secret_key = await secret_manager.get_or_create_app_secret()
     config = await configuration_manager.load_config()
 
