@@ -7,10 +7,13 @@ document.addEventListener('DOMContentLoaded', async function() {
         const userJson = '{{ user | tojson | safe }}';  
         console.log(userJson)
         const user = JSON.parse(userJson);
+        const userId = user.id;
+        const userAvatar = user.avatar;
+        const userName = user.username;
 
-        const followers = await fetchAllItems(user.id, 'followers'); 
-        const followings = await fetchAllItems(user.id, 'following');
-        const graphData = generateGraphData(user, followers, followings); 
+        const followers = await fetchAllItems(userId, 'followers'); 
+        const followings = await fetchAllItems(userId, 'following');
+        const graphData = generateGraphData(userId, userName, userAvatar, followers, followings); 
         window.graph = initGraph(graphData); 
     } catch (error) {
         console.error('Initialization failed:', error); 
@@ -31,8 +34,8 @@ async function fetchAllItems(userId, endpoint) {
     return items;
 }
 
-function generateGraphData(user, followers, followings) {
-    const nodes = [{ id: user.id, username: user.username, type: 'user', avatar: user.avatar }];
+function generateGraphData(userId, userName, userAvatar, followers, followings) {
+    const nodes = [{ id: userId, username: userName, type: 'user', avatar: userAvatar }];
     const followerNodes = followers.map(f => ({ id: f.id, username: f.username, type: 'follower', avatar: f.avatar }));
     const followingNodes = followings.map(f => ({ id: f.id, username: f.username, type: 'following', avatar: f.avatar }));
     nodes.push(...followerNodes, ...followingNodes);
