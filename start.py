@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 import json
 import logging
 import os
@@ -19,11 +20,20 @@ app = Quart(__name__)
 config = None
 graph_data = None
 
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default."""
+    if isinstance(obj, datetime):
+        return obj.isoformat()
+    raise TypeError("Type not serializable")
+
 # Components
 async def get_graph(user, api_base_url):
-    ''' Pass the user data to the template.'''
-    user = json.dumps(user)
-    return await render_template('graph.html', user=user, api_base_url=api_base_url)
+    """Pass user data and API base URL to the graph template."""
+    try:
+        user_serialized = json.dumps(user, default=json_serial)
+        return await render_template('graph.html', user=user_serialized, api_base_url=api_base_url)
+    except TypeError as e:
+        print(f"Serialization error: {e}")
 
 async def generate_graph_data(user, followers, followings):
     # Add the authenticated user as the central node
