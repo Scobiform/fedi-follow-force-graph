@@ -36,15 +36,14 @@ async def generate_graph_data(user, followers, followings):
 
 async def fetch_all_items(user, method):
     items = []
-    next_page = None
+    max_id = None
 
     while True:
-        response = await method(user['id'], limit=500, page=next_page)
-        items.extend(response.items)
-        next_page = response.next_page  # This would depend on how pagination info is provided
-
-        if not next_page:
+        response = await method(user['id'], limit=500, max_id=max_id)
+        items.extend(response)
+        if len(response) < 500:
             break
+        max_id = response[-1]['id']
 
     return items
 
