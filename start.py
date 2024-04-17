@@ -70,8 +70,8 @@ async def home():
         user = mastodon.account_verify_credentials()
 
         # Fetch followers and followings
-        followers = mastodon.account_followers(user['id'])
-        followings = mastodon.account_following(user['id'])
+        followers = mastodon.account_followers(user['id'], limit=500)
+        followings = mastodon.account_following(user['id'], limit=500)
 
         # Generate graph data
         graph = await get_graph(await generate_graph_data(user, followers, followings))
