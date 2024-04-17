@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 async function fetchAllItems(userId, endpoint, apiBaseUrl, accessToken) {
   let items = [];
   let maxId = null;
-  let morePagesAvailable = true;
 
   while (morePagesAvailable) {
     let url = `${apiBaseUrl}/${endpoint}?user_id=${userId}&limit=500`;
@@ -39,9 +38,8 @@ async function fetchAllItems(userId, endpoint, apiBaseUrl, accessToken) {
     items = items.concat(data);  // Concatenate new data
     if (data.length > 0) {
         maxId = data[data.length - 1].id;  // Update maxId for the next page
-        morePagesAvailable = true;  // Assume more pages are available
     } else {
-        morePagesAvailable = false;  // No more pages
+        break;
     }
     console.log(`New maxId: ${maxId}`, `More pages: ${morePagesAvailable}`);  // Log new maxId and page availability
   }
