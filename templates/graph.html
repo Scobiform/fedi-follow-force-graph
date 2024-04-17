@@ -45,13 +45,13 @@
   
   function filterNodes(filterType) {
     const filteredData = {
-        nodes: graphData.nodes.filter(node => filterType === 'all' || node.type === filterType),
-        links: graphData.links.filter(link => {
-            const sourceVisible = filterType === 'all' || link.source.type === filterType;
-            const targetVisible = filterType === 'all' || link.target.type === filterType;
-            return sourceVisible && targetVisible;
-        })
-    };
+      nodes: graphData.nodes.filter(node => filterType === 'all' || node.type === filterType),
+      links: graphData.links.filter(link => {
+          const sourceVisible = filterType === 'all' || link.source.type === filterType;
+          const targetVisible = filterType === 'all' || link.target.type === filterType;
+          return sourceVisible && targetVisible;
+      })
+  };
 
   // Update the graph with the filtered data
   Graph.graphData(filteredData);

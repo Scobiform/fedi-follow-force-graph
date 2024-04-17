@@ -12,9 +12,9 @@
     <header>
         {% if logged_in %}
             <p>Welcome, {{ user.username }}!</p>
-            <a href="/logout">Logout</a>
+            <button onclick="window.location.href='/logout';">Logout</button>
         {% else %}
-            <a href="/login">Login with Mastodon</a>
+            <button onclick="window.location.href='/login';">Login with Mastodon</button>
         {% endif %}
 
         <!-- Buttons to show and hide nodes based on type-->
