@@ -1,6 +1,7 @@
 <div id="graph"></div>
 <script>
 
+  const N = 80;
   const graphData = {{ graph_data | tojson }};
 
   const Graph = ForceGraph()(document.getElementById('graph'))
