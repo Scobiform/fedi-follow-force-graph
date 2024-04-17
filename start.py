@@ -48,9 +48,6 @@ async def fetch_all_items(user, method):
     # Logging
     logging.info(f"Method: {method}")
     logging.info(f"User: {user}")
-    logging.info(f"Max ID: {max_id}")
-    logging.info(f"Response: {response}")
-    logging.info(f"Response length: {len(response)}")
     logging.info(f"Items length: {len(items)}")
 
     return items
