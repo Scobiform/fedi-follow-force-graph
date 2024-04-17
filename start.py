@@ -149,7 +149,7 @@ async def fetch_followers():
         return jsonify({'error': 'User ID is required'}), 400
 
     try:
-        followers = list(mastodon.account_followers(user_id, limit=40))
+        followers = list(mastodon.account_followers(user_id, limit=420))
         all_followers = followers
 
         while followers:
