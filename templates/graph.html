@@ -23,7 +23,7 @@ async function fetchAllItems(userId, endpoint, apiBaseUrl, accessToken) {
     let items = [];
     let maxId = null;
     do {
-        const response = await fetch(`${apiBaseUrl}/${endpoint}/${userId}?limit=500&max_id=${maxId}`, {
+        const response = await fetch(`${apiBaseUrl}/${endpoint}?user_id=${userId}?limit=500&max_id=${maxId}`, {
             headers: { 'Authorization': `Bearer ${accessToken}` }
         });
         const data = await response.json();
