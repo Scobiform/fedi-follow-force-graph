@@ -1,6 +1,7 @@
 <div id="graph"></div>
 <script>
   //const graphData = {{ graph_data | tojson }};
+  const rootId = 0;
   const N = 300;
   const graphData = { nodes: [...Array(N).keys()].map(i => ({ id: i, collapsed: i !== rootId, childLinks: [] })),
       links: [...Array(N).keys()]
