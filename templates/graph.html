@@ -8,7 +8,33 @@
 
   const Graph = ForceGraph()(document.getElementById('graph'))
     .graphData(graphData)
-    .nodeLabel(node => node.username)
+    .nodeCanvasObject((node, ctx, globalScale) => {
+      const label = node.username;
+      const fontSize = 12/globalScale;
+      const imgSize = 12; // Set the size of the avatar image
+      ctx.font = `${fontSize}px Sans-Serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Color nodes differently based on their type
+      if (node.type === 'follower') {
+        ctx.fillStyle = 'red'; // Color for followers
+      } else {
+        ctx.fillStyle = 'blue'; // Color for followings
+      }
+
+      // Draw the label
+      ctx.fillText(label, node.x, node.y + imgSize / 2 + fontSize);
+
+      // Draw the avatar image
+      if (node.avatar) {
+        const avatar = new Image();
+        avatar.src = node.avatar;
+        avatar.onload = () => {
+          ctx.drawImage(avatar, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
+        };
+      }
+    })
     .onNodeClick(node => console.log(node));
 
   // Configuration for forces
