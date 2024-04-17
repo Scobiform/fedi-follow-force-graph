@@ -21,45 +21,7 @@ graph_data = None
 # Components
 async def get_graph(user, api_base_url):
     ''' Pass the user data to the template.'''
-    return await render_template('graph.html', user=user, api_base_url=api_base_url)
-
-async def generate_graph_data(user, followers, followings):
-    # Add the authenticated user as the central node
-    nodes = [{'id': user['id'], 'username': user['username']}]
-
-    # Create nodes for followers with a type attribute
-    nodes_followers = [{'id': u['id'], 'username': u['username'], 'avatar': u['avatar'], 'type': 'follower'} for u in followers]
-
-    # Create nodes for followings with a different type attribute
-    nodes_followings = [{'id': u['id'], 'username': u['username'], 'avatar': u['avatar'], 'type': 'following'} for u in followings]
-    
-    # Combine all nodes
-    nodes += nodes_followers + nodes_followings
-
-    # Create links from the central user to each follower and following
-    links = [{'source': user['id'], 'target': follower['id']} for follower in followers]
-    links += [{'source': user['id'], 'target': following['id']} for following in followings]
-
-    #logging.info(f"Generated graph data: {nodes}, {links}")
-    return {'nodes': nodes, 'links': links}
-
-async def fetch_all_items(user, method):
-    items = []
-    max_id = None
-
-    while True:
-        response = method(user['id'], limit=500, max_id=max_id)
-        items.extend(response)
-        if len(response) < 500:
-            break
-        max_id = response[-1]['id']
-
-    # Logging
-    logging.info(f"Method: {method}")
-    logging.info(f"User: {user}")
-    logging.info(f"Items length: {len(items)}")
-
-    return items
+    return await render_template('graph.html', user=user, api_base_url=os.getenv('APP_URL'))
 
 # Async setup function to load configs and create secrets
 @app.before_serving
@@ -106,7 +68,7 @@ async def home():
     else:
         # Render the template without user data
         return await render_template('index.html', logged_in=False)
-    
+
 @app.route('/login')
 async def login():
     redirect_uri = os.getenv('APP_URL')+'/callback'
@@ -178,6 +140,15 @@ async def webhook():
         return 'OK'
     else:
         return 'Push was not to master branch', 200
+
+@app.route('/fetch_followers', methods=['GET'])
+async def fetch_followers():
+    user_id = request.args.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'User ID is required'}), 400
+
+    followers = mastodon.account_followers(user_id)
+    return jsonify(followers)
 
 if __name__ == '__main__':
     asyncio.run(app.run(host='localhost', port=5003, debug=False))
