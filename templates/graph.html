@@ -8,9 +8,8 @@
     .nodeLabel(node => node.username)
     .onNodeClick(node => console.log(node));
 
-  // Configuration for forces if supported by the library
+  // Configuration for forces
   Graph.d3Force('charge', d3.forceManyBody().strength(-120));
   Graph.d3Force('link', d3.forceLink().distance(50));
 
-  Graph.onEngineStop(() => Graph.zoomToFit(400));
 </script>
