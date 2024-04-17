@@ -51,7 +51,7 @@ class SecretManager:
         '''Verify the GitHub webhook signature asynchronously.'''
         webhook_secret = await self.get_or_create_webhook_secret()
         webhook_secret = webhook_secret.encode()
-        computed_signature = 'sha256=' + hmac.new(webhook_secret, payload_body.encode(), hashlib.sha256).hexdigest()
+        computed_signature = 'sha256=' + hmac.new(webhook_secret, payload_body, hashlib.sha256).hexdigest()
         return hmac.compare_digest(github_signature, computed_signature)
 
     async def get_or_create_client_secret(self):
