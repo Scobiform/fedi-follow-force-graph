@@ -4,14 +4,15 @@ document.addEventListener('DOMContentLoaded', async function() {
     try {
         const apiBaseUrl = '{{ api_base_url }}';
         const accessToken = sessionStorage.getItem('accessToken');
-        const user = JSON.parse('{{ user | safe }}');
+        const userJson = '{{ user | tojson | safe }}';  
+        const user = JSON.parse(userJson);
 
         const followers = await fetchAllItems(user.id, 'followers'); 
         const followings = await fetchAllItems(user.id, 'following');
-        const graphData = generateGraphData(user, followers, followings); // Generate graph data
-        window.graph = initGraph(graphData); // Initialize the graph and store it globally
+        const graphData = generateGraphData(user, followers, followings); 
+        window.graph = initGraph(graphData); 
     } catch (error) {
-        console.error('Initialization failed:', error); // Log errors to the console
+        console.error('Initialization failed:', error); 
     }
 });
 
