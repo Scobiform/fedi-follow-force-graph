@@ -7,7 +7,7 @@
 <body>
 
     {% if logged_in %}
-        <p>Welcome, {{ username }}!</p>
+        <p>Welcome, {{ user.username }}!</p>
         <a href="/logout">Logout</a>
     {% else %}
         <a href="/login">Login</a>
