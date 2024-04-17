@@ -22,64 +22,11 @@ async def get_graph(graph_data):
     ''' Get the worker component and render it with the current configuration.'''
     return await render_template('graph.html', graph_data=graph_data)
 
-async def generate_graph_data(user):
-    ''' Generate the graph data.'''
-
-    base_node = {
-        'id': user.id,
-        'name': user.display_name,
-        'username': user.username,
-        'followers': user.followers_count,
-        'following': user.following_count,
-        'url': user.url,
-        'avatar': user.avatar,
-        'created_at': user.created_at
-    }
-
-    print(user)
-
-    # Get the user's followers and following
-    followers = user.followers()
-    following = user.following()
-
-    # Build a nodes and links structure
-    nodes = [base_node]
-    links = []
-
-    for follower in followers:
-        follower_node = {
-            'id': follower.id,
-            'name': follower.display_name,
-            'username': follower.username,
-            'followers': follower.followers_count,
-            'following': follower.following_count,
-            'url': follower.url,
-            'avatar': follower.avatar,
-            'created_at': follower.created_at
-        }
-        nodes.append(follower_node)
-        links.append({'source': follower.id, 'target': user.id})
-    
-    for followed in following:
-        followed_node = {
-            'id': followed.id,
-            'name': followed.display_name,
-            'username': followed.username,
-            'followers': followed.followers_count,
-            'following': followed.following_count,
-            'url': followed.url,
-            'avatar': followed.avatar,
-            'created_at': followed.created_at
-        }
-        nodes.append(followed_node)
-        links.append({'source': user.id, 'target': followed.id})
-    
-    graph_data = {
-        'nodes': nodes,
-        'links': links
-    }
-
-    return graph_data
+async def generate_graph_data(followers, followings):
+    '''Generate a graph data structure from followers and followings.'''
+    nodes = [{'id': user['id'], 'username': user['username']} for user in followers + followings]
+    links = [{'source': followers['id'], 'target': followings['id']} for follower in followers for following in followings]
+    return {'nodes': nodes, 'links': links}
 
 # Async setup function to load configs and create secrets
 @app.before_serving
@@ -116,12 +63,12 @@ async def home():
         )
         user = mastodon.account_verify_credentials()
 
-        # Generate graph data
-        global graph_data
-        graph_data = await generate_graph_data(user)
+        # Fetch followers and followings
+        followers = await mastodon.account_followers(user['id'])
+        followings = await mastodon.account_following(user['id'])
 
-        # Get the graph component
-        graph = await get_graph(graph_data)
+        # Generate graph data
+        graph = await generate_graph_data(followers, followings)
 
         # Pass data to the template
         return await render_template('index.html', logged_in=True, user=user, graph=graph)
