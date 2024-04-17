@@ -6,9 +6,12 @@
   const Graph = ForceGraph()(document.getElementById('graph'))
     .graphData(graphData)
     .nodeLabel(node => node.username)
-    .force('charge', d3.forceManyBody().strength(-120)) // Adjust strength for repulsion or attraction
-    .force('link', d3.forceLink().id(d => d.id).distance(50)) // Adjust link distance
     .onNodeClick(node => console.log(node));
 
+  // Configuration for forces if supported by the library
+  Graph.d3Force('charge', d3.forceManyBody().strength(-120));
+  Graph.d3Force('link', d3.forceLink().distance(50));
+
   Graph.onEngineStop(() => Graph.zoomToFit(400));
+
 </script>
