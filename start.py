@@ -58,6 +58,7 @@ async def home():
         )
 
         # Fetch the authenticated user
+        global user
         user = mastodon.account_verify_credentials()
 
         # Pass the user to the template
@@ -143,7 +144,7 @@ async def webhook():
 
 @app.route('/followers', methods=['GET'])
 async def fetch_followers():
-    user_id = request.args.get('user_id')
+    user_id = user['id']
     max_id = request.args.get('max_id')
     limit = request.args.get('limit')
     if not user_id:
