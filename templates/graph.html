@@ -13,10 +13,10 @@
             target: id
           }))
       };
-
-    const Graph = ForceGraph()(document.getElementById('graph'))
+  {% endif %}
+  
+  const Graph = ForceGraph()(document.getElementById('graph'))
         .graphData(graphData);
     
-    Graph.onEngineStop(() => Graph.zoomToFit(400));
-  {% endif %}
+  Graph.onEngineStop(() => Graph.zoomToFit(400));
 </script>
