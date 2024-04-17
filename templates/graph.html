@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         const apiBaseUrl = '{{ api_base_url }}';
         const accessToken = sessionStorage.getItem('accessToken');
         const userJson = '{{ user | tojson | safe }}';  
+        console.log(userJson)
         const user = JSON.parse(userJson);
 
         const followers = await fetchAllItems(user.id, 'followers'); 
