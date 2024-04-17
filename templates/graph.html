@@ -10,8 +10,8 @@
     .graphData(graphData)
     .nodeCanvasObject((node, ctx, globalScale) => {
       const label = node.username;
-      const fontSize = 28 / globalScale;
-      const imgSize = 42;
+      const fontSize = 12 / globalScale;
+      const imgSize = 28;
       ctx.font = `${fontSize}px Sans-Serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
