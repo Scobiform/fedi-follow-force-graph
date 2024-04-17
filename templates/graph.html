@@ -22,8 +22,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 async function fetchAllItems(userId, endpoint, apiBaseUrl, accessToken) {
   let items = [];
   let maxId = null;
+  let morePagesAvailable = true;
 
-  while (true) {
+  while (morePagesAvailable) {
     let url = `${apiBaseUrl}/${endpoint}?user_id=${userId}&limit=500`;
     if (maxId) {
         url += `&max_id=${maxId}`;  // Append maxId for pagination
@@ -38,13 +39,15 @@ async function fetchAllItems(userId, endpoint, apiBaseUrl, accessToken) {
     items = items.concat(data);  // Concatenate new data
     if (data.length > 0) {
         maxId = data[data.length - 1].id;  // Update maxId for the next page
+        morePagesAvailable = true;  // Assume more pages are available
     } else {
-        break;
+        morePagesAvailable = false;  // No more pages
     }
-    console.log(`New maxId: ${maxId}`);  // Log new maxId and page availability
+    console.log(`New maxId: ${maxId}`, `More pages: ${morePagesAvailable}`);  // Log new maxId and page availability
   }
   return items;
 }
+
 
 function generateGraphData(userId, userName, userAvatar, followers, followings) {
     const nodes = [{ id: userId, username: userName, type: 'user', avatar: userAvatar }];
