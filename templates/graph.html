@@ -1,4 +1,4 @@
-<div id="graph-data">{{ graph_data }}</div>
+<div id="graph"></div>
 <script>
   const graphData = {{ graph_data | tojson }};
   const Graph = ForceGraph()(document.getElementById('graph'))
