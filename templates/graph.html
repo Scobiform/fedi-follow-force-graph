@@ -4,22 +4,28 @@
 var graphData; // Declare globally to ensure it's accessible from HTML
 
 document.addEventListener('DOMContentLoaded', async function() {
-    try {
-        const apiBaseUrl = '{{ api_base_url }}';
-        const userJson = '{{ user | tojson | safe }}';  
-        //console.log(userJson)
-        const userId = '{{ user.id | tojson | safe }}';
-        const userAvatar = {{ user.avatar | tojson | safe }};
-        console.log(userAvatar);
-        const userName = '{{ user.username | tojson | safe }}';
+  const elementResizeDetector = elementResizeDetectorMaker();
+  try {
+      const apiBaseUrl = '{{ api_base_url }}';
+      const userJson = '{{ user | tojson | safe }}';  
+      //console.log(userJson)
+      const userId = '{{ user.id | tojson | safe }}';
+      const userAvatar = {{ user.avatar | tojson | safe }};
+      console.log(userAvatar);
+      const userName = '{{ user.username | tojson | safe }}';
 
-        const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
-        const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
-        graphData = generateGraphData(userId, userName, userAvatar, followers, followings); 
-        window.graph = initGraph(graphData); 
-    } catch (error) {
-        console.error('Initialization failed:', error); 
-    }
+      const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
+      const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
+      graphData = generateGraphData(userId, userName, userAvatar, followers, followings); 
+      window.graph = initGraph(graphData);
+      // Resize the graph when the window is resized
+      elementResizeDetector.listenTo(document.getElementById('graph'), function(element) {
+            var width = element.offsetWidth;
+            window.graph.width(width);
+      });
+  } catch (error) {
+      console.error('Initialization failed:', error); 
+  }
 });
 
 async function fetchAllItems(userId, endpoint, apiBaseUrl) {
@@ -93,4 +99,6 @@ window.filterNodes = function(filterType) {  // Declare globally to ensure it's 
     };
     graph.graphData(filteredData);
 }
+
+ele
 </script>
