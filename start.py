@@ -13,14 +13,14 @@ load_dotenv()
 
 # Quart app
 app = Quart(__name__)
-secret_manager = None
-configuration_manager = None
 config = None
 
 # Async setup function to load configs and create secrets
 @app.before_serving
 async def setup_app():
+    global secret_manager
     secret_manager = await SecretManager.create() # Secret manager for the application
+    global configuration_manager
     configuration_manager = ConfigurationManager() # Configuration manager for the application
     webhook_secret = secret_manager.get_or_create_webhook_secret()
     app.secret_key = await secret_manager.get_or_create_app_secret()
