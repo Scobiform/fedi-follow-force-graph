@@ -15,22 +15,9 @@ load_dotenv()
 # Quart app
 app = Quart(__name__)
 config = None
+graph_data = None
 
-# Mocked graph data
-graph_data = {
-    "nodes": [
-        {"id": 1, "label": "Node 1"},
-        {"id": 2, "label": "Node 2"},
-        {"id": 3, "label": "Node 3"},
-        {"id": 4, "label": "Node 4"}
-    ],
-    "links": [
-        {"from": 1, "to": 2},
-        {"from": 1, "to": 3},
-        {"from": 2, "to": 4}
-    ]
-}
-
+# Components
 async def get_graph(graph_data):
     ''' Get the worker component and render it with the current configuration.'''
     return await render_template('graph.html', graph_data=graph_data)
