@@ -37,8 +37,8 @@ async def generate_graph_data(user):
     }
 
     # Get the user's followers and following
-    followers = user.account_followers()
-    following = user.account_following()
+    followers = user.followers()
+    following = user.following()
 
     # Build a nodes and links structure
     nodes = [base_node]
