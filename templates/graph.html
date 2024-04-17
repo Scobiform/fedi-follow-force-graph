@@ -2,13 +2,12 @@
 <script>
 document.addEventListener('DOMContentLoaded', async function() {
     try {
-        const apiBaseUrl = '{{ api_base_url }}'; // Ensure this is set correctly in your server-side code
-        const accessToken = sessionStorage.getItem('accessToken'); // Ensure accessToken is securely stored and available
-        const userJson = '{{ user | safe }}'; // Output the user JSON from Flask or Quart
-        const user = JSON.parse(userJson); // Parse user data to use in fetching and graph
+        const apiBaseUrl = '{{ api_base_url }}';
+        const accessToken = sessionStorage.getItem('accessToken');
+        const userJson = '{{ user | safe }}'; 
 
-        const followers = await fetchAllItems(user.id, 'followers'); // Fetch followers
-        const followings = await fetchAllItems(user.id, 'following'); // Fetch followings
+        const followers = await fetchAllItems(user.id, 'followers'); 
+        const followings = await fetchAllItems(user.id, 'following');
         const graphData = generateGraphData(user, followers, followings); // Generate graph data
         window.graph = initGraph(graphData); // Initialize the graph and store it globally
     } catch (error) {
