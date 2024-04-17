@@ -39,7 +39,7 @@ async def fetch_all_items(user, method):
     max_id = None
 
     while True:
-        response = await method(user['id'], limit=500, max_id=max_id)
+        response = method(user['id'], limit=500, max_id=max_id)
         items.extend(response)
         if len(response) < 500:
             break
