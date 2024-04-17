@@ -44,12 +44,17 @@
   );
 
   function filterNodes(filterType) {
-    Graph.graphData().nodes.forEach(node => {
-        node.hidden = (filterType !== 'all' && node.type !== filterType);
-    });
-    Graph.refresh();  // This function call updates the graph rendering
+    const newData = {
+        nodes: Graph.graphData().nodes.map(node => ({
+            ...node,
+            __hidden: node.type !== filterType && filterType !== 'all'
+        })),
+        links: Graph.graphData().links.filter(link => !link.source.__hidden && !link.target.__hidden)
+    };
+
+    Graph.graphData(newData); // This method updates the graph with the new data
   }
 
-  
+
 
 </script>
