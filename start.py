@@ -42,9 +42,16 @@ async def setup_app():
 @app.route('/')
 async def home():
     if 'access_token' in session:
-        return '''
+        # Initialize Mastodon with the access token
+        mastodon = Mastodon(
+            access_token=session['access_token'],
+            api_base_url=config['instance_url']
+        )
+        user = await mastodon.account_verify_credentials()
+        return f'''
         Logged in successfully! <br>
-        <a href="/logout">Logout</a>'''+mastodon.me().username+'''
+        <a href="/logout">Logout</a><br>
+        Username: {user['username']}
         <br>
         '''
     return '<a href="/login">Login with Mastodon</a>'
