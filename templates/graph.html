@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     try {
         const apiBaseUrl = '{{ api_base_url }}';
         const accessToken = sessionStorage.getItem('accessToken');
-        const user = {{ user | safe | tojson }};
+        const user = {{ user | safe }};
 
         const followers = await fetchAllItems(user.id, 'followers'); 
         const followings = await fetchAllItems(user.id, 'following');

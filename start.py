@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 import os
 import subprocess
@@ -21,6 +22,7 @@ graph_data = None
 # Components
 async def get_graph(user, api_base_url):
     ''' Pass the user data to the template.'''
+    user = json.dumps(user)
     return await render_template('graph.html', user=user, api_base_url=api_base_url)
 
 async def generate_graph_data(user, followers, followings):
