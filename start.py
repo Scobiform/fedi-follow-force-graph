@@ -36,6 +36,8 @@ async def generate_graph_data(user):
         'created_at': user.created_at
     }
 
+    print(user)
+
     # Get the user's followers and following
     followers = user.followers()
     following = user.following()
