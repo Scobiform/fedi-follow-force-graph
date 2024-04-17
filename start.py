@@ -47,7 +47,7 @@ async def home():
             access_token=session['access_token'],
             api_base_url=config['instance_url']
         )
-        user = await mastodon.account_verify_credentials()
+        user = mastodon.account_verify_credentials()
         return f'''
         Logged in successfully! <br>
         <a href="/logout">Logout</a><br>
