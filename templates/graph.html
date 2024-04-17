@@ -1,15 +1,16 @@
 <div id="graph"></div>
 <script>
   //const graphData = {{ graph_data | tojson }};
-  const graphData = { nodes: imgs.map((img, id) => ({ id, img })),
-      links: [...Array(imgs.length).keys()]
+  const N = 300;
+  const graphData = { nodes: [...Array(N).keys()].map(i => ({ id: i, collapsed: i !== rootId, childLinks: [] })),
+      links: [...Array(N).keys()]
         .filter(id => id)
         .map(id => ({
-          source: id,
-          target: Math.round(Math.random() * (id-1))
+          source: Math.round(Math.random() * (id - 1)),
+          target: id
         }))
-      };
-      
+    };
+
   const Graph = ForceGraph()(document.getElementById('graph'))
       .graphData(graphData);
   
