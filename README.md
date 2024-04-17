@@ -12,3 +12,8 @@ Create a `.env` file with the following content to configure the application:
 APP_URL=https://yourdomain
 REPO_PATH=/path/to/repo
 ```
+
+## Create virtual environment
+
+
+## 
