@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//unpkg.com/force-graph"></script>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+
+    {% if logged_in %}
+        <p>Welcome, {{ username }}!</p>
+        <a href="/logout">Logout</a>
+    {% else %}
+        <a href="/login">Login</a>
+    {% endif %}
+
+    <div id="graph"></div>
+    <script src="static/script.js"></script>
+
+</body>
+</html>
+
+

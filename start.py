@@ -3,7 +3,7 @@ import os
 import subprocess
 from dotenv import load_dotenv
 from mastodon import Mastodon
-from quart import Quart, abort, jsonify, request, redirect, session, url_for
+from quart import Quart, abort, jsonify, render_template, request, redirect, session, url_for
 from app.configuration import ConfigurationManager
 from app.secrets import SecretManager
 from app.websocket import ConnectionManager
@@ -40,28 +40,8 @@ async def setup_app():
         level=getattr(logging, logging_config['level'])
     )
 
-# Html header jinja2 template
-html_header = '''
-<!DOCTYPE html>
-<html>
-<head>
-    <title>'''+config['app_name']+'''</title>
-    <script src="//unpkg.com/force-graph"></script>
-    <link rel="stylesheet" href="static/style.css">
-</head>
-<body>
-'''
-
-# Html footer jinja2 template
-html_footer = '''
-</body>
-</html>
-'''
-
 @app.route('/')
 async def home():
-    header = html_header
-    footer = html_footer
     if 'access_token' in session:
         # Initialize Mastodon with the access token
         mastodon = Mastodon(
@@ -69,13 +49,11 @@ async def home():
             api_base_url=config['instance_url']
         )
         user = mastodon.account_verify_credentials()
-        return header+f'''
-        Logged in successfully! <br>
-        <a href="/logout">Logout</a><br>
-        Username: {user['username']}
-        <br>
-        '''+footer
-    return header+'<a href="/login">Login with Mastodon</a>'+footer
+        # Pass user data to the template
+        return await render_template('index.html', logged_in=True, user=user)
+    else:
+        # Render the template without user data
+        return await render_template('index.html', logged_in=False)
     
 @app.route('/login')
 async def login():
