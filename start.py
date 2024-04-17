@@ -20,7 +20,7 @@ graph_data = None
 
 # Components
 async def get_graph(user):
-    ''' Get the worker component and render it with the current configuration.'''
+    ''' Pass the user data to the template.'''
     return await render_template('graph.html', user=user)
 
 async def generate_graph_data(user, followers, followings):
@@ -102,7 +102,7 @@ async def home():
         graph_component = await get_graph(user)
 
         # Pass data to the template
-        return await render_template('index.html', logged_in=True, user=user, graoh=graph_component)
+        return await render_template('index.html', logged_in=True, user=user, graph=graph_component)
     else:
         # Render the template without user data
         return await render_template('index.html', logged_in=False)
