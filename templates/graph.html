@@ -21,23 +21,31 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 async function fetchAllItems(userId, endpoint, apiBaseUrl, accessToken) {
   let items = [];
-    let maxId = null;
-    do {
-      let url = `${apiBaseUrl}/${endpoint}?user_id=${userId}&limit=500`;
-      if (maxId) {
-          url += `&max_id=${maxId}`;
-      }
-      console.log(`Requesting URL: ${url}`);  // Log the URL being requested
-      const response = await fetch(url, {
-          headers: { 'Authorization': `Bearer ${accessToken}` }
-      });
-      const data = await response.json();
-      console.log(`Received data: `, data);  // Log the data received
-      items = items.concat(data);
-      maxId = data.length > 0 ? data[data.length - 1].id : null;
-      console.log(`New maxId: ${maxId}`);  // Log the new maxId to check if it updates
-  } while (maxId);
-    return items;
+  let maxId = null;
+  let morePagesAvailable = true;
+
+  while (morePagesAvailable) {
+    let url = `${apiBaseUrl}/${endpoint}?user_id=${userId}&limit=500`;
+    if (maxId) {
+        url += `&max_id=${maxId}`;  // Append maxId for pagination
+    }
+    console.log(`Requesting URL: ${url}`);  // Log the URL being requested
+    const response = await fetch(url, {
+        headers: { 'Authorization': `Bearer ${accessToken}` }
+    });
+    const data = await response.json();
+    console.log(`Received data: `, data);  // Log the data received
+    
+    items = items.concat(data);  // Concatenate new data
+    if (data.length > 0) {
+        maxId = data[data.length - 1].id;  // Update maxId for the next page
+        morePagesAvailable = true;  // Assume more pages are available
+    } else {
+        morePagesAvailable = false;  // No more pages
+    }
+    console.log(`New maxId: ${maxId}`, `More pages: ${morePagesAvailable}`);  // Log new maxId and page availability
+  }
+  return items;
 }
 
 function generateGraphData(userId, userName, userAvatar, followers, followings) {
