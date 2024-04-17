@@ -5,8 +5,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         const apiBaseUrl = '{{ api_base_url }}';
         const accessToken = sessionStorage.getItem('accessToken');
         const userJson = '{{ user | tojson | safe }}';  
-        console.log(userJson)
-        const user = JSON.parse(userJson);
+        //console.log(userJson)
         const userId = user.id;
         const userAvatar = user.avatar;
         const userName = user.username;
