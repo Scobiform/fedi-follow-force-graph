@@ -25,6 +25,7 @@ async def get_graph(graph_data):
 async def generate_graph_data(followers, followings):
     nodes = [{'id': user['id'], 'username': user['username']} for user in followers + followings]
     links = [{'source': follower['id'], 'target': following['id']} for follower in followers for following in followings]
+    logging.info(f"Generated graph data: {nodes}, {links}")
     return {'nodes': nodes, 'links': links}
 
 # Async setup function to load configs and create secrets
