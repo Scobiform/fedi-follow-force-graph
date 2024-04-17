@@ -16,12 +16,24 @@ load_dotenv()
 app = Quart(__name__)
 config = None
 
-# Components
-async def get_graph():
+# Mocked graph data
+graph_data = {
+    "nodes": [
+        {"id": 1, "label": "Node 1"},
+        {"id": 2, "label": "Node 2"},
+        {"id": 3, "label": "Node 3"},
+        {"id": 4, "label": "Node 4"}
+    ],
+    "edges": [
+        {"from": 1, "to": 2},
+        {"from": 1, "to": 3},
+        {"from": 2, "to": 4}
+    ]
+}
+
+async def get_graph(graph_data):
     ''' Get the worker component and render it with the current configuration.'''
-    async with aiofiles.open('templates/graph.html', 'r', encoding='utf-8') as file:
-        graph = await file.read()
-    return await render_template_string(graph)
+    return await render_template('graph.html', graph_data=graph_data)
 
 # Async setup function to load configs and create secrets
 @app.before_serving
@@ -59,7 +71,7 @@ async def home():
         user = mastodon.account_verify_credentials()
 
         # Get the graph component
-        graph = await get_graph()
+        graph = await get_graph(graph_data)
 
         # Pass data to the template
         return await render_template('index.html', logged_in=True, user=user, graph=graph)
