@@ -5,4 +5,8 @@ Mastodon analytics tool. It will create a force graph based on user followers an
 ## Environment
 
 Create .env
-'APP_URL = <https://yourdomain>'
+'''
+APP_URL = <https://yourdomain>
+REPO_PATH = /path/to/repo
+
+'''
