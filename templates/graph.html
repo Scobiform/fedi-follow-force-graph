@@ -4,7 +4,9 @@
   const graphData = {{ graph_data | tojson }};
 
   const Graph = ForceGraph()(document.getElementById('graph'))
-        .graphData(graphData);
+        .graphData(graphData)
+        .nodeLabel(node => node.username)
+        .onNodeClick(node => console.log(node));
     
   Graph.onEngineStop(() => Graph.zoomToFit(400));
 </script>
