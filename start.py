@@ -13,6 +13,25 @@ load_dotenv()
 
 # Quart app
 app = Quart(__name__)
+config = None
+
+# Html header jinja2 template
+html_header = '''
+<!DOCTYPE html>
+<html>
+<head>
+    <title>'''+config['app_name']+'''</title>
+    <script src="//unpkg.com/force-graph"></script>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+'''
+
+# Html footer jinja2 template
+html_footer = '''
+</body>
+</html>
+'''
 
 # Async setup function to load configs and create secrets
 @app.before_serving
@@ -41,6 +60,8 @@ async def setup_app():
 
 @app.route('/')
 async def home():
+    header = html_header
+    footer = html_footer
     if 'access_token' in session:
         # Initialize Mastodon with the access token
         mastodon = Mastodon(
@@ -48,13 +69,13 @@ async def home():
             api_base_url=config['instance_url']
         )
         user = mastodon.account_verify_credentials()
-        return f'''
+        return header+f'''
         Logged in successfully! <br>
         <a href="/logout">Logout</a><br>
         Username: {user['username']}
         <br>
-        '''
-    return '<a href="/login">Login with Mastodon</a>'
+        '''+footer
+    return header+'<a href="/login">Login with Mastodon</a>'+footer
     
 @app.route('/login')
 async def login():
