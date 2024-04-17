@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
         const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
-        const graphData = generateGraphData(userId, userName, userAvatar, followers, followings); 
+        graphData = generateGraphData(userId, userName, userAvatar, followers, followings); 
         window.graph = initGraph(graphData); 
     } catch (error) {
         console.error('Initialization failed:', error); 
