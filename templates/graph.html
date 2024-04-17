@@ -3,11 +3,10 @@
 document.addEventListener('DOMContentLoaded', async function() {
     const apiBaseUrl = '{{ api_base_url }}';
     const accessToken = sessionStorage.getItem('accessToken');  // Stored securely
-    const userId = '{{ user.id }}';
-    const user = { id: userId, username: '{{ user.username }}', avatar: '{{ user.avatar }}' };
+    const user = JSON.parse('{{ user | tojson | safe }}');
 
-    const followers = await fetchAllItems(userId, 'followers');
-    const followings = await fetchAllItems(userId, 'following');
+    const followers = await fetchAllItems(user.id, 'followers');
+    const followings = await fetchAllItems(user.id, 'following');
     const graphData = generateGraphData(user, followers, followings);
     window.graph = initGraph(graphData);  // Assign to a global variable to ensure accessibility
 });
