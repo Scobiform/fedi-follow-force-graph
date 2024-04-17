@@ -1,0 +1,14 @@
+*.env
+*.secret
+*~
+*.pyc
+*.swp
+*#
+.metadata
+.DS_Store
+*.log
+__pycache__
+.mypy_cache
+.venv
+.vscode
+venv/*

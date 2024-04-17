@@ -1,0 +1,36 @@
+name: Health Check
+
+on:
+  schedule:
+    # This cron job is scheduled to run every 30 minutes
+    - cron: '*/30 * * * *'
+  # Allows manual triggering of the workflow from GitHub UI
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest  # Using Ubuntu as the runner
+
+    steps:
+    # Step 1: Check the health of your application
+      - name: Check Health
+        id: health_check
+        run: |
+          # The curl command checks the HTTP status code of your health endpoint
+          response=$(curl -o /dev/null -s -w "%{http_code}\n" https://fffg.scobiform.com/health)
+          echo "Response code: $response"
+          # If the response is not 200, the status is considered 'down'
+          if [ "$response" != "200" ]; then
+            echo "::set-output name=status::down"
+          else
+            # If the response is 200, the status is considered 'up'
+            echo "::set-output name=status::up"
+          fi
+
+      # Step 2: Log the health check status
+      - name: Log Status
+        if: success()
+        run: |
+          # This step would typically be where you update a status page or badge
+          echo "Application status: ${{ steps.health_check.outputs.status }}"
+          # Replace the echo command with your actual logic to update a status badge or page
