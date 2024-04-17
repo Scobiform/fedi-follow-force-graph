@@ -3,58 +3,107 @@
 
   const graphData = {{ graph_data | tojson }};
 
-  const Graph = ForceGraph()(document.getElementById('graph'))
-    .backgroundColor('#F5F5FF')
-    .height(window.innerHeight - 60)
-    .graphData(graphData)
-    .nodeCanvasObject((node, ctx, globalScale) => {
-      const label = node.username;
-      const fontSize = 12 / globalScale;
-      const imgSize = 28;
-      ctx.font = `${fontSize}px Sans-Serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
+  document.addEventListener('DOMContentLoaded', function() {
+    const apiBaseUrl = '{{ api_base_url }}';
+    const accessToken = sessionStorage.getItem('accessToken'); // Ensure this is stored securely
+    const userId = '{{ user_id }}';
 
-      // Draw avatar images
-      if (node.avatar && node.img) {
-        ctx.drawImage(node.img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
-      } else if (node.avatar && !node.img) {
-        const img = new Image();
-        img.src = node.avatar;
-        img.onload = () => {
-          node.img = img;
-          ctx.drawImage(img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
-        };
-      }
+    Promise.all([
+        fetchAllItems(userId, 'followers'),
+        fetchAllItems(userId, 'following')
+    ]).then(([followers, followings]) => {
+        const user = { id: userId, username: 'User' }; // Mock user data, replace with actual data as needed
+        const graphData = generateGraphData(user, followers, followings);
+        initGraph(graphData);
+    });
+  });
 
-      // Draw labels
-      ctx.fillStyle = (node.type === 'follower') ? 'red' : 'blue'; 
-      ctx.fillText(label, node.x, node.y + imgSize / 2 + 5);
+  async function fetchAllItems(userId, endpoint) {
+      let items = [];
+      let maxId = null;
+      do {
+          const response = await fetch(`${apiBaseUrl}/${endpoint}/${userId}?limit=500&max_id=${maxId}`, {
+              headers: { 'Authorization': `Bearer ${accessToken}` }
+          });
+          const data = await response.json();
+          items = items.concat(data);
+          maxId = data.length > 0 ? data[data.length - 1].id : null;
+      } while (maxId != null);
+      return items;
+  }
 
-    })
-    .onNodeClick(node => console.log(node));
+  function generateGraphData(user, followers, followings) {
+      const nodes = [{ id: user.id, username: user.username, type: 'user' }];
+      const followerNodes = followers.map(f => ({ id: f.id, username: f.username, type: 'follower' }));
+      const followingNodes = followings.map(f => ({ id: f.id, username: f.username, type: 'following' }));
+      nodes.push(...followerNodes, ...followingNodes);
+      const links = followerNodes.map(f => ({ source: user.id, target: f.id }))
+                        .concat(followingNodes.map(f => ({ source: user.id, target: f.id })));
+      return { nodes, links };
+  }
 
-  // Configuration for forces
-  Graph.d3Force('charge', d3.forceManyBody().strength(-120));
-  Graph.d3Force('link', d3.forceLink().distance(140));
+  function initGraph(graphData) {
+      const Graph = ForceGraph()(document.getElementById('graph'))
+          .backgroundColor('#F5F5FF')
+          .height(window.innerHeight - 60)
+          .graphData(graphData)
+          .nodeCanvasObject((node, ctx, globalScale) => {
+              const label = node.username;
+              const fontSize = 12 / globalScale;
+              const imgSize = 28;  // Adjust size as needed
+              ctx.font = `${fontSize}px Sans-Serif`;
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
 
-  elementResizeDetectorMaker().listenTo(
-    document.getElementById('graph'),
-    el => Graph.width(el.offsetWidth)
-  );
-  
-  function filterNodes(filterType) {
-    const filteredData = {
-      nodes: graphData.nodes.filter(node => filterType === 'all' || node.type === filterType),
-      links: graphData.links.filter(link => {
-          const sourceVisible = filterType === 'all' || link.source.type === filterType;
-          const targetVisible = filterType === 'all' || link.target.type === filterType;
-          return sourceVisible && targetVisible;
-      })
-  };
+              // Draw avatar images
+              if (node.avatar && node.img) {
+                  ctx.drawImage(node.img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
+              } else if (node.avatar && !node.img) {
+                  const img = new Image();
+                  img.src = node.avatar;
+                  img.onload = () => {
+                      node.img = img;
+                      ctx.drawImage(img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
+                  };
+              }
 
-  // Update the graph with the filtered data
-  Graph.graphData(filteredData);
+              // Draw labels
+              ctx.fillStyle = (node.type === 'follower') ? 'red' : 'blue'; 
+              ctx.fillText(label, node.x, node.y + imgSize / 2 + 5);
+          })
+          .onNodeClick(node => console.log(node));
+
+      // Configuration for forces
+      Graph.d3Force('charge', d3.forceManyBody().strength(-120));
+      Graph.d3Force('link', d3.forceLink().distance(140));
+
+      elementResizeDetectorMaker().listenTo(
+          document.getElementById('graph'),
+          el => Graph.width(el.offsetWidth)
+      );
+  }
+
+    // Configuration for forces
+    Graph.d3Force('charge', d3.forceManyBody().strength(-120));
+    Graph.d3Force('link', d3.forceLink().distance(140));
+
+    elementResizeDetectorMaker().listenTo(
+      document.getElementById('graph'),
+      el => Graph.width(el.offsetWidth)
+    );
+    
+    function filterNodes(filterType) {
+      const filteredData = {
+          nodes: graphData.nodes.filter(node => filterType === 'all' || node.type === filterType),
+          links: graphData.links.filter(link => {
+              const sourceVisible = filterType === 'all' || link.source.type === filterType;
+              const targetVisible = filterType === 'all' || link.target.type === filterType;
+              return sourceVisible && targetVisible;
+          })
+    };
+
+    // Update the graph with the filtered data
+    Graph.graphData(filteredData);
 }
   
 </script>
