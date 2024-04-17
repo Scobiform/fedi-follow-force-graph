@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 import subprocess
@@ -39,19 +40,18 @@ async def fetch_all_items(user, method):
     max_id = None
 
     while True:
-        response = method(user['id'], limit=500, max_id=max_id)
+        loop = asyncio.get_event_loop()
+        # Run the synchronous method in an executor to prevent blocking
+        response = await loop.run_in_executor(None, method, user['id'], 500, max_id)
+        if not response:
+            break
         items.extend(response)
         if len(response) < 500:
             break
         max_id = response[-1]['id']
 
-    # Logging
-    logging.info(f"Method: {method}")
-    logging.info(f"User: {user}")
-    logging.info(f"Max ID: {max_id}")
-    logging.info(f"Response: {response}")
-    logging.info(f"Response length: {len(response)}")
-    logging.info(f"Items length: {len(items)}")
+    logging.info(f"Final Max ID: {max_id}")
+    logging.info(f"Total Items Fetched: {len(items)}")
 
     return items
 
