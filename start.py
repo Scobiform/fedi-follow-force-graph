@@ -141,7 +141,7 @@ async def webhook():
     else:
         return 'Push was not to master branch', 200
 
-@app.route('/fetch_followers', methods=['GET'])
+@app.route('/followers', methods=['GET'])
 async def fetch_followers():
     user_id = request.args.get('user_id')
     if not user_id:

@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         const accessToken = sessionStorage.getItem('accessToken');
         const userJson = '{{ user | tojson | safe }}';  
         //console.log(userJson)
-        const userId = userJson.id;
-        const userAvatar = userJson.avatar;
-        const userName = userJson.username;
+        const userId = '{{ user.id | tojson | safe }}';
+        const userAvatar = '{{ user.avatar | tojson | safe }}';
+        const userName = '{{ user.username | tojson | safe }}';
 
         const followers = await fetchAllItems(userId, 'followers', apiBaseUrl, accessToken); 
         const followings = await fetchAllItems(userId, 'following', apiBaseUrl, accessToken);
