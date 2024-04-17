@@ -42,19 +42,12 @@
     document.getElementById('graph'),
     el => Graph.width(el.offsetWidth)
   );
-
+  
   function filterNodes(filterType) {
-    const newData = {
-        nodes: Graph.graphData().nodes.map(node => ({
-            ...node,
-            __hidden: node.type !== filterType && filterType !== 'all'
-        })),
-        links: Graph.graphData().links.filter(link => !link.source.__hidden && !link.target.__hidden)
-    };
-
-    Graph.graphData(newData); // This method updates the graph with the new data
+    Graph.graphData().nodes.forEach(node => {
+        node.hidden = (filterType !== 'all' && node.type !== filterType); // Hide nodes not matching the filterType
+    });
+    Graph.graphData(Graph.graphData()); // Re-trigger the graph rendering with updated visibility
   }
-
-
-
+  
 </script>
