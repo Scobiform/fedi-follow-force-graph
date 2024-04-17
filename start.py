@@ -67,6 +67,8 @@ async def home():
             access_token=session['access_token'],
             api_base_url=config['instance_url']
         )
+        
+        # Fetch the authenticated user
         user = mastodon.account_verify_credentials()
 
         # Fetch followers and followings
