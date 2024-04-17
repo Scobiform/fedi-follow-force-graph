@@ -21,27 +21,17 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 async function fetchAllItems(userId, endpoint, apiBaseUrl, accessToken) {
   let items = [];
-  let maxId = null; // To keep track of the pagination
 
-  while (true) {
-      let url = `${apiBaseUrl}/${endpoint}?user_id=${userId}&limit=500`;
-      if (maxId) {
-          url += `&max_id=${maxId}`; // Append maxId for pagination
-      }
-      
-      const response = await fetch(url, {
-          headers: { 'Authorization': `Bearer ${accessToken}` }
-      });
-      const data = await response.json();
-      console.log(`Received data length: ${data.length}`); // Debugging output
-      
-      if (data.length === 0) {
-          break; // Exit the loop if no data is returned
-      }
+  let url = `${apiBaseUrl}/${endpoint}?user_id=${userId}`;
+  
+  const response = await fetch(url, {
+      headers: { 'Authorization': `Bearer ${accessToken}` }
+  });
+  
+  const data = await response.json();
+  console.log(`Received data length: ${data.length}`); // Debugging output
 
-      items = items.concat(data); // Add new items to the array
-      maxId = data[data.length - 1].id; // Update maxId to the last item's id for the next page
-  }
+  items = items.concat(data); // Add new items to the array
 
   return items; // Return all fetched items
 }
