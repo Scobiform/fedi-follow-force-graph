@@ -6,7 +6,16 @@ from mastodon import Mastodon
 from app.configuration import ConfigurationManager
 
 class SecretManager:
-    '''Handles the management and verification of secrets for an application.'''
+    '''Handles the management and verification of secrets for an application.
+    
+        Attributes:
+        
+        client_secret_path (str): The path to the client secret file.
+        app_secret_path (str): The path to the app secret file.
+        webhook_secret_path (str): The path to the webhook secret file.
+        config (dict): The configuration for the application.
+    
+    '''
 
     def __init__(self):
         self.client_secret_path = 'client.secret'
