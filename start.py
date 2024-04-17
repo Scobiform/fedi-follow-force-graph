@@ -45,6 +45,8 @@ async def fetch_all_items(user, method):
             break
         max_id = response[-1]['id']
 
+    print(f"Items: {items}")
+    
     return items
 
 # Async setup function to load configs and create secrets
