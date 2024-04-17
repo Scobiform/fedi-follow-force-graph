@@ -145,14 +145,17 @@ async def webhook():
 @app.route('/followers', methods=['GET'])
 async def fetch_followers():
     user_id = request.args.get('user_id')
-    max_id = request.args.get('max_id')  # Use `max_id` for pagination
-    limit = request.args.get('limit', default=42, type=int)
+    max_id = request.args.get('max_id')
+    limit = request.args.get('limit', default=42, type=int)  # Default and max can be set based on your needs
 
     if not user_id:
         return jsonify({'error': 'User ID is required'}), 400
 
+    # Fetch the followers from Mastodon
     followers = mastodon.account_followers(user_id, max_id=max_id, limit=limit)
-    return jsonify(followers)
+    # Convert Mastodon's response object to a list if not already
+    followers_list = list(followers) if followers else []
+    return jsonify(followers_list)
 
 @app.route('/following', methods=['GET'])
 async def fetch_following():
