@@ -98,7 +98,7 @@ async def health():
 async def webhook():
     github_signature = request.headers.get('X-Hub-Signature-256', '')
     payload_body = await request.get_data()  # Get the raw byte payload for signature computation
-    if not secret_manager.verify_signature(payload_body, github_signature):
+    if not await secret_manager.verify_signature(payload_body, github_signature):
         print("Signature verification failed.")
         abort(401) # Unauthorized
     # If the signature is verified, process the webhook payload

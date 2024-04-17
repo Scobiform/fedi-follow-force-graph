@@ -36,20 +36,21 @@ class SecretManager:
         '''Generate a random secret key.'''
         return os.urandom(24).hex()
 
-    def get_or_create_webhook_secret(self):
-        '''Get or create the webhook secret key.'''
+    async def get_or_create_webhook_secret(self):
+        '''Get or create the webhook secret key asynchronously.'''
         if os.path.exists(self.webhook_secret_path):
-            with open(self.webhook_secret_path, 'r') as file:
-                return file.read()
+            async with aiofiles.open(self.webhook_secret_path, 'r') as file:
+                return await file.read()
         else:
             secret_key = self.generate_secret_key()
-            with open(self.webhook_secret_path, 'w', encoding='utf-8') as file:
-                file.write(secret_key)
+            async with aiofiles.open(self.webhook_secret_path, 'w', encoding='utf-8') as file:
+                await file.write(secret_key)
             return secret_key
 
-    def verify_signature(self, payload_body, github_signature):
-        '''Verify the GitHub webhook signature.'''
-        webhook_secret = self.get_or_create_webhook_secret().encode()
+    async def verify_signature(self, payload_body, github_signature):
+        '''Verify the GitHub webhook signature asynchronously.'''
+        webhook_secret = await self.get_or_create_webhook_secret()
+        webhook_secret = webhook_secret.encode()
         computed_signature = 'sha256=' + hmac.new(webhook_secret, payload_body.encode(), hashlib.sha256).hexdigest()
         return hmac.compare_digest(github_signature, computed_signature)
 
