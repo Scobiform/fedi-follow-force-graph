@@ -10,32 +10,31 @@
     .graphData(graphData)
     .nodeCanvasObject((node, ctx, globalScale) => {
       const label = node.username;
-      const fontSize = 12/globalScale;
-      const imgSize = 12; // Set the size of the avatar image
+      const fontSize = 28 / globalScale;
+      const imgSize = 42;
       ctx.font = `${fontSize}px Sans-Serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
-      // Color nodes differently based on their type
-      if (node.type === 'follower') {
-        ctx.fillStyle = 'red'; // Color for followers
-      } else {
-        ctx.fillStyle = 'blue'; // Color for followings
-      }
-
-      // Draw the label
-      ctx.fillText(label, node.x, node.y + imgSize / 2 + fontSize);
-
-      // Draw the avatar image
-      if (node.avatar) {
-        const avatar = new Image();
-        avatar.src = node.avatar;
-        avatar.onload = () => {
-          ctx.drawImage(avatar, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
+      // Draw avatar images
+      if (node.avatar && node.img) {
+        ctx.drawImage(node.img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
+      } else if (node.avatar && !node.img) {
+        const img = new Image();
+        img.src = node.avatar;
+        img.onload = () => {
+          node.img = img;
+          ctx.drawImage(img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
         };
       }
+
+      // Draw labels
+      ctx.fillStyle = (node.type === 'follower') ? 'red' : 'blue'; 
+      ctx.fillText(label, node.x, node.y + imgSize / 2 + 5);
+
     })
     .onNodeClick(node => console.log(node));
+
 
   // Configuration for forces
   Graph.d3Force('charge', d3.forceManyBody().strength(-120));
