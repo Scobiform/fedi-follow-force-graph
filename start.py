@@ -24,7 +24,7 @@ graph_data = {
         {"id": 3, "label": "Node 3"},
         {"id": 4, "label": "Node 4"}
     ],
-    "edges": [
+    "links": [
         {"from": 1, "to": 2},
         {"from": 1, "to": 3},
         {"from": 2, "to": 4}
