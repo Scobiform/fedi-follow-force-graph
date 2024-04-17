@@ -25,7 +25,7 @@ async def get_graph(graph_data):
 async def generate_graph_data(user, followers, followings):
     # Add the authenticated user as the central node
     nodes = [{'id': user['id'], 'username': user['username']}]
-    nodes += [{'id': u['id'], 'username': u['username']} for u in followers + followings]
+    nodes += [{'id': u['id'], 'username': u['username'], 'avatar': u['avatar']} for u in followers + followings]
     
     # Create links from the central user to each follower and following
     links = [{'source': user['id'], 'target': follower['id']} for follower in followers]
