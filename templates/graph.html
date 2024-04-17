@@ -7,6 +7,8 @@
   const graphData = {{ graph_data | tojson }};
 
   const Graph = ForceGraph()(document.getElementById('graph'))
+    .backgroundColor('#F5F5FF')
+    .height(window.innerHeight - 60)
     .graphData(graphData)
     .nodeCanvasObject((node, ctx, globalScale) => {
       const label = node.username;
@@ -42,5 +44,10 @@
   // Display the counts
   document.getElementById('nodeCount').textContent = graphData.nodes.length;
   document.getElementById('linkCount').textContent = graphData.links.length;
+
+  elementResizeDetectorMaker().listenTo(
+    document.getElementById('graph'),
+    el => Graph.width(el.offsetWidth)
+  );
 
 </script>
