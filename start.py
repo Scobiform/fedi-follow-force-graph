@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 import subprocess
@@ -98,9 +99,7 @@ async def home():
         user = mastodon.account_verify_credentials()
 
         # Fetch followers and followings
-        #followers = mastodon.account_followers(user['id'], limit=500)
         followers = await fetch_all_items(user, mastodon.account_followers)
-        #followings = mastodon.account_following(user['id'], limit=500)
         followings = await fetch_all_items(user, mastodon.account_following)
 
         # Generate graph data
@@ -185,5 +184,5 @@ async def webhook():
         return 'Push was not to master branch', 200
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=5003, debug=False)
+    asyncio.run(app.run(host='localhost', port=5003, debug=False))
 
