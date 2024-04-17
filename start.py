@@ -34,6 +34,20 @@ async def generate_graph_data(user, followers, followings):
     #logging.info(f"Generated graph data: {nodes}, {links}")
     return {'nodes': nodes, 'links': links}
 
+async def fetch_all_items(user, method):
+    items = []
+    next_page = None
+
+    while True:
+        response = await method(user['id'], limit=500, page=next_page)
+        items.extend(response.items)
+        next_page = response.next_page  # This would depend on how pagination info is provided
+
+        if not next_page:
+            break
+
+    return items
+
 # Async setup function to load configs and create secrets
 @app.before_serving
 async def setup_app():
@@ -67,13 +81,15 @@ async def home():
             access_token=session['access_token'],
             api_base_url=config['instance_url']
         )
-        
+
         # Fetch the authenticated user
         user = mastodon.account_verify_credentials()
 
         # Fetch followers and followings
-        followers = mastodon.account_followers(user['id'], limit=500)
-        followings = mastodon.account_following(user['id'], limit=500)
+        #followers = mastodon.account_followers(user['id'], limit=500)
+        followers = await fetch_all_items(user, mastodon.account_followers)
+        #followings = mastodon.account_following(user['id'], limit=500)
+        followings = await fetch_all_items(user, mastodon.account_following)
 
         # Generate graph data
         graph = await get_graph(await generate_graph_data(user, followers, followings))
