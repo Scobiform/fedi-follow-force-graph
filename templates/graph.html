@@ -1,6 +1,3 @@
-
-<p>Nodes: <span id="nodeCount"></span></p>
-<p>Links: <span id="linkCount"></span></p>
 <div id="graph"></div>
 <script>
 
@@ -40,10 +37,6 @@
   // Configuration for forces
   Graph.d3Force('charge', d3.forceManyBody().strength(-120));
   Graph.d3Force('link', d3.forceLink().distance(140));
-
-  // Display the counts
-  document.getElementById('nodeCount').textContent = graphData.nodes.length;
-  document.getElementById('linkCount').textContent = graphData.links.length;
 
   elementResizeDetectorMaker().listenTo(
     document.getElementById('graph'),
