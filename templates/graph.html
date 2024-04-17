@@ -29,7 +29,6 @@ async function fetchAllItems(userId, endpoint, apiBaseUrl, accessToken) {
           url += `&max_id=${maxId}`; // Append maxId for pagination
       }
       
-      console.log(`Requesting URL: ${url}`); // Debugging output
       const response = await fetch(url, {
           headers: { 'Authorization': `Bearer ${accessToken}` }
       });
