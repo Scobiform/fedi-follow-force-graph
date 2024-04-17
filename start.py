@@ -1,9 +1,10 @@
 import logging
 import os
 import subprocess
+import aiofiles
 from dotenv import load_dotenv
 from mastodon import Mastodon
-from quart import Quart, abort, jsonify, render_template, request, redirect, session, url_for
+from quart import Quart, abort, jsonify, render_template, render_template_string, request, redirect, session, url_for
 from app.configuration import ConfigurationManager
 from app.secrets import SecretManager
 from app.websocket import ConnectionManager
@@ -14,6 +15,13 @@ load_dotenv()
 # Quart app
 app = Quart(__name__)
 config = None
+
+# Components
+async def get_graph():
+    ''' Get the worker component and render it with the current configuration.'''
+    async with aiofiles.open('templates/graph.html', 'r', encoding='utf-8') as file:
+        graph = await file.read()
+    return await render_template_string(graph)
 
 # Async setup function to load configs and create secrets
 @app.before_serving
@@ -49,8 +57,12 @@ async def home():
             api_base_url=config['instance_url']
         )
         user = mastodon.account_verify_credentials()
-        # Pass user data to the template
-        return await render_template('index.html', logged_in=True, user=user)
+
+        # Get the graph component
+        graph = await get_graph()
+
+        # Pass data to the template
+        return await render_template('index.html', logged_in=True, user=user, graph=graph)
     else:
         # Render the template without user data
         return await render_template('index.html', logged_in=False)
