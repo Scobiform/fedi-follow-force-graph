@@ -146,7 +146,7 @@ async def webhook():
 async def fetch_followers():
     user_id = request.args.get('user_id')
     max_id = request.args.get('max_id')
-    limit = request.args.get('limit', default=500, type=int)
+    limit = request.args.get('limit', default=42, type=int)
 
     if not user_id:
         return jsonify({'error': 'User ID is required'}), 400
