@@ -106,7 +106,7 @@ async def webhook():
     payload = await request.json
     # Check if the push is to the master branch
     if payload['ref'] == 'refs/heads/master':
-        repo_path = config['repo_path']
+        repo_path = os.getenv('REPO_PATH')
         # Fetch and reset the local repository to match the remote
         try:
             # Fetch the latest changes from the remote
