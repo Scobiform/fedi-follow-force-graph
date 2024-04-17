@@ -67,7 +67,7 @@ async def home():
         followings = mastodon.account_following(user['id'])
 
         # Generate graph data
-        graph = await generate_graph_data(followers, followings)
+        graph = await get_graph(await generate_graph_data(followers, followings))
 
         # Pass data to the template
         return await render_template('index.html', logged_in=True, user=user, graph=graph)
