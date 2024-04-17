@@ -1,15 +1,19 @@
 <div id="graph"></div>
 <script>
-  document.addEventListener('DOMContentLoaded', async function() {
-      const apiBaseUrl = '{{ api_base_url }}';
-      const accessToken = sessionStorage.getItem('accessToken');
-      const userId = '{{ user.id }}';
-      const user = { id: userId, username: '{{ user.username }}', avatar: '{{ user.avatar }}' };
 
-      const followers = await fetchAllItems(userId, 'followers');
-      const followings = await fetchAllItems(userId, 'following');
-      const graphData = generateGraphData(user, followers, followings);
-      initGraph(graphData);
+  document.addEventListener('DOMContentLoaded', function() {
+    const apiBaseUrl = '{{ api_base_url }}';
+    const accessToken = sessionStorage.getItem('accessToken'); // Ensure this is stored securely
+    const userId = '{{ user.id }}';
+
+    Promise.all([
+        fetchAllItems(userId, 'followers'),
+        fetchAllItems(userId, 'following')
+    ]).then(([followers, followings]) => {
+        const user = { id: userId, username: 'User' }; // Mock user data, replace with actual data as needed
+        const graphData = generateGraphData(user, followers, followings);
+        initGraph(graphData);
+    });
   });
 
   async function fetchAllItems(userId, endpoint) {
@@ -27,12 +31,12 @@
   }
 
   function generateGraphData(user, followers, followings) {
-      const nodes = [{ id: user.id, username: user.username, type: 'user', avatar: user.avatar }];
-      const followerNodes = followers.map(f => ({ id: f.id, username: f.username, type: 'follower', avatar: f.avatar }));
-      const followingNodes = followings.map(f => ({ id: f.id, username: f.username, type: 'following', avatar: f.avatar }));
+      const nodes = [{ id: user.id, username: user.username, type: 'user' }];
+      const followerNodes = followers.map(f => ({ id: f.id, username: f.username, type: 'follower' }));
+      const followingNodes = followings.map(f => ({ id: f.id, username: f.username, type: 'following' }));
       nodes.push(...followerNodes, ...followingNodes);
       const links = followerNodes.map(f => ({ source: user.id, target: f.id }))
-                      .concat(followingNodes.map(f => ({ source: user.id, target: f.id })));
+                        .concat(followingNodes.map(f => ({ source: user.id, target: f.id })));
       return { nodes, links };
   }
 
@@ -44,10 +48,12 @@
           .nodeCanvasObject((node, ctx, globalScale) => {
               const label = node.username;
               const fontSize = 12 / globalScale;
-              const imgSize = 28;
+              const imgSize = 28;  // Adjust size as needed
               ctx.font = `${fontSize}px Sans-Serif`;
               ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
+
+              // Draw avatar images
               if (node.avatar && node.img) {
                   ctx.drawImage(node.img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
               } else if (node.avatar && !node.img) {
@@ -58,16 +64,33 @@
                       ctx.drawImage(img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
                   };
               }
+
+              // Draw labels
               ctx.fillStyle = (node.type === 'follower') ? 'red' : 'blue'; 
               ctx.fillText(label, node.x, node.y + imgSize / 2 + 5);
           })
           .onNodeClick(node => console.log(node));
 
+      // Configuration for forces
       Graph.d3Force('charge', d3.forceManyBody().strength(-120));
       Graph.d3Force('link', d3.forceLink().distance(140));
+
+      elementResizeDetectorMaker().listenTo(
+          document.getElementById('graph'),
+          el => Graph.width(el.offsetWidth)
+      );
   }
 
-  function filterNodes(filterType) {
+    // Configuration for forces
+    Graph.d3Force('charge', d3.forceManyBody().strength(-120));
+    Graph.d3Force('link', d3.forceLink().distance(140));
+
+    elementResizeDetectorMaker().listenTo(
+      document.getElementById('graph'),
+      el => Graph.width(el.offsetWidth)
+    );
+    
+    function filterNodes(filterType) {
       const filteredData = {
           nodes: graphData.nodes.filter(node => filterType === 'all' || node.type === filterType),
           links: graphData.links.filter(link => {
@@ -75,7 +98,10 @@
               const targetVisible = filterType === 'all' || link.target.type === filterType;
               return sourceVisible && targetVisible;
           })
-      };
-      Graph.graphData(filteredData);  // Assuming 'Graph' is your ForceGraph instance
-  }  
+    };
+
+    // Update the graph with the filtered data
+    Graph.graphData(filteredData);
+}
+  
 </script>
