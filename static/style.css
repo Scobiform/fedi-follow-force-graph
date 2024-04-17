@@ -18,5 +18,5 @@ header {
   color: white;
   text-align: center;
   padding: 1em;
-  position: sticky;
+  position: absolute;
 }
