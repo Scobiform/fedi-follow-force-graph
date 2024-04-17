@@ -21,32 +21,32 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 async function fetchAllItems(userId, endpoint, apiBaseUrl, accessToken) {
   let items = [];
-  let maxId = null;
-  let morePagesAvailable = true;
+  let maxId = null; // To keep track of the pagination
 
-  while (morePagesAvailable) {
-    let url = `${apiBaseUrl}/${endpoint}?user_id=${userId}&limit=500`;
-    if (maxId) {
-        url += `&max_id=${maxId}`;  // Append maxId for pagination
-    }
-    console.log(`Requesting URL: ${url}`);  // Log the URL being requested
-    const response = await fetch(url, {
-        headers: { 'Authorization': `Bearer ${accessToken}` }
-    });
-    const data = await response.json();
-    console.log(`Received data: `, data);  // Log the data received
-    
-    items = items.concat(data);  // Concatenate new data
-    if (data.length > 0) {
-        maxId = data[data.length - 1].id;  // Update maxId for the next page
-        morePagesAvailable = true;  // Assume more pages are available
-    } else {
-        morePagesAvailable = false;  // No more pages
-    }
-    console.log(`New maxId: ${maxId}`, `More pages: ${morePagesAvailable}`);  // Log new maxId and page availability
+  while (true) {
+      let url = `${apiBaseUrl}/${endpoint}?user_id=${userId}&limit=500`;
+      if (maxId) {
+          url += `&max_id=${maxId}`; // Append maxId for pagination
+      }
+      
+      console.log(`Requesting URL: ${url}`); // Debugging output
+      const response = await fetch(url, {
+          headers: { 'Authorization': `Bearer ${accessToken}` }
+      });
+      const data = await response.json();
+      console.log(`Received data length: ${data.length}`); // Debugging output
+      
+      if (data.length === 0) {
+          break; // Exit the loop if no data is returned
+      }
+
+      items = items.concat(data); // Add new items to the array
+      maxId = data[data.length - 1].id; // Update maxId to the last item's id for the next page
   }
-  return items;
+
+  return items; // Return all fetched items
 }
+
 
 
 function generateGraphData(userId, userName, userAvatar, followers, followings) {
