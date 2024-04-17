@@ -15,24 +15,6 @@ load_dotenv()
 app = Quart(__name__)
 config = None
 
-# Html header jinja2 template
-html_header = '''
-<!DOCTYPE html>
-<html>
-<head>
-    <title>'''+config['app_name']+'''</title>
-    <script src="//unpkg.com/force-graph"></script>
-    <link rel="stylesheet" href="static/style.css">
-</head>
-<body>
-'''
-
-# Html footer jinja2 template
-html_footer = '''
-</body>
-</html>
-'''
-
 # Async setup function to load configs and create secrets
 @app.before_serving
 async def setup_app():
@@ -57,6 +39,24 @@ async def setup_app():
         format=logging_config['format'],
         level=getattr(logging, logging_config['level'])
     )
+
+# Html header jinja2 template
+html_header = '''
+<!DOCTYPE html>
+<html>
+<head>
+    <title>'''+config['app_name']+'''</title>
+    <script src="//unpkg.com/force-graph"></script>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+'''
+
+# Html footer jinja2 template
+html_footer = '''
+</body>
+</html>
+'''
 
 @app.route('/')
 async def home():
