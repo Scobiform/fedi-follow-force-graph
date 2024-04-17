@@ -44,7 +44,8 @@ async def home():
     if 'access_token' in session:
         return '''
         Logged in successfully! <br>
-        <a href="/logout">Logout</a>
+        <a href="/logout">Logout</a>'''+mastodon.me().username+'''
+        <br>
         '''
     return '<a href="/login">Login with Mastodon</a>'
     
