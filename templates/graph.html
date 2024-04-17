@@ -41,7 +41,7 @@ async function fetchAllItems(userId, endpoint, apiBaseUrl, accessToken) {
     } else {
         break;
     }
-    console.log(`New maxId: ${maxId}`, `More pages: ${morePagesAvailable}`);  // Log new maxId and page availability
+    console.log(`New maxId: ${maxId}`);  // Log new maxId and page availability
   }
   return items;
 }
