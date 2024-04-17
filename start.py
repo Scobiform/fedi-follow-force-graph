@@ -89,8 +89,17 @@ async def setup_app():
 @app.route('/')
 async def home():
     if 'access_token' in session:
-        # Pass minimal data to the client to fetch data
-        return await render_template('index.html', logged_in=True, api_base_url=config['instance_url'], user_id=session['user_id'])
+        # Initialize Mastodon with the access token
+        mastodon = Mastodon(
+            access_token=session['access_token'],
+            api_base_url=config['instance_url']
+        )
+
+        # Fetch the authenticated user
+        user = mastodon.account_verify_credentials()
+
+        # Pass data to the template
+        return await render_template('index.html', logged_in=True, user=user)
     else:
         # Render the template without user data
         return await render_template('index.html', logged_in=False)

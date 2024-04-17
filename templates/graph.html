@@ -6,7 +6,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     const apiBaseUrl = '{{ api_base_url }}';
     const accessToken = sessionStorage.getItem('accessToken'); // Ensure this is stored securely
-    const userId = '{{ user_id }}';
+    const userId = '{{ user.id }}';
 
     Promise.all([
         fetchAllItems(userId, 'followers'),
