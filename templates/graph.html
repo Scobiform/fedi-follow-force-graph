@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         const userAvatar = userJson.avatar;
         const userName = userJson.username;
 
-        const followers = await fetchAllItems(userId, 'followers'); 
-        const followings = await fetchAllItems(userId, 'following');
+        const followers = await fetchAllItems(userId, 'followers', apiBaseUrl, accessToken); 
+        const followings = await fetchAllItems(userId, 'following', apiBaseUrl, accessToken);
         const graphData = generateGraphData(userId, userName, userAvatar, followers, followings); 
         window.graph = initGraph(graphData); 
     } catch (error) {
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 });
 
-async function fetchAllItems(userId, endpoint) {
+async function fetchAllItems(userId, endpoint, apiBaseUrl, accessToken) {
     let items = [];
     let maxId = null;
     do {
