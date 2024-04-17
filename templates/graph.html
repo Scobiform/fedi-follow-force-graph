@@ -35,7 +35,6 @@
     })
     .onNodeClick(node => console.log(node));
 
-
   // Configuration for forces
   Graph.d3Force('charge', d3.forceManyBody().strength(-120));
   Graph.d3Force('link', d3.forceLink().distance(140));
