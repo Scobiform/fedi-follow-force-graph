@@ -1,23 +1,22 @@
 <div id="graph"></div>
 <script>
   {% if graph_data %}
-  const graphData = {{ graph_data | tojson }};
+    const graphData = {{ graph_data | tojson }};
   {% else %}
-  const rootId = 0;
-  const N = 300;
-  const graphData = { nodes: [...Array(N).keys()].map(i => ({ id: i, collapsed: i !== rootId, childLinks: [] })),
-      links: [...Array(N).keys()]
-        .filter(id => id)
-        .map(id => ({
-          source: Math.round(Math.random() * (id - 1)),
-          target: id
-        }))
-    };
+    const rootId = 0;
+    const N = 300;
+    const graphData = { nodes: [...Array(N).keys()].map(i => ({ id: i, collapsed: i !== rootId, childLinks: [] })),
+        links: [...Array(N).keys()]
+          .filter(id => id)
+          .map(id => ({
+            source: Math.round(Math.random() * (id - 1)),
+            target: id
+          }))
+      };
 
-  const Graph = ForceGraph()(document.getElementById('graph'))
-      .graphData(graphData);
-  
-  Graph.onEngineStop(() => Graph.zoomToFit(400));
+    const Graph = ForceGraph()(document.getElementById('graph'))
+        .graphData(graphData);
+    
+    Graph.onEngineStop(() => Graph.zoomToFit(400));
   {% endif %}
-
 </script>
