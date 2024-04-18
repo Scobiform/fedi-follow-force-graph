@@ -63,7 +63,7 @@
             followerCount: followers.length, // Assuming followers and followings are arrays
             followingCount: followings.length,
             // Extract domain from URL
-            instance: curl.match(f.url)
+            instance: url.match(f.url)
         }];
         
         // Generate nodes for followers with their own follower/following counts
