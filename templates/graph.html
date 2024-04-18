@@ -21,7 +21,9 @@
         const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
         const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
         // Generate graph data
-        graphData = generateGraphData(userId, userName, userAvatar, followers, followings); 
+        graphData = generateGraphData(userId, userName, userAvatar, followers, followings);
+        // Calculate the number of connections for each node
+        calculateNodeConnections(graphData.nodes, graphData.links);
         window.graph = initGraph(graphData);
         // Resize the graph when the window is resized
         elementResizeDetector.listenTo(document.getElementById('graph'), function(element) {
@@ -128,6 +130,23 @@
 
         console.log('Generated graph data:', { nodes, links }); // Debugging output
         return { nodes, links };
+    }
+
+    // Function to calculate the number of connections for each node
+    function calculateNodeConnections(nodes, links) {
+        const connectionCount = new Map();
+
+        links.forEach(link => {
+            const sourceId = (typeof link.source === 'object') ? link.source.id : link.source;
+            const targetId = (typeof link.target === 'object') ? link.target.id : link.target;
+
+            connectionCount.set(sourceId, (connectionCount.get(sourceId) || 0) + 1);
+            connectionCount.set(targetId, (connectionCount.get(targetId) || 0) + 1);
+        });
+
+        nodes.forEach(node => {
+            node.connectionCount = connectionCount.get(node.id) || 0;
+        });
     }
 
     function initGraph(graphData) {
@@ -248,22 +267,5 @@
 
         // Update the graph with the filtered data.
         graph.graphData(filteredData);
-    }
-
-    // Function to calculate the number of connections for each node
-    function calculateNodeConnections(nodes, links) {
-        const connectionCount = new Map();
-
-        links.forEach(link => {
-            const sourceId = (typeof link.source === 'object') ? link.source.id : link.source;
-            const targetId = (typeof link.target === 'object') ? link.target.id : link.target;
-
-            connectionCount.set(sourceId, (connectionCount.get(sourceId) || 0) + 1);
-            connectionCount.set(targetId, (connectionCount.get(targetId) || 0) + 1);
-        });
-
-        nodes.forEach(node => {
-            node.connectionCount = connectionCount.get(node.id) || 0;
-        });
     }
 </script>
