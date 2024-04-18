@@ -150,6 +150,7 @@ async def fetch_followers():
 
     try:
         followers = list(mastodon.account_followers(user_id, limit=420))
+        print(followers)
         all_followers = followers
 
         while followers:
