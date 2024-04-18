@@ -74,4 +74,5 @@ nav {
   outline: none;
   -webkit-tap-highlight-color: transparent;
   margin-top: 1.4rem !important;
+  background: none !important
 }
