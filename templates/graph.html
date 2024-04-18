@@ -65,28 +65,36 @@
         }];
         
         // Generate nodes for followers with their own follower/following counts
-        const followerNodes = followers.map(f => ({
-            id: `follower-${f.id}`, 
-            username: f.username, 
-            type: 'follower', 
-            avatar: f.avatar,
-            followerCount: f.followers_count,
-            followingCount: f.following_count,
-            // Extract domain from URL
-            instance: f.url.match(regex)
-        }));
+        const followerNodes = followers.map(f => {
+            const domainMatch = f.url.match(regex); // Attempt to match the regex
+            const domain = domainMatch ? domainMatch[1] : "unknown"; // Check if there was a match
+
+            return {
+                id: `follower-${f.id}`,
+                username: f.username,
+                type: 'follower',
+                avatar: f.avatar,
+                followerCount: f.followers_count,
+                followingCount: f.following_count,
+                instance: domain
+            };
+        });
 
         // Generate nodes for followings with their own follower/following counts
-        const followingNodes = followings.map(f => ({
-            id: `following-${f.id}`,
-            username: f.username, 
-            type: 'following', 
-            avatar: f.avatar,
-            followerCount: f.followers_count,
-            followingCount: f.following_count,
-            // Extract domain from URL
-            instance: f.url.match(f.url)
-        }));
+        const followingNodes = followings.map(f => {
+            const domainMatch = f.url.match(regex); // Attempt to match the regex
+            const domain = domainMatch ? domainMatch[1] : "unknown"; // Check if there was a match
+            
+            return{
+                id: `following-${f.id}`,
+                username: f.username, 
+                type: 'following', 
+                avatar: f.avatar,
+                followerCount: f.followers_count,
+                followingCount: f.following_count,
+                instance: domain
+            };
+        });
         
         nodes.push(...followerNodes, ...followingNodes);
         const links = followerNodes.map(f => ({ source: userId, target: f.id }))
