@@ -89,6 +89,7 @@
     }
 
     function initGraph(graphData) {
+        const container = document.getElementById('graph');
         const Graph = ForceGraph()(document.getElementById('graph'))
             .backgroundColor('#F5F5FF')
             .height(container.clientHeight)
