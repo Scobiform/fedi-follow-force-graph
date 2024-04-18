@@ -18,14 +18,16 @@
         console.log(userAvatar);
         const userName = '{{ user.username | tojson | safe }}';
 
+        // Fetch followers and followings
         const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
         const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
+        // Generate graph data
         graphData = generateGraphData(userId, userName, userAvatar, followers, followings); 
         window.graph = initGraph(graphData);
         // Resize the graph when the window is resized
         elementResizeDetector.listenTo(document.getElementById('graph'), function(element) {
-                var width = element.innerWidth;
-                var height = element.innerHeight;
+                var width = element.clientWidth;
+                var height = element.clientHeight;
                 window.graph.width(width);
                 window.graph.height(height);
         });
@@ -95,7 +97,6 @@
         const Graph = ForceGraph()(document.getElementById('graph'))
             .height(container.clientHeight)
             .graphData(graphData)
-            .backgroundColor('')
             .nodeAutoColorBy('type')
             .nodeCanvasObject((node, ctx, globalScale) => {
             const label = node.username;
