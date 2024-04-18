@@ -11,7 +11,7 @@
     const elementResizeDetector = elementResizeDetectorMaker();
     try {
 
-        const apiBaseUrl = '{{ api_base_url | tojson | safe }}';
+        const apiBaseUrl = '{{ api_base_url }}';
         const userJson = '{{ user | tojson | safe }}';  
         const userId = '{{ user.id | tojson | safe }}';
         const userAvatar = '{{ user.avatar }}';
