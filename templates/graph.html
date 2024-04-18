@@ -138,6 +138,11 @@
             .height(container.clientHeight)
             .graphData(graphData)
             .nodeAutoColorBy('type')
+            .linkColor(link => {
+                if (link.type === 'instance') return 'green';
+                return 'rgba(0,0,0,0.5)';
+            })
+            .linkWidth(link => link.type === 'instance' ? 2 : 1) 
             .nodeCanvasObject((node, ctx, globalScale) => {
                 const label = node.username;
                 const fontSize = 12 / globalScale;
