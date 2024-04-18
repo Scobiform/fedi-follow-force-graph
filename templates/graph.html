@@ -201,54 +201,38 @@
         Graph.d3Force('link').strength(0.1);
         Graph.d3Force('link').id(d => d.id);
         Graph.d3Force('link').distance(400);
-        Graph.d3Force('link').links(graphData.links);
 
-        return Graph; 
+
+        return Graph;  // Return the graph instance
     }
 
     window.filterNodes = function(filterType) {
-        const filteredData = {
-            nodes: [],
-            links: []
-        };
+    // This will hold the IDs of nodes that should be visible based on the filtering criteria.
+    const visibleNodes = new Set();
 
-        // Determine visibility for each node
-        const visibleNodes = new Set();
-        graphData.nodes.forEach(node => {
-            if (filterType === 'all' || node.type === filterType || node.type === 'user' || node.type === 'instance') {
-                visibleNodes.add(node.id);
-            }
-        });
+    // Add directly visible nodes based on filter type.
+    graphData.nodes.forEach(node => {
+        if (filterType === 'all' || node.type === filterType || node.type === 'user') {
+            visibleNodes.add(node.id);
+        }
+    });
 
-        // Filter links and add nodes connected by visible links
-        graphData.links.forEach(link => {
-            if (visibleNodes.has(link.source.id) && visibleNodes.has(link.target.id)) {
-                filteredData.links.push(link);
-                visibleNodes.add(link.source.id);
-                visibleNodes.add(link.target.id);
-            }
-        });
+    // Now, we need to ensure that instance nodes linked to any visible node are also shown.
+    graphData.links.forEach(link => {
+        if (visibleNodes.has(link.source) || visibleNodes.has(link.target)) {
+            visibleNodes.add(link.source);
+            visibleNodes.add(link.target);
+        }
+    });
 
-        // Add visible nodes to filteredData
-        graphData.nodes.forEach(node => {
-            if (visibleNodes.has(node.id)) {
-                filteredData.nodes.push(node);
-            }
-        });
+    // Prepare the filtered data for nodes and links.
+    const filteredData = {
+        nodes: graphData.nodes.filter(node => visibleNodes.has(node.id)),
+        links: graphData.links.filter(link => visibleNodes.has(link.source) && visibleNodes.has(link.target))
+    };
 
-        // Include instance nodes if related nodes are visible
-        graphData.nodes.forEach(node => {
-            if (node.type === 'instance') {
-                const relatedNodesVisible = graphData.links.some(link => {
-                    return (link.source.id === node.id || link.target.id === node.id) &&
-                        (visibleNodes.has(link.source.id) || visibleNodes.has(link.target.id));
-                });
-                if (relatedNodesVisible) {
-                    filteredData.nodes.push(node);
-                }
-            }
-        });
+    // Update the graph with the filtered data.
+    graph.graphData(filteredData);
+}
 
-        graph.graphData(filteredData);
-    }
 </script>
