@@ -62,3 +62,12 @@ nav {
 .logo img {
   width: 7rem;
 }
+
+/* Graph component */
+.force-graph-container canvas {
+  display: block;
+  user-select: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  margin-top: 1.4rem !important;
+}
