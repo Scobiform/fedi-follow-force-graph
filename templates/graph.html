@@ -71,7 +71,7 @@ function generateGraphData(userId, userName, userAvatar, followers, followings) 
     nodes.push(...followerNodes, ...followingNodes);
     const links = followerNodes.map(f => ({ source: userId, target: f.id }))
                         .concat(followingNodes.map(f => ({ source: userId, target: f.id })));
-    onsole.log(nodes);
+    console.log(nodes);
     console.log(links);
     return { nodes, links };
 }
