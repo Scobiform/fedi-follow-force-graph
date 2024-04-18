@@ -66,7 +66,7 @@ function generateGraphData(userId, userName, userAvatar, followers, followings) 
     followers.forEach(follower => addUser(follower, 'follower'));
     followings.forEach(following => addUser(following, 'following'));
 
-    // Convert map to array of nodes
+    // Create nodes from the map, ensuring all are included
     const nodes = Array.from(uniqueUsers.values()).map(user => ({
         id: user.id,
         username: user.username,
@@ -76,7 +76,7 @@ function generateGraphData(userId, userName, userAvatar, followers, followings) 
         followingCount: user.followingCount
     }));
 
-    // Add central user node
+    // Add the central user node
     nodes.unshift({
         id: userId,
         username: userName,
@@ -86,14 +86,15 @@ function generateGraphData(userId, userName, userAvatar, followers, followings) 
         followingCount: followings.length
     });
 
-    // Create links for followers and followings
-    const links = nodes.slice(1).map(node => ({
-        source: userId,
-        target: node.id
-    }));
+    // Create links for all nodes directly connected to the central user
+    const links = [];
+    uniqueUsers.forEach((user, userId) => {
+        links.push({ source: userId, target: user.id });
+    });
 
     return { nodes, links };
 }
+
 
 function initGraph(graphData) {
     const Graph = ForceGraph()(document.getElementById('graph'))
