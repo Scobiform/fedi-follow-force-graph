@@ -21,7 +21,9 @@ document.addEventListener('DOMContentLoaded', async function() {
       // Resize the graph when the window is resized
       elementResizeDetector.listenTo(document.getElementById('graph'), function(element) {
             var width = element.offsetWidth;
+            var height = element.offsetHeight;
             window.graph.width(width);
+            window.graph.height(height);
       });
   } catch (error) {
       console.error('Initialization failed:', error); 
