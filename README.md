@@ -44,3 +44,11 @@ pip install -r requirements.txt
 ```plaintext
 python3 start.py
 ```
+
+## Mastdodon developer settings
+
+You will need a valid callback adress that is reachable from the internet. You can use a service like [ngrok](https://ngrok.com/) to create a tunnel to your local machine.
+
+## License
+
+AGPL-3.0
