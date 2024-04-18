@@ -1,13 +1,12 @@
 # Fedi follow force graph
 
-[![License](https://img.shields.io/github/license/sc0biform/fedi-follow-force-graph)
 ![App Status](https://img.shields.io/endpoint?url=https://fffg.scobiform.com/health)
 
 <p align="right">
   <img src="https://github.com/Scobiform/fedi-follow-force-graph/blob/master/static/fffg_logo.svg" alt="Fedi follow force graph logo" style="width:14%;">
 </p>
 
-<p align=left">Mastodon analytics tool that generates a force graph to visually represent the relationships between user followers and followings on Mastodon. Users can log in via Mastodon OAuth to view graphs of their social connections. The tool is coded primarily in Python and utilizes JavaScript libraries for graphical representations.
+<p align="left">Mastodon analytics tool that generates a force graph to visually represent the relationships between user followers and followings on Mastodon. Users can log in via Mastodon OAuth to view graphs of their social connections. The tool is coded primarily in Python and utilizes JavaScript libraries for graphical representations.
 </p>
 
 ## Table of Contents
