@@ -51,7 +51,6 @@
     }
 
     function generateGraphData(userId, userName, userAvatar, followers, followings) {
-
         const regex = /https?:\/\/([^/:]+)/; // Regex to extract domain from URL
 
         // Initialize user node with avatar and follower/following counts
@@ -63,13 +62,30 @@
             followerCount: followers.length, // Assuming followers and followings are arrays
             followingCount: followings.length,
         }];
-        
-        // Generate nodes for followers with their own follower/following counts
-        const followerNodes = followers.map(f => {
-            const domainMatch = f.url.match(regex); // Attempt to match the regex
-            const domain = domainMatch ? domainMatch[1] : "unknown"; // Check if there was a match
 
-            return {
+        const instanceMap = new Map();
+
+        // Function to create or get existing instance node
+        function getInstanceNode(domain) {
+            if (!instanceMap.has(domain)) {
+                const instanceNode = {
+                    id: `instance-${domain}`,
+                    username: domain,
+                    type: 'instance',
+                    avatar: '', // Optional: a specific icon for instances
+                    instance: domain
+                };
+                instanceMap.set(domain, instanceNode);
+                nodes.push(instanceNode);
+            }
+            return instanceMap.get(domain);
+        }
+
+        // Generate nodes and links for followers
+        const followerLinks = followers.map(f => {
+            const domainMatch = f.url.match(regex);
+            const domain = domainMatch ? domainMatch[1] : "unknown";
+            const followerNode = {
                 id: `follower-${f.id}`,
                 username: f.username,
                 type: 'follower',
@@ -78,30 +94,41 @@
                 followingCount: f.following_count,
                 instance: domain
             };
+            nodes.push(followerNode);
+
+            return { source: userId, target: followerNode.id, type: 'follow' };
         });
 
-        // Generate nodes for followings with their own follower/following counts
-        const followingNodes = followings.map(f => {
-            const domainMatch = f.url.match(regex); // Attempt to match the regex
-            const domain = domainMatch ? domainMatch[1] : "unknown"; // Check if there was a match
-            
-            return{
+        // Generate nodes and links for followings
+        const followingLinks = followings.map(f => {
+            const domainMatch = f.url.match(regex);
+            const domain = domainMatch ? domainMatch[1] : "unknown";
+            const followingNode = {
                 id: `following-${f.id}`,
-                username: f.username, 
-                type: 'following', 
+                username: f.username,
+                type: 'following',
                 avatar: f.avatar,
                 followerCount: f.followers_count,
                 followingCount: f.following_count,
                 instance: domain
             };
+            nodes.push(followingNode);
+
+            return { source: userId, target: followingNode.id, type: 'follow' };
         });
-        
-        nodes.push(...followerNodes, ...followingNodes);
-        const links = followerNodes.map(f => ({ source: userId, target: f.id }))
-                            .concat(followingNodes.map(f => ({ source: userId, target: f.id })));
+
+        // Generate instance links
+        const instanceLinks = nodes.filter(n => n.type !== 'user').map(n => ({
+            source: getInstanceNode(n.instance).id,
+            target: n.id,
+            type: 'instance'
+        }));
+
+        const links = followerLinks.concat(followingLinks, instanceLinks);
 
         return { nodes, links };
     }
+
 
     function initGraph(graphData) {
         // Get the container element
