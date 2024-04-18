@@ -191,17 +191,12 @@
         });
 
         // Add forces to the graph
-        Graph.d3Force('collide', d3.forceCollide().radius(30));
-        Graph.d3Force('x', d3.forceX(container.clientWidth / 2).strength(0.1));
-        Graph.d3Force('y', d3.forceY(container.clientHeight / 2).strength(0.1));
-        Graph.d3Force('charge', d3.forceManyBody().strength(-140));
-        Graph.d3Force('link', d3.forceLink().distance(420));
-        Graph.d3Force('charge').distanceMax(200);
-        Graph.d3Force('link').iterations(10);
-        Graph.d3Force('link').strength(0.1);
-        Graph.d3Force('link').id(d => d.id);
-        Graph.d3Force('link').distance(400);
-
+        Graph.d3Force('collide', d3.forceCollide().radius(30)); 
+        Graph.d3Force('x', d3.forceX(container.clientWidth / 2).strength(0.05)); 
+        Graph.d3Force('y', d3.forceY(container.clientHeight / 2).strength(0.05)); 
+        Graph.d3Force('charge', d3.forceManyBody().strength(-300));
+        Graph.d3Force('link', d3.forceLink().distance(500).strength(0.1)); 
+        Graph.d3Force('charge').distanceMax(2000); 
 
         return Graph;  // Return the graph instance
     }
