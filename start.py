@@ -163,15 +163,22 @@ async def fetch_followers():
 
 @app.route('/following', methods=['GET'])
 async def fetch_following():
-    user_id = request.args.get('user_id')
-    max_id = request.args.get('max_id')  # Use `max_id` for pagination
-    limit = request.args.get('limit', default=500, type=int)
-
+    user_id = request.args.get('user_id', type=int)
     if not user_id:
         return jsonify({'error': 'User ID is required'}), 400
 
-    following = mastodon.account_following(user_id, max_id=max_id, limit=limit)
-    return jsonify(following)
+    try:
+        following = mastodon.account_following(user_id, limit=420)
+        all_following = following
+
+        while following:
+            following = mastodon.fetch_next(following)
+            if following:
+                all_following.extend(following)
+
+        return jsonify(all_following)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     asyncio.run(app.run(host='localhost', port=5003, debug=False))
