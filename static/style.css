@@ -46,7 +46,7 @@ button {
 }
 
 .flyout {
-  background-color: var(--primary-color);
+  /*background-color: var(--primary-color);*/
   color: var(--secondary-color);
   text-align: center;
   padding: 0.42rem;
