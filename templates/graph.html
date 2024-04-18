@@ -155,8 +155,8 @@
 
                 // Differentiate the appearance based on node type
                 if (node.type === 'instance') {
-                    imgSize = 50; // Constant size for instance nodes
-                    ctx.fillStyle = 'green'; // Distinct color for instance nodes
+                    imgSize = 30 + 3 * Math.sqrt(node.connectionCount);
+                    ctx.fillStyle = 'green';
                     ctx.beginPath();
                     ctx.rect(node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize); // Draw a square
                     ctx.fill();
@@ -248,5 +248,22 @@
 
         // Update the graph with the filtered data.
         graph.graphData(filteredData);
+    }
+
+    // Function to calculate the number of connections for each node
+    function calculateNodeConnections(nodes, links) {
+        const connectionCount = new Map();
+
+        links.forEach(link => {
+            const sourceId = (typeof link.source === 'object') ? link.source.id : link.source;
+            const targetId = (typeof link.target === 'object') ? link.target.id : link.target;
+
+            connectionCount.set(sourceId, (connectionCount.get(sourceId) || 0) + 1);
+            connectionCount.set(targetId, (connectionCount.get(targetId) || 0) + 1);
+        });
+
+        nodes.forEach(node => {
+            node.connectionCount = connectionCount.get(node.id) || 0;
+        });
     }
 </script>
