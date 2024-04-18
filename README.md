@@ -1,6 +1,6 @@
 # Fedi follow force graph
 
-[![License](https://img.shields.io/github/license/sc0biform/fedi-follow-force-graph)](LICENSE)
+[![License](https://img.shields.io/github/license/sc0biform/fedi-follow-force-graph)
 ![App Status](https://img.shields.io/endpoint?url=https://fffg.scobiform.com/health)
 
 <p align="right">
