@@ -63,6 +63,7 @@ function generateGraphData(userId, userName, userAvatar, followers, followings) 
         avatar: f.avatar,
         followerCount: f.followers_count,
         followingCount: f.following_count,
+        source: f.source
     }));
 
     console.log(followerNodes[0].data);
