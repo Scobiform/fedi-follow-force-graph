@@ -215,9 +215,8 @@
         });
 
         // Add forces to the graph
-        Graph.d3Force('collide', d3.forceCollide().radius(140)); 
-        Graph.d3Force('charge', d3.forceManyBody().strength(-630));
-        Graph.d3Force('link', d3.forceLink().distance(2000).strength(0.05)); 
+        Graph.d3Force('collide', d3.forceCollide().radius(420)); 
+        Graph.d3Force('charge', d3.forceManyBody().strength(-2100));
         Graph.d3Force('charge').distanceMax(42000); 
 
         return Graph;
