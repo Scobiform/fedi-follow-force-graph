@@ -11,7 +11,7 @@
 </head>
 <body>
 
-    <header>
+    <div class="flyout">
         <div class="logo">
             <img src="static/fffg_logo.svg" alt="fedi follow force graph logo">
         </div>
@@ -29,7 +29,7 @@
             <button onclick="filterNodes('all');">Show All</button>
         </nav>
 
-    </header>
+    </div>
 
     {{ graph | safe }}
 
