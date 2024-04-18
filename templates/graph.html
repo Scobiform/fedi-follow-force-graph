@@ -10,12 +10,11 @@
     document.addEventListener('DOMContentLoaded', async function() {
     const elementResizeDetector = elementResizeDetectorMaker();
     try {
-        const apiBaseUrl = '{{ api_base_url }}';
+
+        const apiBaseUrl = '{{ api_base_url | tojson | safe }}';
         const userJson = '{{ user | tojson | safe }}';  
-        //console.log(userJson)
         const userId = '{{ user.id | tojson | safe }}';
         const userAvatar = '{{ user.avatar }}';
-        console.log(userAvatar);
         const userName = '{{ user.username | tojson | safe }}';
 
         // Fetch followers and followings
@@ -30,7 +29,7 @@
                 var height = element.clientHeight;
                 window.graph.width(width);
                 window.graph.height(height);
-        });
+    });
     } catch (error) {
         console.error('Initialization failed:', error); 
     }

@@ -23,9 +23,9 @@ async def get_graph(user, api_base_url):
     ''' Pass the user data to the template.'''
     return await render_template('graph.html', user=user, api_base_url=os.getenv('APP_URL'))
 
-# Async setup function to load configs and create secrets
 @app.before_serving
 async def setup_app():
+    ''' Setup the application before serving requests.'''
     global secret_manager
     secret_manager = await SecretManager.create() # Secret manager for the application
     global configuration_manager
