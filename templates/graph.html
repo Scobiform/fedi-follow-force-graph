@@ -72,6 +72,9 @@ function generateGraphData(userId, userName, userAvatar, followers, followings) 
     const links = followerNodes.map(f => ({ source: userId, target: f.id }))
                         .concat(followingNodes.map(f => ({ source: userId, target: f.id })));
     return { nodes, links };
+
+    console.log(nodes);
+    console.log(links);
 }
 
 function initGraph(graphData) {
