@@ -60,6 +60,8 @@ pip install -r requirements.txt
 
 ## Start the application
 
+Run the application with the following command:
+
 ```plaintext
 
 python3 start.py
