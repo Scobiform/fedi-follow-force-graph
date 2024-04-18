@@ -174,7 +174,7 @@
 
                 // Differentiate the appearance based on node type
                 if (node.type === 'instance') {
-                    imgSize = 30 + 3 * Math.sqrt(node.connectionCount);
+                    imgSize = 70 + 7 * Math.sqrt(node.connectionCount);
                     ctx.fillStyle = 'green';
                     ctx.beginPath();
                     ctx.rect(node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize); // Draw a square
