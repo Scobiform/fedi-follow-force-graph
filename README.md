@@ -32,6 +32,7 @@ JavsScript
     d3-quadtree
     d3-force
     element-resize-detector
+
 ```
 
 ## Environment Setup
@@ -39,8 +40,10 @@ JavsScript
 Create a `.env` file with the following content to configure the application:
 
 ```plaintext
+
 APP_URL=https://yourdomain
 REPO_PATH=/path/to/repo
+
 ```
 
 ## Create virtual environment
@@ -48,15 +51,19 @@ REPO_PATH=/path/to/repo
 Create a virtual environment and install the requirements:
 
 ```plaintext
+
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+
 ```
 
 ## Start the application
 
 ```plaintext
+
 python3 start.py
+
 ```
 
 ## Mastdodon developer settings
@@ -66,3 +73,4 @@ You will need a valid callback address that is reachable from the internet. You 
 ## License
 
 AGPL-3.0
+
