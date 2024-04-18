@@ -66,6 +66,8 @@ function generateGraphData(userId, userName, userAvatar, followers, followings) 
         data: f
     }));
 
+    console.log(followerNodes[0].data);
+
     // Generate nodes for followings with their own follower/following counts
     const followingNodes = followings.map(f => ({
         id: `following-${f.id}`,
