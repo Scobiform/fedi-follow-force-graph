@@ -2,12 +2,23 @@
 
 ![App Status](https://img.shields.io/endpoint?url=https://fffg.scobiform.com/health)
 
-Mastodon analytics tool. It will create a force graph based on user followers and followings. 
+Mastodon analytics tool. It will create a force graph based on user followers and followings.
 
 ## Requirements
-dotenv
-mastodon.py
-quart
+
+```plaintext
+
+Python
+    dotenv
+    mastodon.py
+    quart
+
+JavsScript
+    force-graph
+    d3-quadtree
+    d3-force
+    element-resize-detector
+```
 
 ## Environment Setup
 
@@ -22,15 +33,14 @@ REPO_PATH=/path/to/repo
 
 Create a virtual environment and install the requirements:
 
-```
+```plaintext
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-``` 
+```
 
 ## Start the application
 
-```
+```plaintext
 python3 start.py
 ```
-
