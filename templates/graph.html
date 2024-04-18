@@ -103,11 +103,11 @@ function initGraph(graphData) {
           
           ctx.fillStyle = (node.type === 'follower') ? 'red' : 'blue'; 
           ctx.fillText(label, node.x, node.y + imgSize / 2 + 5);
-      }) 
+      })
       .onNodeClick(node => console.log(node));
 
-    //Graph.d3Force('charge', d3.forceManyBody().strength(-120));
-    //Graph.d3Force('link', d3.forceLink().distance(140));
+    Graph.d3Force('charge', d3.forceManyBody().strength(-140));
+    Graph.d3Force('link', d3.forceLink().distance(420));
 
     return Graph;  // Return the graph instance
 }
