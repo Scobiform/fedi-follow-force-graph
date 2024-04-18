@@ -134,7 +134,6 @@
         });
 
         // Add forces to the graph
-        Graph.d3Force('center', d3.forceCenter(container.clientWidth, container.clientHeight));
         Graph.d3Force('collide', d3.forceCollide().radius(30));
         Graph.d3Force('x', d3.forceX(container.clientWidth / 2).strength(0.1));
         Graph.d3Force('y', d3.forceY(container.clientHeight / 2).strength(0.1));
