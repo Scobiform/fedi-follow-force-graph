@@ -103,7 +103,7 @@ function initGraph(graphData) {
           
           ctx.fillStyle = (node.type === 'follower') ? 'red' : 'blue'; 
           ctx.fillText(label, node.x, node.y + imgSize / 2 + 5);
-      })
+      }) 
       .onNodeClick(node => console.log(node));
 
     //Graph.d3Force('charge', d3.forceManyBody().strength(-120));
