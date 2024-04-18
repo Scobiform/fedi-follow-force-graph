@@ -1,8 +1,23 @@
 # Fedi follow force graph
 
+[![License](https://img.shields.io/github/license/sc0biform/fedi-follow-force-graph)](LICENSE)
 ![App Status](https://img.shields.io/endpoint?url=https://fffg.scobiform.com/health)
 
+<p align="right">
+  <img src="https://github.com/Scobiform/fedi-follow-force-graph/blob/master/static/fffg_logo.svg" alt="Fedi follow force graph logo">
+</p>
+
 Mastodon analytics tool that generates a force graph to visually represent the relationships between user followers and followings on Mastodon. Users can log in via Mastodon OAuth to view graphs of their social connections. The tool is coded primarily in Python and utilizes JavaScript libraries for graphical representations.
+
+## Table of Contents
+
+- [Requirements](#requirements)
+- [Environment Setup](#environment-setup)
+- [Create Virtual Environment](#create-virtual-environment)
+- [Start the Application](#start-the-application)
+- [Mastodon Developer Settings](#mastodon-developer-settings)
+- [Contributions](#contributions)
+- [License](#license)
 
 ## Requirements
 
@@ -47,7 +62,7 @@ python3 start.py
 
 ## Mastdodon developer settings
 
-You will need a valid callback adress that is reachable from the internet. You can use a service like [ngrok](https://ngrok.com/) to create a tunnel to your local machine.
+You will need a valid callback address that is reachable from the internet. You can use a service like [ngrok](https://ngrok.com/) to create a tunnel to your local machine.
 
 ## License
 
