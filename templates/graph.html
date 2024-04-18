@@ -46,7 +46,15 @@ async function fetchAllItems(userId, endpoint, apiBaseUrl) {
 
 
 function generateGraphData(userId, userName, userAvatar, followers, followings) {
-    const nodes = [{ id: userId, username: userName, type: 'user', avatar: userAvatar }];
+    // Initialize user node with avatar and follower/following counts
+    const nodes = [{
+        id: userId,
+        username: userName,
+        type: 'user',
+        avatar: userAvatar,
+        followerCount: followers.length, // Assuming followers and followings are arrays
+        followingCount: followings.length
+    }];
     
     // Generate nodes for followers with their own follower/following counts
     const followerNodes = followers.map(f => ({
@@ -71,8 +79,7 @@ function generateGraphData(userId, userName, userAvatar, followers, followings) 
     nodes.push(...followerNodes, ...followingNodes);
     const links = followerNodes.map(f => ({ source: userId, target: f.id }))
                         .concat(followingNodes.map(f => ({ source: userId, target: f.id })));
-    console.log(nodes);
-    console.log(links);
+
     return { nodes, links };
 }
 
