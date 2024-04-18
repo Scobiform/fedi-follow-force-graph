@@ -1,5 +1,6 @@
 # Fedi follow force graph
 
+[![CodeQL](https://github.com/Scobiform/fedi-follow-force-graph/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/Scobiform/fedi-follow-force-graph/actions/workflows/github-code-scanning/codeql)
 ![App Status](https://img.shields.io/endpoint?url=https://fffg.scobiform.com/health)
 
 <table>
