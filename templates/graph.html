@@ -62,8 +62,6 @@
             avatar: userAvatar,
             followerCount: followers.length, // Assuming followers and followings are arrays
             followingCount: followings.length,
-            // Extract domain from URL
-            instance: f.url.match(regex)
         }];
         
         // Generate nodes for followers with their own follower/following counts
@@ -87,7 +85,7 @@
             followerCount: f.followers_count,
             followingCount: f.following_count,
             // Extract domain from URL
-            instance: curl.match(f.url)
+            instance: f.url.match(f.url)
         }));
         
         nodes.push(...followerNodes, ...followingNodes);
