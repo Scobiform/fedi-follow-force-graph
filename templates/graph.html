@@ -54,8 +54,8 @@ function generateGraphData(userId, userName, userAvatar, followers, followings) 
         username: f.username, 
         type: 'follower', 
         avatar: f.avatar,
-        followerCount: f.followerCount, // These counts need to be provided in the followers/followings data
-        followingCount: f.followingCount
+        followerCount: f.followers_count,
+        followingCount: f.following_count
     }));
 
     // Generate nodes for followings with their own follower/following counts
@@ -64,8 +64,8 @@ function generateGraphData(userId, userName, userAvatar, followers, followings) 
         username: f.username, 
         type: 'following', 
         avatar: f.avatar,
-        followerCount: f.followerCount,
-        followingCount: f.followingCount
+        followerCount: f.followers_count,
+        followingCount: f.following_count
     }));
     
     nodes.push(...followerNodes, ...followingNodes);
