@@ -68,6 +68,10 @@ nav {
 }
 
 /* Graph component */
+#graph-container {
+  height: 100%;
+}
+
 .force-graph-container canvas {
   display: block;
   user-select: none;

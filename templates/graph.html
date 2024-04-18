@@ -1,6 +1,6 @@
 <div id="graph"></div>
 <script>
-    
+
     // This script is loaded when the graph page is opened
     // It initializes the graph with the user's followers and followings
     // and provides a function to filter nodes based on type
@@ -91,7 +91,7 @@
     function initGraph(graphData) {
         const Graph = ForceGraph()(document.getElementById('graph'))
             .backgroundColor('#F5F5FF')
-            .height(window.innerHeight - 60)
+            .height(container.clientHeight)
             .graphData(graphData)
             .nodeCanvasObject((node, ctx, globalScale) => {
             const label = node.username;
