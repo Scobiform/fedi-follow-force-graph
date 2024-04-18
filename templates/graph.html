@@ -80,26 +80,31 @@ function initGraph(graphData) {
         .height(window.innerHeight - 60)
         .graphData(graphData)
         .nodeCanvasObject((node, ctx, globalScale) => {
-            const label = node.username;
-            const fontSize = 12 / globalScale;
-            const imgSize = 28;
-            ctx.font = `${fontSize}px Sans-Serif`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            if (node.avatar && node.img) {
-                ctx.drawImage(node.img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
-            } else if (node.avatar && !node.img) {
-                const img = new Image();
-                img.src = node.avatar;
-                img.onload = () => {
-                    node.img = img;
-                    ctx.drawImage(img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
-                };
-            }
-            ctx.fillStyle = (node.type === 'follower') ? 'red' : 'blue'; 
-            ctx.fillText(label, node.x, node.y + imgSize / 2 + 5);
-        })
-        .onNodeClick(node => console.log(node));
+          const label = node.username;
+          const fontSize = 12 / globalScale;
+          const baseImgSize = 28; // Base size for images
+          // Dynamically adjust node size based on follower count
+          const imgSize = baseImgSize + (Math.log(node.followerCount + 1) * 5); // Increase size logarithmically
+
+          ctx.font = `${fontSize}px Sans-Serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          
+          if (node.avatar && node.img) {
+              ctx.drawImage(node.img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
+          } else if (node.avatar && !node.img) {
+              const img = new Image();
+              img.src = node.avatar;
+              img.onload = () => {
+                  node.img = img; // Cache the image in the node
+                  ctx.drawImage(img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
+              };
+          }
+          
+          ctx.fillStyle = (node.type === 'follower') ? 'red' : 'blue'; 
+          ctx.fillText(label, node.x, node.y + imgSize / 2 + 5);
+      })
+      .onNodeClick(node => console.log(node));
 
     Graph.d3Force('charge', d3.forceManyBody().strength(-120));
     Graph.d3Force('link', d3.forceLink().distance(140));
