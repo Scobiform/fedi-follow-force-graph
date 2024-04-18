@@ -55,12 +55,19 @@ button {
   z-index: 777;
 }
 
+/* Navigation */
 nav {
   display: flex;
   justify-content: space-between;
   align-items: normal;
   flex-direction: column;
   width: max-content;
+}
+
+nav p {
+  margin: 0;
+  padding: 0;
+  font-size: 0.7rem;
 }
 
 .logo img {
