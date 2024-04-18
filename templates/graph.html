@@ -141,6 +141,7 @@
             .nodeCanvasObject((node, ctx, globalScale) => {
                 const label = node.username;
                 const fontSize = 12 / globalScale;
+                const baseImgSize = 28;
                 let imgSize = baseImgSize + (Math.log(node.followerCount + 1) * 7); // Increase size logarithmically
 
                 ctx.font = `${fontSize}px Sans-Serif`;
@@ -172,28 +173,29 @@
                     ctx.fillText(label, node.x, node.y + imgSize / 2 + 5);
                 }
             })
-            // Show node info on click
-            .onNodeClick(node => console.log(node))
-            // Paint the node pointer area with a circle
-            .nodePointerAreaPaint((node, color, ctx) => {
-                const imgSize = 28 + (Math.log(node.followerCount + 1) * 5); // Same calculation as in nodeCanvasObject
-                ctx.fillStyle = color;  // Use the color parameter for hit detection painting
-                ctx.beginPath();
-                ctx.arc(node.x, node.y, imgSize / 2, 0, 2 * Math.PI, false);
-                ctx.fill();
-            });
+        // Show node info on click
+        .onNodeClick(node => console.log(node))
+        // Paint the node pointer area with a circle
+        .nodePointerAreaPaint((node, color, ctx) => {
+            const imgSize = 28 + (Math.log(node.followerCount + 1) * 5); // Same calculation as in nodeCanvasObject
+            ctx.fillStyle = color;  // Use the color parameter for hit detection painting
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, imgSize / 2, 0, 2 * Math.PI, false);
+            ctx.fill();
+        });
 
         // Add forces to the graph
         Graph.d3Force('collide', d3.forceCollide().radius(30));
-        Graph.d3Force('x', d3.forceX(container.clientWidth * 2).strength(0.1));
-        Graph.d3Force('y', d3.forceY(container.clientHeight * 2).strength(0.1));
-        Graph.d3Force('charge', d3.forceManyBody().strength(70));
+        Graph.d3Force('x', d3.forceX(container.clientWidth / 2).strength(0.1));
+        Graph.d3Force('y', d3.forceY(container.clientHeight / 2).strength(0.1));
+        Graph.d3Force('charge', d3.forceManyBody().strength(-140));
         Graph.d3Force('link', d3.forceLink().distance(420));
         Graph.d3Force('charge').distanceMax(200);
         Graph.d3Force('link').iterations(10);
         Graph.d3Force('link').strength(0.1);
         Graph.d3Force('link').id(d => d.id);
         Graph.d3Force('link').distance(400);
+
 
         return Graph;  // Return the graph instance
     }
