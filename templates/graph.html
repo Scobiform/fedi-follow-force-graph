@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       const userJson = '{{ user | tojson | safe }}';  
       //console.log(userJson)
       const userId = '{{ user.id | tojson | safe }}';
-      const userAvatar = '{{ user.avatar | tojson | safe }}';
+      const userAvatar = '{{ user.avatar }}';
       console.log(userAvatar);
       const userName = '{{ user.username | tojson | safe }}';
 
