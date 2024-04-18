@@ -89,7 +89,9 @@
     }
 
     function initGraph(graphData) {
+        // Get the container element
         const container = document.getElementById('graph');
+        // Initialize the graph
         const Graph = ForceGraph()(document.getElementById('graph'))
             .backgroundColor('#F5F5FF')
             .height(container.clientHeight)
@@ -119,10 +121,21 @@
             ctx.fillStyle = (node.type === 'follower') ? 'red' : 'blue'; 
             ctx.fillText(label, node.x, node.y + imgSize / 2 + 5);
         })
-        .onNodeClick(node => console.log(node));
+        // Show node info on click
+        .onNodeClick(node => console.log(node))
+        // Paint the node pointer area with a circle
+        .nodePointerAreaPaint((node, color, ctx) => {
+            const imgSize = 28 + (Math.log(node.followerCount + 1) * 5); // Same calculation as in nodeCanvasObject
+            ctx.fillStyle = color;  // Use the color parameter for hit detection painting
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, imgSize / 2, 0, 2 * Math.PI, false);
+            ctx.fill();
+        });
 
+        // Add forces to the graph
         Graph.d3Force('charge', d3.forceManyBody().strength(-140));
         Graph.d3Force('link', d3.forceLink().distance(420));
+        Graph.d3Force('center', d3.forceCenter(container.clientWidth / 2, container.clientHeight / 2));
 
         return Graph;  // Return the graph instance
     }

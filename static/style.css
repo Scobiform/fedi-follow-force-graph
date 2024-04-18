@@ -43,6 +43,7 @@ button {
   transition: background-color var(--transition);
   text-transform: uppercase;
   font-size: xx-small;
+  margin: 0.07rem;
 }
 
 .flyout {
