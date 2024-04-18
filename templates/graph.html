@@ -215,7 +215,7 @@
 
     // Function to filter nodes based on type    
     window.filterNodes = function(filterType) {
-        // Create a set to store visible nodes
+        // This will hold the IDs of nodes that should be visible based on the filtering criteria.
         const visibleNodes = new Set();
 
         // Add directly visible nodes based on filter type.
@@ -225,31 +225,19 @@
             }
         });
 
-        // Filter links based on visible nodes and mark connected nodes.
+        // Filter links based on visible nodes.
         const filteredLinks = graphData.links.filter(link => {
             let sourceId = (typeof link.source === 'object') ? link.source.id : link.source;
             let targetId = (typeof link.target === 'object') ? link.target.id : link.target;
-            if (visibleNodes.has(sourceId) || visibleNodes.has(targetId)) {
-                visibleNodes.add(sourceId);
-                visibleNodes.add(targetId);
-                return true;
-            }
-            return false;
+            return visibleNodes.has(sourceId) && visibleNodes.has(targetId);
         });
 
-        // Check if any instance node is connected to the visible nodes.
-        graphData.nodes.forEach(node => {
-            if (node.type === 'instance') {
-                // Check if any link involves this instance node.
-                const isInstanceVisible = filteredLinks.some(link => {
-                    let sourceId = (typeof link.source === 'object') ? link.source.id : link.source;
-                    let targetId = (typeof link.target === 'object') ? link.target.id : link.target;
-                    return node.id === sourceId || node.id === targetId;
-                });
-                if (isInstanceVisible) {
-                    visibleNodes.add(node.id);
-                }
-            }
+        // Ensure instance nodes linked to any visible node are also shown
+        filteredLinks.forEach(link => {
+            let sourceId = (typeof link.source === 'object') ? link.source.id : link.source;
+            let targetId = (typeof link.target === 'object') ? link.target.id : link.target;
+            visibleNodes.add(sourceId);
+            visibleNodes.add(targetId);
         });
 
         // Prepare the filtered data for nodes and links.
