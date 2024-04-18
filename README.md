@@ -8,7 +8,6 @@
 
 Mastodon analytics tool that generates a force graph to visually represent the relationships between user followers and followings on Mastodon. Users can log in via Mastodon OAuth to view graphs of their social connections. The tool is coded primarily in Python and utilizes JavaScript libraries for graphical representations.
 
-
 ## Table of Contents
 
 - [Requirements](#requirements)
