@@ -52,6 +52,8 @@
 
     function generateGraphData(userId, userName, userAvatar, followers, followings) {
 
+        const regex = /https?:\/\/([^/:]+)/; // Regex to extract domain from URL
+
         // Initialize user node with avatar and follower/following counts
         const nodes = [{
             id: userId,
@@ -59,7 +61,9 @@
             type: 'user',
             avatar: userAvatar,
             followerCount: followers.length, // Assuming followers and followings are arrays
-            followingCount: followings.length
+            followingCount: followings.length,
+            // Extract domain from URL
+            instance: curl.match(f.url)
         }];
         
         // Generate nodes for followers with their own follower/following counts
@@ -69,7 +73,9 @@
             type: 'follower', 
             avatar: f.avatar,
             followerCount: f.followers_count,
-            followingCount: f.following_count
+            followingCount: f.following_count,
+            // Extract domain from URL
+            instance: curl.match(f.url)
         }));
 
         // Generate nodes for followings with their own follower/following counts
@@ -79,7 +85,9 @@
             type: 'following', 
             avatar: f.avatar,
             followerCount: f.followers_count,
-            followingCount: f.following_count
+            followingCount: f.following_count,
+            // Extract domain from URL
+            instance: curl.match(f.url)
         }));
         
         nodes.push(...followerNodes, ...followingNodes);
