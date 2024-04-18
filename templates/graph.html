@@ -1,137 +1,141 @@
 <div id="graph"></div>
 <script>
-
-var graphData; // Declare globally to ensure it's accessible from HTML
-
-document.addEventListener('DOMContentLoaded', async function() {
-  const elementResizeDetector = elementResizeDetectorMaker();
-  try {
-      const apiBaseUrl = '{{ api_base_url }}';
-      const userJson = '{{ user | tojson | safe }}';  
-      //console.log(userJson)
-      const userId = '{{ user.id | tojson | safe }}';
-      const userAvatar = '{{ user.avatar }}';
-      console.log(userAvatar);
-      const userName = '{{ user.username | tojson | safe }}';
-
-      const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
-      const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
-      graphData = generateGraphData(userId, userName, userAvatar, followers, followings); 
-      window.graph = initGraph(graphData);
-      // Resize the graph when the window is resized
-      elementResizeDetector.listenTo(document.getElementById('graph'), function(element) {
-            var width = element.offsetWidth;
-            var height = element.offsetHeight;
-            window.graph.width(width);
-            window.graph.height(height);
-      });
-  } catch (error) {
-      console.error('Initialization failed:', error); 
-  }
-});
-
-async function fetchAllItems(userId, endpoint, apiBaseUrl) {
-  let items = [];
-
-  let url = `${apiBaseUrl}/${endpoint}?user_id=${userId}`;
-  
-  const response = await fetch(url);
-
-  const data = await response.json();
-  console.log(`Received data length: ${data.length}`); // Debugging output
-
-  items = items.concat(data); // Add new items to the array
-
-  return items; // Return all fetched items
-}
-
-function generateGraphData(userId, userName, userAvatar, followers, followings) {
-
-    // Initialize user node with avatar and follower/following counts
-    const nodes = [{
-        id: userId,
-        username: userName,
-        type: 'user',
-        avatar: userAvatar,
-        followerCount: followers.length, // Assuming followers and followings are arrays
-        followingCount: followings.length
-    }];
     
-    // Generate nodes for followers with their own follower/following counts
-    const followerNodes = followers.map(f => ({
-        id: `follower-${f.id}`, 
-        username: f.username, 
-        type: 'follower', 
-        avatar: f.avatar,
-        followerCount: f.followers_count,
-        followingCount: f.following_count
-    }));
+    // This script is loaded when the graph page is opened
+    // It initializes the graph with the user's followers and followings
+    // and provides a function to filter nodes based on type
 
-    // Generate nodes for followings with their own follower/following counts
-    const followingNodes = followings.map(f => ({
-        id: `following-${f.id}`,
-        username: f.username, 
-        type: 'following', 
-        avatar: f.avatar,
-        followerCount: f.followers_count,
-        followingCount: f.following_count
-    }));
+    var graphData;
+
+    document.addEventListener('DOMContentLoaded', async function() {
+    const elementResizeDetector = elementResizeDetectorMaker();
+    try {
+        const apiBaseUrl = '{{ api_base_url }}';
+        const userJson = '{{ user | tojson | safe }}';  
+        //console.log(userJson)
+        const userId = '{{ user.id | tojson | safe }}';
+        const userAvatar = '{{ user.avatar }}';
+        console.log(userAvatar);
+        const userName = '{{ user.username | tojson | safe }}';
+
+        const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
+        const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
+        graphData = generateGraphData(userId, userName, userAvatar, followers, followings); 
+        window.graph = initGraph(graphData);
+        // Resize the graph when the window is resized
+        elementResizeDetector.listenTo(document.getElementById('graph'), function(element) {
+                var width = element.innerWidth;
+                var height = element.innerHeight;
+                window.graph.width(width);
+                window.graph.height(height);
+        });
+    } catch (error) {
+        console.error('Initialization failed:', error); 
+    }
+    });
+
+    async function fetchAllItems(userId, endpoint, apiBaseUrl) {
+    let items = [];
+
+    let url = `${apiBaseUrl}/${endpoint}?user_id=${userId}`;
     
-    nodes.push(...followerNodes, ...followingNodes);
-    const links = followerNodes.map(f => ({ source: userId, target: f.id }))
-                        .concat(followingNodes.map(f => ({ source: userId, target: f.id })));
+    const response = await fetch(url);
 
-    return { nodes, links };
-}
+    const data = await response.json();
+    console.log(`Received data length: ${data.length}`); // Debugging output
 
-function initGraph(graphData) {
-    const Graph = ForceGraph()(document.getElementById('graph'))
-        .backgroundColor('#F5F5FF')
-        .height(window.innerHeight - 60)
-        .graphData(graphData)
-        .nodeCanvasObject((node, ctx, globalScale) => {
-          const label = node.username;
-          const fontSize = 12 / globalScale;
-          const baseImgSize = 28; // Base size for images
-          // Dynamically adjust node size based on follower count
-          const imgSize = baseImgSize + (Math.log(node.followerCount + 1) * 5); // Increase size logarithmically
+    items = items.concat(data); // Add new items to the array
 
-          ctx.font = `${fontSize}px Sans-Serif`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          
-          if (node.avatar && node.img) {
-              ctx.drawImage(node.img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
-          } else if (node.avatar && !node.img) {
-              const img = new Image();
-              img.src = node.avatar;
-              img.onload = () => {
-                  node.img = img; // Cache the image in the node
-                  ctx.drawImage(img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
-              };
-          }
-          
-          ctx.fillStyle = (node.type === 'follower') ? 'red' : 'blue'; 
-          ctx.fillText(label, node.x, node.y + imgSize / 2 + 5);
-      })
-      .onNodeClick(node => console.log(node));
+    return items; // Return all fetched items
+    }
 
-    Graph.d3Force('charge', d3.forceManyBody().strength(-140));
-    Graph.d3Force('link', d3.forceLink().distance(420));
+    function generateGraphData(userId, userName, userAvatar, followers, followings) {
 
-    return Graph;  // Return the graph instance
-}
+        // Initialize user node with avatar and follower/following counts
+        const nodes = [{
+            id: userId,
+            username: userName,
+            type: 'user',
+            avatar: userAvatar,
+            followerCount: followers.length, // Assuming followers and followings are arrays
+            followingCount: followings.length
+        }];
+        
+        // Generate nodes for followers with their own follower/following counts
+        const followerNodes = followers.map(f => ({
+            id: `follower-${f.id}`, 
+            username: f.username, 
+            type: 'follower', 
+            avatar: f.avatar,
+            followerCount: f.followers_count,
+            followingCount: f.following_count
+        }));
 
-window.filterNodes = function(filterType) {
-    const filteredData = {
-        nodes: graphData.nodes.filter(node => filterType === 'all' || node.type === filterType || node.type === 'user'), // Keep user nodes visible
-        links: graphData.links.filter(link => {
-            const sourceVisible = filterType === 'all' || link.source.type === filterType || link.source.type === 'user';
-            const targetVisible = filterType === 'all' || link.target.type === filterType || link.target.type === 'user';
-            return sourceVisible && targetVisible;
+        // Generate nodes for followings with their own follower/following counts
+        const followingNodes = followings.map(f => ({
+            id: `following-${f.id}`,
+            username: f.username, 
+            type: 'following', 
+            avatar: f.avatar,
+            followerCount: f.followers_count,
+            followingCount: f.following_count
+        }));
+        
+        nodes.push(...followerNodes, ...followingNodes);
+        const links = followerNodes.map(f => ({ source: userId, target: f.id }))
+                            .concat(followingNodes.map(f => ({ source: userId, target: f.id })));
+
+        return { nodes, links };
+    }
+
+    function initGraph(graphData) {
+        const Graph = ForceGraph()(document.getElementById('graph'))
+            .backgroundColor('#F5F5FF')
+            .height(window.innerHeight - 60)
+            .graphData(graphData)
+            .nodeCanvasObject((node, ctx, globalScale) => {
+            const label = node.username;
+            const fontSize = 12 / globalScale;
+            const baseImgSize = 28; // Base size for images
+            // Dynamically adjust node size based on follower count
+            const imgSize = baseImgSize + (Math.log(node.followerCount + 1) * 5); // Increase size logarithmically
+
+            ctx.font = `${fontSize}px Sans-Serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            if (node.avatar && node.img) {
+                ctx.drawImage(node.img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
+            } else if (node.avatar && !node.img) {
+                const img = new Image();
+                img.src = node.avatar;
+                img.onload = () => {
+                    node.img = img; // Cache the image in the node
+                    ctx.drawImage(img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
+                };
+            }
+            
+            ctx.fillStyle = (node.type === 'follower') ? 'red' : 'blue'; 
+            ctx.fillText(label, node.x, node.y + imgSize / 2 + 5);
         })
-    };
-    graph.graphData(filteredData); // Update the graph with filtered data
-}
+        .onNodeClick(node => console.log(node));
+
+        Graph.d3Force('charge', d3.forceManyBody().strength(-140));
+        Graph.d3Force('link', d3.forceLink().distance(420));
+
+        return Graph;  // Return the graph instance
+    }
+
+    window.filterNodes = function(filterType) {
+        const filteredData = {
+            nodes: graphData.nodes.filter(node => filterType === 'all' || node.type === filterType || node.type === 'user'), // Keep user nodes visible
+            links: graphData.links.filter(link => {
+                const sourceVisible = filterType === 'all' || link.source.type === filterType || link.source.type === 'user';
+                const targetVisible = filterType === 'all' || link.target.type === filterType || link.target.type === 'user';
+                return sourceVisible && targetVisible;
+            })
+        };
+        graph.graphData(filteredData); // Update the graph with filtered data
+    }
 
 </script>
