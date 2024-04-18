@@ -2,7 +2,7 @@
 
 ![App Status](https://img.shields.io/endpoint?url=https://fffg.scobiform.com/health)
 
-Mastodon analytics tool. It will create a force graph based on user followers and followings.
+Mastodon analytics tool. It will create a force graph based on user followers and followings. Client can login via Mastodon OAuth and see the graph of their followers and followings.
 
 ## Requirements
 
