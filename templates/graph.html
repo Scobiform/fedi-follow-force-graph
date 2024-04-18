@@ -201,7 +201,7 @@
         Graph.d3Force('y', d3.forceY(container.clientHeight / 2).strength(0.05)); 
         Graph.d3Force('charge', d3.forceManyBody().strength(-420));
         Graph.d3Force('link', d3.forceLink().distance(500).strength(0.1)); 
-        Graph.d3Force('charge').distanceMax(2000); 
+        Graph.d3Force('charge').distanceMax(21000); 
 
         return Graph;  // Return the graph instance
     }
