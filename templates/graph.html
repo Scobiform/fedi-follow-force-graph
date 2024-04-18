@@ -47,8 +47,27 @@ async function fetchAllItems(userId, endpoint, apiBaseUrl) {
 
 function generateGraphData(userId, userName, userAvatar, followers, followings) {
     const nodes = [{ id: userId, username: userName, type: 'user', avatar: userAvatar }];
-    const followerNodes = followers.map(f => ({ id: f.id, username: f.username, type: 'follower', avatar: f.avatar }));
-    const followingNodes = followings.map(f => ({ id: f.id, username: f.username, type: 'following', avatar: f.avatar }));
+    
+    // Generate nodes for followers with their own follower/following counts
+    const followerNodes = followers.map(f => ({
+        id: f.id, 
+        username: f.username, 
+        type: 'follower', 
+        avatar: f.avatar,
+        followerCount: f.followerCount, // These counts need to be provided in the followers/followings data
+        followingCount: f.followingCount
+    }));
+
+    // Generate nodes for followings with their own follower/following counts
+    const followingNodes = followings.map(f => ({
+        id: f.id, 
+        username: f.username, 
+        type: 'following', 
+        avatar: f.avatar,
+        followerCount: f.followerCount,
+        followingCount: f.followingCount
+    }));
+    
     nodes.push(...followerNodes, ...followingNodes);
     const links = followerNodes.map(f => ({ source: userId, target: f.id }))
                         .concat(followingNodes.map(f => ({ source: userId, target: f.id })));
