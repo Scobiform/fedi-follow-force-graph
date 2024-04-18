@@ -126,9 +126,9 @@
 
         const links = followerLinks.concat(followingLinks, instanceLinks);
 
+        console.log('Generated graph data:', { nodes, links }); // Debugging output
         return { nodes, links };
     }
-
 
     function initGraph(graphData) {
         // Get the container element
