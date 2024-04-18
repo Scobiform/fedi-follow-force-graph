@@ -206,6 +206,16 @@
         return Graph;  // Return the graph instance
     }
 
+    // Resize the graph when the window is resized
+    window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        Graph.width(width).height(height);
+        Graph.d3Force('x', d3.forceX(width / 2).strength(0.05));
+        Graph.d3Force('y', d3.forceY(height / 2).strength(0.05));
+    });
+
+    // Function to filter nodes based on type    
     window.filterNodes = function(filterType) {
     // This will hold the IDs of nodes that should be visible based on the filtering criteria.
     const visibleNodes = new Set();
