@@ -51,7 +51,12 @@ function generateGraphData(userId, userName, userAvatar, followers, followings) 
     // Helper function to add or update users in the map
     function addUser(user, type) {
         if (!uniqueUsers.has(user.id)) {
-            uniqueUsers.set(user.id, {...user, types: new Set([type])});
+            uniqueUsers.set(user.id, {
+                ...user,
+                types: new Set([type]),
+                followerCount: user.followers_count,
+                followingCount: user.following_count
+            });
         } else {
             uniqueUsers.get(user.id).types.add(type);
         }
@@ -63,24 +68,29 @@ function generateGraphData(userId, userName, userAvatar, followers, followings) 
 
     // Convert map to array of nodes
     const nodes = Array.from(uniqueUsers.values()).map(user => ({
-        ...user,
+        id: user.id,
+        username: user.username,
         type: Array.from(user.types).join('+'), // Combines types if both follower and following
-        avatar: user.avatar, // Ensure avatar data is correctly formatted
+        avatar: user.avatar,
+        followerCount: user.followerCount,
+        followingCount: user.followingCount
     }));
 
     // Add central user node
-    nodes.unshift({ id: userId, username: userName, type: 'user', avatar: userAvatar });
+    nodes.unshift({
+        id: userId,
+        username: userName,
+        type: 'user',
+        avatar: userAvatar,
+        followerCount: followers.length,
+        followingCount: followings.length
+    });
 
     // Create links for followers and followings
-    const links = nodes.filter(node => node.types.has('follower')).map(follower => ({
+    const links = nodes.slice(1).map(node => ({
         source: userId,
-        target: follower.id
-    })).concat(
-        nodes.filter(node => node.types.has('following')).map(following => ({
-            source: userId,
-            target: following.id
-        }))
-    );
+        target: node.id
+    }));
 
     return { nodes, links };
 }
