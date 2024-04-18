@@ -120,16 +120,16 @@ function initGraph(graphData) {
     return Graph;  // Return the graph instance
 }
 
-window.filterNodes = function(filterType) {  // Declare globally to ensure it's accessible from HTML
+window.filterNodes = function(filterType) {
     const filteredData = {
-        nodes: graphData.nodes.filter(node => filterType === 'all' || node.type === filterType),
+        nodes: graphData.nodes.filter(node => filterType === 'all' || node.type === filterType || node.type === 'user'), // Keep user nodes visible
         links: graphData.links.filter(link => {
-            const sourceVisible = filterType === 'all' || link.source.type === filterType;
-            const targetVisible = filterType === 'all' || link.target.type === filterType;
+            const sourceVisible = filterType === 'all' || link.source.type === filterType || link.source.type === 'user';
+            const targetVisible = filterType === 'all' || link.target.type === filterType || link.target.type === 'user';
             return sourceVisible && targetVisible;
         })
     };
-    graph.graphData(filteredData);
+    graph.graphData(filteredData); // Update the graph with filtered data
 }
 
 </script>
