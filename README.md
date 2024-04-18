@@ -3,16 +3,10 @@
 [![CodeQL](https://github.com/Scobiform/fedi-follow-force-graph/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/Scobiform/fedi-follow-force-graph/actions/workflows/github-code-scanning/codeql)
 ![App Status](https://img.shields.io/endpoint?url=https://fffg.scobiform.com/health)
 
-<table>
-  <tr>
-    <td valign="top">
-      <p>Mastodon analytics tool that generates a force graph to visually represent the relationships between user followers and followings on Mastodon. Users can log in via Mastodon OAuth to view graphs of their social connections. The tool is coded primarily in Python and utilizes JavaScript libraries for graphical representations.</p>
-    </td>
-    <td align="right" width="14%">
-      <img src="https://github.com/Scobiform/fedi-follow-force-graph/blob/master/static/fffg_logo.svg" alt="Fedi follow force graph logo">
-    </td>
-  </tr>
-</table>
+
+<img src="https://github.com/Scobiform/fedi-follow-force-graph/blob/master/static/fffg_logo.svg" alt="fedi follow force graph logo" align="right" style="width: 14%"/>
+
+Mastodon analytics tool that generates a force graph to visually represent the relationships between user followers and followings on Mastodon. Users can log in via Mastodon OAuth to view graphs of their social connections. The tool is coded primarily in Python and utilizes JavaScript libraries for graphical representations.
 
 
 ## Table of Contents
