@@ -50,6 +50,7 @@ async def setup_app():
 
 @app.route('/')
 async def home():
+    ''' Home route for the application.'''
     if 'access_token' in session:
         # Initialize Mastodon with the access token
         mastodon = Mastodon(
@@ -72,16 +73,19 @@ async def home():
 
 @app.route('/login')
 async def login():
+    ''' Login route for the application.'''
     redirect_uri = os.getenv('APP_URL')+'/callback'
     return redirect(mastodon.auth_request_url(scopes=['read', 'write'], redirect_uris=redirect_uri))
 
 @app.route('/logout')
 async def logout():
+    ''' Logout route for the application.'''
     session.pop('access_token', None)
     return redirect(url_for('home'))
 
 @app.route('/callback')
 async def callback():
+    ''' Callback route for the application.'''
     code = request.args.get('code')
     if not code:
         return "Authorization failed: No code provided.", 400
@@ -118,6 +122,7 @@ async def health():
 
 @app.route('/webhook', methods=['POST'])
 async def webhook():
+    ''' Webhook route for the application.'''
     github_signature = request.headers.get('X-Hub-Signature-256', '')
     payload_body = await request.get_data()  # Get the raw byte payload for signature computation
     # Verify the signature
@@ -144,6 +149,7 @@ async def webhook():
 
 @app.route('/followers', methods=['GET'])
 async def fetch_followers():
+    ''' Fetch the followers of a user.'''
     user_id = request.args.get('user_id', type=int)
     if not user_id:
         return jsonify({'error': 'User ID is required'}), 400
@@ -163,6 +169,7 @@ async def fetch_followers():
 
 @app.route('/following', methods=['GET'])
 async def fetch_following():
+    ''' Fetch the users that a user is following.'''
     user_id = request.args.get('user_id', type=int)
     if not user_id:
         return jsonify({'error': 'User ID is required'}), 400
@@ -181,5 +188,6 @@ async def fetch_following():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
+    ''' Run the application.'''
     asyncio.run(app.run(host='localhost', port=5003, debug=False))
 

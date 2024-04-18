@@ -12,17 +12,23 @@
 <body>
 
     <header>
-        {% if logged_in %}
-            <p>Welcome, {{ user.username }}!</p>
-            <button onclick="window.location.href='/logout';">Logout</button>
-        {% else %}
-            <button onclick="window.location.href='/login';">Login with Mastodon</button>
-        {% endif %}
+        <div class="logo">
+            <img src="static/fffg_logo.svg" alt="fedi follow force graph logo">
+        </div>
+  
+        <nav>
+            {% if logged_in %}
+                <p>Welcome, {{ user.username }}!</p>
+                <button onclick="window.location.href='/logout';">Logout</button>
+            {% else %}
+                <button onclick="window.location.href='/login';">Login with Mastodon</button>
+            {% endif %}
+            <!-- Buttons to show and hide nodes based on type-->
+            <button onclick="filterNodes('follower');">Show Followers</button>
+            <button onclick="filterNodes('following');">Show Followings</button>
+            <button onclick="filterNodes('all');">Show All</button>
+        </nav>
 
-        <!-- Buttons to show and hide nodes based on type-->
-        <button onclick="filterNodes('follower');">Show Followers</button>
-        <button onclick="filterNodes('following');">Show Followings</button>
-        <button onclick="filterNodes('all');">Show All</button>
     </header>
 
     {{ graph | safe }}
