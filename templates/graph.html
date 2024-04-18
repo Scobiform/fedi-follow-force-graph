@@ -93,15 +93,16 @@
         const container = document.getElementById('graph');
         // Initialize the graph
         const Graph = ForceGraph()(document.getElementById('graph'))
-            .backgroundColor('#F5F5FF')
             .height(container.clientHeight)
             .graphData(graphData)
+            .backgroundColor('')
+            .nodeAutoColorBy('type')
             .nodeCanvasObject((node, ctx, globalScale) => {
             const label = node.username;
             const fontSize = 12 / globalScale;
             const baseImgSize = 28; // Base size for images
             // Dynamically adjust node size based on follower count
-            const imgSize = baseImgSize + (Math.log(node.followerCount + 1) * 5); // Increase size logarithmically
+            const imgSize = baseImgSize + (Math.log(node.followerCount + 1) * 7); // Increase size logarithmically
 
             ctx.font = `${fontSize}px Sans-Serif`;
             ctx.textAlign = 'center';
@@ -133,12 +134,14 @@
         });
 
         // Add forces to the graph
-        Graph.d3Force('center', d3.forceCenter(container.clientWidth / 2, container.clientHeight / 2));
+        Graph.d3Force('center', d3.forceCenter(container.clientWidth, container.clientHeight));
         Graph.d3Force('collide', d3.forceCollide().radius(30));
         Graph.d3Force('x', d3.forceX(container.clientWidth / 2).strength(0.1));
         Graph.d3Force('y', d3.forceY(container.clientHeight / 2).strength(0.1));
         Graph.d3Force('charge', d3.forceManyBody().strength(-140));
         Graph.d3Force('link', d3.forceLink().distance(420));
+        Graph.d3Force('charge').distanceMax(200);
+
 
         return Graph;  // Return the graph instance
     }

@@ -65,8 +65,10 @@ async def home():
         # Pass the user to the template
         graph_component = await get_graph(user, api_base_url=config['instance_url'])
 
+        app_name =  config['app_name']
+
         # Pass data to the template
-        return await render_template('index.html', logged_in=True, user=user, graph=graph_component)
+        return await render_template('index.html', logged_in=True, user=user, graph=graph_component, app_name=app_name)
     else:
         # Render the template without user data
         return await render_template('index.html', logged_in=False)
