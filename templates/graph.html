@@ -253,9 +253,13 @@
             node.fx = node.x;
             node.fy = node.y;
         })
-        .nodeRelSize(node => node.type === 'instance' ? 420 + 7 * Math.sqrt(node.connectionCount) : 70 + (Math.log(node.followerCount + 7) * 42)
-            
-        )
+        .nodeRelSize(node => {
+            if (node.type === 'instance') {
+                return 0.1 + 7 * Math.sqrt(node.connectionCount);
+            } else {
+                return 0.2 + (Math.log(node.followerCount + 1) * 42);
+            }
+        })
 
         ;
 
