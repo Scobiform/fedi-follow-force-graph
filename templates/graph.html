@@ -46,9 +46,9 @@
                 const newSize = parseInt(this.value, 10);
                 sliderValueDisplay.textContent = newSize;  // Update display
 
-                if (window.graph && window.graph.nodeRelSize) {
-                    window.graph.nodeRelSize(newSize);  // Update the node size in the graph
-                    window.graph.refresh();  // Refresh the graph to apply the changes
+                if (window.graph && window.graph.graphData) {
+                    window.graph.nodeRelSize(value);
+                    window.graph.graphData(graphData);  // Reapply the graph data to update the graph
                 }
             });
         }
