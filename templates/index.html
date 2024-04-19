@@ -106,6 +106,8 @@
         }
 
         async function handleKeyUp(event) {
+            event.preventDefault();
+
             clearTimeout(timeout);
 
             // Check if the enter key is pressed
