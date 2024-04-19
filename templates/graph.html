@@ -207,7 +207,7 @@
                     }
 
                     // Adjust text color and positioning for non-instance nodes
-                    ctx.fillStyle = (node.type === 'follower') ? 'red' : 'blue';
+                    ctx.fillStyle = (node.type === 'follower') ? 'red' : 'var(--british-racing-green)';
                     ctx.fillText(label, node.x, node.y + imgSize / 2 + 5);
                 }
             })
@@ -240,7 +240,7 @@
             .d3Force('center', d3.forceCenter(container.clientWidth / 2, container.clientHeight / 2))
             // Link distance based on type
             .d3Force('link', d3.forceLink().distance(link => link.type === 'instance' ? 200 : 100).strength(0.5))
-            
+
         ;
 
 
