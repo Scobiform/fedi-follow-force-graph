@@ -342,17 +342,13 @@
     document.addEventListener('DOMContentLoaded', function() {
 
         const slider = document.getElementById('nodeSizeSlider');
-        const sliderValueDisplay = document.getElementById('sliderValue');
 
         const textSlider = document.getElementById('textFontSizeSlider');
-        const textSliderValueDisplay = document.getElementById('textSliderValue');
 
         const instanceSlider = document.getElementById('instanceSizeSlider');
-        const instanceSliderValueDisplay = document.getElementById('instanceSliderValue');
 
         slider.addEventListener('input', function() {
             avatarSizeMultiplier = parseInt(this.value, 10); 
-            sliderValueDisplay.textContent = avatarSizeMultiplier; 
 
             // Reapply the graph data to update the graph
             if (window.graph && window.graph.graphData) {
@@ -362,7 +358,6 @@
 
         textSlider.addEventListener('input', function() {
             textFontSize = parseInt(this.value, 10); 
-            textSliderValueDisplay.textContent = textFontSize; 
 
             // Reapply the graph data to update the graph
             if (window.graph && window.graph.graphData) {
@@ -372,7 +367,6 @@
 
         instanceSlider.addEventListener('input', function() {
             instanceSizeMultiplier = parseInt(this.value, 10); 
-            instanceSliderValueDisplay.textContent = instanceSizeMultiplier; 
 
             // Reapply the graph data to update the graph
             if (window.graph && window.graph.graphData) {
