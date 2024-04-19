@@ -37,20 +37,18 @@
                     window.graph.width(width);
                     window.graph.height(height);
             });
-
-            // Function to update the node size based on the slider value
-            const slider = document.getElementById('nodeSizeSlider');
-            const sliderValueDisplay = document.getElementById('sliderValue');
-
-            slider.addEventListener('input', function() {
-                const newSize = parseInt(this.value, 10);
-                sliderValueDisplay.textContent = newSize;  // Update display
-                console.log('New node size:', newSize);  // Debugging output
-
-                if (window.graph && window.graph.graphData) {
-                    window.graph.nodeRelSize(newSize);  // Update node size
-                    window.graph.graphData(graphData);  // Reapply the graph data to update the graph
-                }
+            // Setup slider to dynamically adjust node size
+            const nodeSizeSlider = document.getElementById('nodeSizeSlider');
+            nodeSizeSlider.addEventListener('input', () => {
+                const value = parseInt(nodeSizeSlider.value);
+                document.getElementById('sliderValue').textContent = value;
+                window.graph.nodeRelSize(node => {
+                    if (node.type === 'instance') {
+                        return 0.1 + 7 * Math.sqrt(node.connectionCount);
+                    } else {
+                        return 0.2 + (Math.log(node.followerCount + 1) * value);
+                    }
+                });
             });
         }
         catch (error) {
