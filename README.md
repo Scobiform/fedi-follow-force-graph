@@ -16,6 +16,7 @@ Mastodon analytics tool that generates a force graph to visually represent the r
 - [Start the Application](#start-the-application)
 - [Mastodon Developer Settings](#mastodon-developer-settings)
 - [Contributions](#contributions)
+- [Screenshots](#screenshots)
 - [License](#license)
 
 ## Requirements
@@ -72,13 +73,13 @@ python3 start.py
 
 You will need a valid callback address that is reachable from the internet. You can use a service like [ngrok](https://ngrok.com/) to create a tunnel to your local machine.
 
-## License
-
-AGPL-3.0
-
 ## Contributions
 
 Contributions are welcome! Please submit a pull request or open an issue if you would like to contribute to the project.
 
 ## Screenshots
 <img src="https://github.com/Scobiform/fedi-follow-force-graph/blob/master/static/screen.png" alt="fedi follow force graph screen" style="width: 100%"/>
+
+## License
+
+AGPL-3.0
