@@ -47,7 +47,7 @@
                 sliderValueDisplay.textContent = newSize;  // Update display
 
                 if (window.graph && window.graph.graphData) {
-                    window.graph.nodeSize(newSize);  // Update node size
+                    window.graph.nodeRelSize(newSize);  // Update node size
                     window.graph.graphData(graphData);  // Reapply the graph data to update the graph
                 }
             });
@@ -248,6 +248,11 @@
                 console.log(node);
             }
         })
+        .onNodeDragEnd(node => {
+            node.fx = node.x;
+            node.fy = node.y;
+        })
+        
         ;
 
         // # Add forces to the graph
