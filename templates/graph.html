@@ -61,13 +61,7 @@
 
     // Function to update the graph with new node sizes
     function updateGraph() {
-        if (window.graph && window.graph.update) {
-            window.graph.update();  // If your library supports an 'update' method
-        } else if (window.graph && window.graph.refresh) {
-            window.graph.refresh();  // If your library supports a 'refresh' method
-        } else {
-            console.error("Graph update method not found.");
-        }
+        window.graph.graphData(graphData);
     }
 
     // Function to fetch all items from an endpoint
