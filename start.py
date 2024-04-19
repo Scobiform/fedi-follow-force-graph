@@ -193,9 +193,24 @@ async def fetch_following():
 @app.route('/search', methods=['GET'])
 async def search():
     ''' Search for users on the instance.'''
+    # session['access_token']
+
+    instance = request.args.get('instance')
+
+    regex = r"(https?:\/\/)?([\w\d-]+\.)*([\w\d-]+)(:\d{2,5})?"
+    instance = instance.match(regex)[1]
+
     query = request.args.get('query')
     if not query:
         return jsonify({'error': 'Query is required'}), 400
+
+    if 'access_token' not in session:
+            return jsonify({'error': 'Authentication required'}), 401
+
+    mastodon = Mastodon(
+        access_token=session['access_token'],
+        api_base_url=instance
+    )
 
     try:
         results = mastodon.account_search(query, limit=10)
