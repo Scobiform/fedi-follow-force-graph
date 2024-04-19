@@ -105,16 +105,20 @@
             window.graph = initGraph(graphData);
         }
 
-        function handleKeyUp(event) {
+        async function handleKeyUp(event) {
             clearTimeout(timeout);
 
             // Check if the enter key is pressed
             if (event.key === "Enter") {
                 submitForm();
             }
+            else {
+                timeout = setTimeout(submitForm, delay);
+            }
+
         }
 
-        function submitForm() {
+        async function submitForm() {
             const form = document.getElementById('searchForUser');
             form.submit();
         }
