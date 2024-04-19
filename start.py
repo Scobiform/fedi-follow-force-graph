@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import os
+import re
 import subprocess
 import aiofiles
 from dotenv import load_dotenv
@@ -196,9 +197,7 @@ async def search():
     # session['access_token']
 
     instance = request.args.get('instance')
-
-    regex = r"(https?:\/\/)?([\w\d-]+\.)*([\w\d-]+)(:\d{2,5})?"
-    instance = instance.match(regex)[1]
+    instance = re.search(r"//([^/@]+)", instance).group(1) if re.search(r"//([^/@]+)", instance) else None
 
     query = request.args.get('query')
     if not query:
