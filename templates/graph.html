@@ -43,6 +43,27 @@
         }
     });
 
+    document.getElementById('nodeSizeSlider').addEventListener('input', function() {
+        const newSize = parseInt(this.value, 10); 
+        document.getElementById('sliderValue').textContent = newSize;  // Update display
+
+        // Update the size of each node based on the new slider value
+        graphData.nodes.forEach(node => {
+            if (node.type === 'instance') {
+                node.size = newSize + 7 * Math.sqrt(node.connectionCount);  // Example for instance nodes
+            } else {
+                node.size = newSize + (Math.log(node.followerCount + 1) * 42);  // Example for other nodes
+            }
+        });
+
+        updateGraph();
+    });
+
+    // Function to update the graph with new node sizes
+    function updateGraph() {
+        window.graph.graphData(graphData);
+    }
+
     // Function to fetch all items from an endpoint
     async function fetchAllItems(userId, endpoint, apiBaseUrl) {
         let items = [];
@@ -311,27 +332,6 @@
         graph.graphData(filteredData);
     }
 
-    window.addEventListener('resize', () => {
-        if (window.graph) {
-            window.graph.width(container.clientWidth);
-            window.graph.height(container.clientHeight);
-        }
-    });
-
-    // Update the node size based on the slider value
-    // Event listener for the node size slider
-    document.getElementById('nodeSizeSlider').addEventListener('input', function() {
-        const value = parseInt(this.value);
-        document.getElementById('sliderValue').textContent = value;
-        if (window.graph) {
-            window.graph.nodeRelSize(node => {
-                if (node.type === 'instance') {
-                    return 0.1 + 7 * Math.sqrt(node.connectionCount) * value / 1000;
-                } else {
-                    return 0.2 + (Math.log(node.followerCount + 1) * 42) * value / 1000;
-                }
-            });
-        }
-    });
+    
 
 </script>
