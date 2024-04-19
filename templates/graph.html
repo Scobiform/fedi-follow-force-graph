@@ -236,8 +236,13 @@
             // Increased distance and adjusted strength for links 
             .d3Force('link', d3.forceLink().id(d => d.id).distance(200).strength(0.5))
             .d3Force('x', d3.forceX(container.clientWidth / 2).strength(0.05))
-            .d3Force('y', d3.forceY(container.clientHeight / 2).strength(0.05));
+            .d3Force('y', d3.forceY(container.clientHeight / 2).strength(0.05))
+            .d3Force('center', d3.forceCenter(container.clientWidth / 2, container.clientHeight / 2))
+            // Link distance based on type
+            .d3Force('link', d3.forceLink().distance(link => link.type === 'instance' ? 200 : 100).strength(0.5))
             
+        ;
+
 
         return Graph;
     }
