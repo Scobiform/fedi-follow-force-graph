@@ -1,6 +1,6 @@
 <div id="graph"></div>
 <div id="settingsPanel">
-    <h2>Graph Settings</h2>
+    <!--<h2>Graph Settings</h2>-->
     <label for="nodeSizeSlider">Avatar Size: </label>
     <input type="range" id="nodeSizeSlider" min="0.7" max="4200" value="70" step="0.7" aria-label="Avatar Size">
     <span id="sliderValue">70</span>
@@ -135,8 +135,8 @@
                 followerCount: f.followers_count,
                 followingCount: f.following_count,
                 instance: domain
-            };
-            nodes.push(followerNode);
+        };
+        nodes.push(followerNode);
 
             return { source: userId, target: followerNode.id, type: 'follow' };
         });
