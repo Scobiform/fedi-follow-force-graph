@@ -116,6 +116,10 @@ nav p {
   position: absolute;
   bottom: 0;
   width: max-content;
+  text-align: center;
+  right: 1.4rem;
+  width: 98px;
+  bottom: 10.5rem;
 }
 
 #settingsPanel h2 {
