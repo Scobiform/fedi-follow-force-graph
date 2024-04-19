@@ -77,4 +77,4 @@ You will need a valid callback address that is reachable from the internet. You 
 AGPL-3.0
 
 // Add screen.png 
-<img src="https://github.com/Scobiform/fedi-follow-force-graph/blob/master/static/images/screen.png" alt="fedi follow force graph screen" style="width: 100%"/>
+<img src="https://github.com/Scobiform/fedi-follow-force-graph/blob/master/static/screen.png" alt="fedi follow force graph screen" style="width: 100%"/>
