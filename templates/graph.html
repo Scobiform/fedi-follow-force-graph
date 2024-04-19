@@ -6,6 +6,7 @@
     // and provides a function to filter nodes based on type
 
     var graphData;
+    const container = document.getElementById('graph');
 
     document.addEventListener('DOMContentLoaded', async function() {
     const elementResizeDetector = elementResizeDetectorMaker();
@@ -150,8 +151,6 @@
     }
 
     function initGraph(graphData) {
-        // Get the container element
-        const container = document.getElementById('graph');
         // Initialize the graph
         const Graph = ForceGraph()(document.getElementById('graph'))
             .height(container.clientHeight)
