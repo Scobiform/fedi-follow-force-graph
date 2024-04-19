@@ -173,7 +173,7 @@
                 ctx.save();
 
                 const label = node.username;
-                const fontSize = 7 / globalScale;
+                const fontSize = 9.1 / globalScale;
                 let imgSize = node.type === 'instance' ? 70 + 7 * Math.sqrt(node.connectionCount) : 28 + (Math.log(node.followerCount + 1) * 7);
 
                 ctx.font = `${fontSize}px Sans-Serif`;
@@ -232,6 +232,7 @@
                 console.log(node);
             }
         })
+        .nodeRelSize(42)
         ;
 
         // # Add forces to the graph
