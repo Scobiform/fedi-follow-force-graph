@@ -169,35 +169,40 @@
             .nodeCanvasObject((node, ctx, globalScale) => {
                 const label = node.username;
                 const fontSize = 12 / globalScale;
-                const baseImgSize = 28;
-                let imgSize = baseImgSize + (Math.log(node.followerCount + 1) * 7) * Math.sqrt(node.connectionCount);
+                let imgSize;
 
-                ctx.font = `${fontSize}px Sans-Serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-
+                // Calculate the image size based on node type or connections
                 if (node.type === 'instance') {
-                    // Calculate size dynamically based on connection count
-                    imgSize = 70 + 7 * Math.sqrt(node.connectionCount); // Increase size logarithmically
-                    ctx.fillStyle = 'green'; // Distinct color for instance nodes
-
-                    // Draw a circle instead of a square
-                    ctx.beginPath();
-                    ctx.arc(node.x, node.y, imgSize / 2, 0, 2 * Math.PI); // Draw a circle
-                    ctx.fill();
-
-                    // Adjust text color and positioning
-                    ctx.fillStyle = 'white'; // Text color for instance nodes
-                    ctx.textAlign = 'center'; // Ensure text is centered
-                    ctx.textBaseline = 'middle'; // Align text vertically in the middle
-                    ctx.fillText(label, node.x, node.y);
+                    imgSize = 70 + 7 * Math.sqrt(node.connectionCount);
                 } else {
-                    // Dynamic sizing for non-instance nodes
                     imgSize = 28 + (Math.log(node.followerCount + 1) * 7);
+                }
 
-                    if (node.avatar && node.img) {
+                // Set the color based on node type
+                if (node.type === 'instance') {
+                    ctx.fillStyle = 'green';
+                } else if (node.type === 'follower') {
+                    ctx.fillStyle = 'red';
+                } else {
+                    ctx.fillStyle = 'blue';
+                }
+
+                // Draw a circle for all node types
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, imgSize / 2, 0, 2 * Math.PI); // Draw a circle
+                ctx.fill();
+
+                // Text styling
+                ctx.fillStyle = 'white'; // Text color inside the nodes
+                ctx.textAlign = 'center'; // Ensure text is centered
+                ctx.textBaseline = 'middle'; // Align text vertically in the middle
+                ctx.fillText(label, node.x, node.y);
+
+                // Handle avatars for non-instance nodes
+                if (node.type !== 'instance' && node.avatar) {
+                    if (node.img) {
                         ctx.drawImage(node.img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
-                    } else if (node.avatar && !node.img) {
+                    } else {
                         const img = new Image();
                         img.src = node.avatar;
                         img.onload = () => {
@@ -205,12 +210,9 @@
                             ctx.drawImage(img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
                         };
                     }
-
-                    // Adjust text color and positioning for non-instance nodes
-                    ctx.fillStyle = (node.type === 'follower') ? 'red' : 'var(--british-racing-green)';
-                    ctx.fillText(label, node.x, node.y + imgSize / 2 + 5);
                 }
             })
+
         // Show node info on click
         .onNodeClick(node => console.log(node))
         // Paint the node pointer area with a circle
