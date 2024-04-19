@@ -150,10 +150,14 @@ nav p {
 
 #settingsPanel input {
   font-size: 0.7rem;
+  margin: 0;
+  padding: 0.42rem;
 }
 
 #settingsPanel label {
-  font-size: 0.7rem;
+  font-size: 0.42rem;
+  margin: 0;
+  padding: 0;
 }
 
 input[type="text"] {
