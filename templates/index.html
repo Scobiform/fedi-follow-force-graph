@@ -76,7 +76,7 @@
         document.getElementById('searchForUser').addEventListener('submit', function(event) {
             event.preventDefault();  // Prevent the default form submission which causes page reload
             const query = document.getElementById('searchUser').value;
-            fetch(`/search?query=${encodeURIComponent(query)}`)
+            fetch(`/search?query=${query}`)
                 .then(response => response.json())
                 .then(data => {
                     displayResults(data);
