@@ -117,3 +117,9 @@ nav p {
   bottom: 0;
   width: min-content;
 }
+
+#settingsPanel h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 0.7rem;
+}
