@@ -120,9 +120,17 @@
             // Check if the enter key is pressed
             if (event.key === "Enter") {
                 submitForm();
-            }
-            else {
-                timeout = setTimeout(submitForm, delay);
+            } else {
+                timeout = setTimeout(() => {
+                    const query = document.getElementById('searchUser').value;
+                    fetch(`{{ app_url }}/search?query=${query}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            displayResults(data);
+                            console.log(data);
+                        })
+                        .catch(error => console.error('Error:', error));
+                }, delay);
             }
 
         }
