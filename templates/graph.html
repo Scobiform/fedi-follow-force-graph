@@ -221,7 +221,18 @@
                 ctx.arc(node.x, node.y, imgSize / 2, 0, 2 * Math.PI, false);
                 ctx.fill();
             }
-        });
+        })
+        // Pop-up node info on hover
+        .onNodeHover(node => {
+            container.style.cursor = node ? 'pointer' : null;
+        })
+        // Show node info on hover
+        .onNodeHover(node => {
+            if (node) {
+                console.log(node);
+            }
+        })
+        ;
 
         // # Add forces to the graph
         // Dynamic collision radius based on node type
@@ -237,6 +248,8 @@
             .d3Force('link', d3.forceLink().distance(link => link.type === 'instance' ? 200 : 100).strength(0.5))
 
         ;
+
+        
 
 
         return Graph;
