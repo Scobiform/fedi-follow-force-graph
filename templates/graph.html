@@ -47,7 +47,7 @@
                 sliderValueDisplay.textContent = newSize;  // Update display
 
                 if (window.graph && window.graph.graphData) {
-                    window.graph.nodeRelSize(value);
+                    window.graph.nodeRelSize(newSize);  // Update node size
                     window.graph.graphData(graphData);  // Reapply the graph data to update the graph
                 }
             });
