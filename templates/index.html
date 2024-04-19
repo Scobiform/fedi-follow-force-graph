@@ -70,76 +70,51 @@
     <script>
         
         let timeout = null;
-        const delay = 1000;
-
+        const delay = 1000; // Delay in milliseconds
 
         document.getElementById('searchForUser').addEventListener('submit', function(event) {
-            event.preventDefault();  // Prevent the default form submission which causes page reload
-            const query = document.getElementById('searchUser').value;
-            fetch(`{{ app_url }}/search?query=${query}`)
-                .then(response => response.json())
-                .then(data => {
-                    displayResults(data);
-                })
-                .catch(error => console.error('Error:', error));
+            event.preventDefault(); // Prevent the default form submission
+            performSearch(); // Perform search directly without waiting
         });
 
-        async function displayResults(results) {
+        function handleKeyUp(event) {
+            clearTimeout(timeout); // Clear the existing timeout
+
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent form submission via Enter key
+                performSearch(); // Immediately perform the search
+            } else {
+                timeout = setTimeout(() => {
+                    performSearch(); // Perform the search after a delay when user stops typing
+                }, delay);
+            }
+        }
+
+        function performSearch() {
+            const query = document.getElementById('searchUser').value;
+            fetch(`${baseUrl}/search?query=${encodeURIComponent(query)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch data from the server');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayResults(data);
+                    console.log(data);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function displayResults(results) {
             const container = document.getElementById('searchResults');
             container.innerHTML = ''; // Clear previous results
             results.forEach(result => {
                 const div = document.createElement('div');
-                div.textContent = result.username;
-                div.onclick = () => loadGraph(result.id); // Add click handler to load graph
+                div.textContent = result.username; // Assuming the 'username' is part of the returned data
                 container.appendChild(div);
             });
         }
-
-        async function loadGraph(userId) {
-            try {
-                const followers = await fetchAllItems(userId, 'followers', 'https://your-api-url.com'); 
-                const followings = await fetchAllItems(userId, 'following', 'https://your-api-url.com');
-                const userName = '{{ user.username }}'; 
-                const userAvatar = '{{ user.avatar }}';
-                
-                // Generate graph data
-                const graphData = generateGraphData(userId, userName, userAvatar, followers, followings);
-                // Calculate the number of connections for each node
-                calculateNodeConnections(graphData.nodes, graphData.links);
-                window.graph = initGraph(graphData);
-            } catch (error) {
-                console.error('Failed to load graph data:', error);
-            }
-        }
-
-        async function handleKeyUp(event) {
-            event.preventDefault();
-
-            clearTimeout(timeout);
-
-            // Check if the enter key is pressed
-            if (event.key === "Enter") {
-                submitForm();
-            } else {
-                timeout = setTimeout(() => {
-                    const query = document.getElementById('searchUser').value;
-                    fetch(`{{ app_url }}/search?query=${query}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            displayResults(data);
-                            console.log(data);
-                        })
-                        .catch(error => console.error('Error:', error));
-                }, delay);
-            }
-
-        }
-
-        async function submitForm() {
-            const form = document.getElementById('searchForUser');
-            form.submit();
-        }
-
     </script>
 
 
