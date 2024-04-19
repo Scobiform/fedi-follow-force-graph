@@ -1,4 +1,8 @@
 <div id="graph"></div>
+<div id="settingsPanel">
+    <label for="nodeSizeSlider">Node Size: </label>
+    <input type="range" id="nodeSizeSlider" min="1" max="1000" value="420" step="1">
+    <span id="sliderValue">420</span>
 <script>
 
     // This script is loaded when the graph page is opened
@@ -296,5 +300,11 @@
         graph.graphData(filteredData);
     }
 
+    // Function to update the node size based on the slider value
+    document.getElementById('nodeSizeSlider').addEventListener('input', function() {
+        const value = parseInt(this.value);
+        document.getElementById('sliderValue').textContent = value;
+        graph.nodeRelSize(value);
+    });
 
 </script>
