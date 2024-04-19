@@ -52,11 +52,9 @@
 
             // Function to update the node size based on the slider value
             const slider = document.getElementById('nodeSizeSlider');
-            const sliderValueDisplay = document.getElementById('sliderValue');
 
             slider.addEventListener('input', function() {
                 const newSize = parseInt(this.value, 10);
-                sliderValueDisplay.textContent = newSize;  // Update display
                 console.log('New node size:', newSize);  // Debugging output
 
                 if (window.graph && window.graph.graphData) {
@@ -367,6 +365,7 @@
 
         instanceSlider.addEventListener('input', function() {
             instanceSizeMultiplier = parseInt(this.value, 10); 
+
 
             // Reapply the graph data to update the graph
             if (window.graph && window.graph.graphData) {
