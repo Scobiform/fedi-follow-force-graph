@@ -48,11 +48,11 @@
         document.getElementById('sliderValue').textContent = newSize;  // Update display
 
         // Update the size of each node based on the new slider value
-        graphData.nodes.forEach(node => {
+        window.graph.graphData.nodes.forEach(node => {
             if (node.type === 'instance') {
-                node.size = newSize + 7 * Math.sqrt(node.connectionCount);  // Example for instance nodes
+                node.size = newSize + 7 * Math.sqrt(node.connectionCount); 
             } else {
-                node.size = newSize + (Math.log(node.followerCount + 1) * 42);  // Example for other nodes
+                node.size = newSize + (Math.log(node.followerCount + 1) * 42); 
             }
         });
 
