@@ -198,11 +198,12 @@
                             drawAvatarCircle(ctx, node.x, node.y, imgSize / 2, img);
                         };
                     } else {
-                        ctx.fillStyle = '#fff';
                         drawAvatarCircle(ctx, node.x, node.y, imgSize / 2, node.img);
                     }
                 }
 
+                // Set the text color only white for instance nodes
+                ctx.fillStyle = node.type === 'instance' ? '#F9F5F1' : ctx.fillStyle;
                 ctx.fillText(label, node.x, node.y);
 
                 ctx.restore();
