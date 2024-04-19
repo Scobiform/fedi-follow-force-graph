@@ -168,7 +168,7 @@
             .linkWidth(link => link.type === 'instance' ? 2 : 1) 
             .nodeCanvasObject((node, ctx, globalScale) => {
                 // Draw a circle for all nodes
-                
+
                 // Save the current state of the context
                 ctx.save();
 
@@ -202,8 +202,6 @@
                     }
                 }
 
-                // Draw the text label
-                ctx.fillStyle = 'white';
                 ctx.fillText(label, node.x, node.y);
 
                 ctx.restore();
