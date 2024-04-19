@@ -189,6 +189,19 @@ async def fetch_following():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/search', methods=['GET'])
+async def search():
+    ''' Search for users on the instance.'''
+    query = request.args.get('query')
+    if not query:
+        return jsonify({'error': 'Query is required'}), 400
+
+    try:
+        results = mastodon.account_search(query)
+        return jsonify(results)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     ''' Run the application.'''
     asyncio.run(app.run(host='localhost', port=5003, debug=False))
