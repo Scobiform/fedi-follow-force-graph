@@ -49,6 +49,8 @@
                 <input type="text" id="searchUser" placeholder="Search for a user" aria-label="Search for a user">
                 <button type="submit">Search</button>
             </form>
+            <div id="searchResults"></div>
+
         </nav>
 
     </div>
@@ -61,7 +63,46 @@
 
     </div>
     
+
+    <script>
+        document.getElementById('searchForUser').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const query = document.getElementById('searchUser').value;
+            fetch(`/search?query=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayResults(data);
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        function displayResults(results) {
+            const container = document.getElementById('searchResults');
+            container.innerHTML = ''; // Clear previous results
+            results.forEach(result => {
+                const div = document.createElement('div');
+                div.textContent = result.username;
+                div.onclick = () => loadGraph(result.id); // Add click handler to load graph
+                container.appendChild(div);
+            });
+        }
+
+        async function loadGraph(userId) {
+            const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
+            const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
+            // Generate graph data
+            graphData = generateGraphData(userId, userName, userAvatar, followers, followings);
+            // Calculate the number of connections for each node
+            calculateNodeConnections(graphData.nodes, graphData.links);
+            window.graph = initGraph(graphData);
+        }
+    </script>
+
+
+
     <!-- <script src="static/app.js"></script> -->
+
+
 
 </body>
 </html>
