@@ -198,7 +198,7 @@ async def search():
         return jsonify({'error': 'Query is required'}), 400
 
     try:
-        results = mastodon.account_search(query, limit=10)  # Adjust limit as needed
+        results = mastodon.account_search(query, limit=10)
         return jsonify(results)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
