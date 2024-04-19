@@ -45,6 +45,7 @@
             slider.addEventListener('input', function() {
                 const newSize = parseInt(this.value, 10);
                 sliderValueDisplay.textContent = newSize;  // Update display
+                console.log('New node size:', newSize);  // Debugging output
 
                 if (window.graph && window.graph.graphData) {
                     window.graph.nodeRelSize(newSize);  // Update node size
@@ -252,7 +253,7 @@
             node.fx = node.x;
             node.fy = node.y;
         })
-        
+
         ;
 
         // # Add forces to the graph
