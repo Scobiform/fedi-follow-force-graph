@@ -18,7 +18,7 @@
     const userAvatar = '{{ user.avatar }}';
     const userName = '{{ user.username | tojson | safe }}';
 
-    let avatarSizeMultiplier = 70;  // Starting size, updated by the slider
+    let avatarSizeMultiplier = 70;
 
     // Wait for the DOM to load before initializing the graph
     document.addEventListener('DOMContentLoaded', async function() {
@@ -321,16 +321,18 @@
         graph.graphData(filteredData);
     }
 
+    // Function to update the avatar size based on the slider value
     document.addEventListener('DOMContentLoaded', function() {
         const slider = document.getElementById('nodeSizeSlider');
         const sliderValueDisplay = document.getElementById('sliderValue');
 
         slider.addEventListener('input', function() {
-            avatarSizeMultiplier = parseInt(this.value, 10); // Update the global avatar size multiplier
-            sliderValueDisplay.textContent = avatarSizeMultiplier; // Update the display next to the slider
+            avatarSizeMultiplier = parseInt(this.value, 10); 
+            sliderValueDisplay.textContent = avatarSizeMultiplier; 
 
+            // Reapply the graph data to update the graph
             if (window.graph && window.graph.graphData) {
-                window.graph.graphData(graphData); // Reapply the graph data to update the graph
+                window.graph.graphData(graphData); 
             }
         });
     });
