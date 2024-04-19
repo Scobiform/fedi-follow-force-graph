@@ -210,17 +210,16 @@
         .onNodeClick(node => console.log(node))
         // Paint the node pointer area with a circle
         .nodePointerAreaPaint((node, color, ctx) => {
-            const imgSize = node.type === 'instance' ? 50 : 28 + (Math.log(node.followerCount + 1) * 5);
+            // Determine the size of the node based on type and attributes
+            const imgSize = node.type === 'instance' ? 
+                            420 + 7 * Math.sqrt(node.connectionCount) : 
+                            70 + (Math.log(node.followerCount + 7) * 7
+            );
             ctx.fillStyle = color;
-            if (node.type === 'instance') {
-                ctx.beginPath();
-                ctx.rect(node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
-                ctx.fill();
-            } else {
-                ctx.beginPath();
-                ctx.arc(node.x, node.y, imgSize / 2, 0, 2 * Math.PI, false);
-                ctx.fill();
-            }
+            // Draw a circle for the hit area, which matches the visual representation of the node
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, imgSize / 2, 0, 2 * Math.PI, false);
+            ctx.fill();
         })
         // Pop-up node info on hover
         .onNodeHover(node => {
