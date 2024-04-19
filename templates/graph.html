@@ -37,11 +37,15 @@
                     window.graph.width(width);
                     window.graph.height(height);
             });
+
             // Function to update the node size based on the slider value
             document.getElementById('nodeSizeSlider').addEventListener('input', function() {
                 const value = parseInt(this.value);
                 document.getElementById('sliderValue').textContent = value;
-                window.graph.nodeRelSize(value);
+                if(window.graph && window.graph.nodeRelSize) {
+                    window.graph.nodeRelSize(value);
+                    window.graph.refresh(); // Ensure to call refresh if required by your graph library
+                }
             });
         }
         catch (error) {
