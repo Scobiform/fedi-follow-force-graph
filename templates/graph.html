@@ -203,7 +203,7 @@
                 ctx.save();
                 const label = node.username;
                 const fontSize = textFontSize / globalScale;
-                let imgSize = node.type === 'instance' ? instanceSizeMultiplier + 7 * Math.sqrt(node.connectionCount) : avatarSizeMultiplier  + (Math.log(node.followerCount + 7) * 42);
+                let imgSize = node.type === 'instance' ? instanceSizeMultiplier + 7 * Math.sqrt(node.connectionCount) : avatarSizeMultiplier  + (Math.log(node.followerCount + 7) * 63);
 
                 ctx.font = `${fontSize}px Sans-Serif`;
                 ctx.textAlign = 'center';
