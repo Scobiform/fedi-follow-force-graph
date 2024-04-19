@@ -187,7 +187,7 @@ input[type="range"]::-moz-range-thumb {
   z-index: 999;
   mix-blend-mode: luminosity;
   pointer-events: none;
-  opacity: 0.007;
+  opacity: 0.0014;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat; 
