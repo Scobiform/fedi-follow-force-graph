@@ -218,7 +218,7 @@
         // Dynamic collision radius based on node type
         Graph.d3Force('collide', d3.forceCollide().radius(node => node.type === 'instance' ? 60 : 42))
             // Increased repulsive force
-            .d3Force('charge', d3.forceManyBody().strength(-2500)) 
+            .d3Force('charge', d3.forceManyBody().strength(-4200)) 
             // Increased distance and adjusted strength for links 
             .d3Force('link', d3.forceLink().id(d => d.id).distance(200).strength(0.5)); 
 
