@@ -3,7 +3,7 @@
   --secondary-color: #f4f4f4;
   --british-racing-green: #004225;
   --border-color: rgba(255, 235, 119, 0.274);
-  --border-radius: 0rem;
+  --border-radius: var(--border-radius);
   --transition: 0.3s ease-in-out;
   --opacity: 0.6;
   --font: system-ui, sans-serif;
@@ -61,7 +61,6 @@ button {
   text-transform: uppercase;
   font-size: xx-small;
   margin: 0.14rem;
-  border-radius: 0.42rem;
   outline: none;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
