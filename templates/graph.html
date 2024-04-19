@@ -198,6 +198,7 @@
                             drawAvatarCircle(ctx, node.x, node.y, imgSize / 2, img);
                         };
                     } else {
+                        ctx.fillStyle = '#fff';
                         drawAvatarCircle(ctx, node.x, node.y, imgSize / 2, node.img);
                     }
                 }
@@ -247,9 +248,6 @@
             .d3Force('link', d3.forceLink().distance(link => link.type === 'instance' ? 200 : 100).strength(0.5))
 
         ;
-
-        
-
 
         return Graph;
     }
