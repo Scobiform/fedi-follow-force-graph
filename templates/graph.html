@@ -252,10 +252,8 @@
         // Paint the node pointer area with a circle
         .nodePointerAreaPaint((node, color, ctx) => {
             // Determine the size of the node based on type and attributes
-            const imgSize = node.type === 'instance' ? 
-                            instanceSizeMultiplier
-                             + 7 * Math.sqrt(node.connectionCount) : 
-                            avatarSizeMultiplier
+            const imgSize = node.type === 'instance' ? instanceSizeMultiplier
+                             + 7 * Math.sqrt(node.connectionCount) : avatarSizeMultiplier
                              + (Math.log(node.followerCount + 7) * 7
             );
             ctx.fillStyle = color;
