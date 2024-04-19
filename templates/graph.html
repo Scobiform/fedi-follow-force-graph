@@ -37,19 +37,6 @@
                     window.graph.width(width);
                     window.graph.height(height);
             });
-            // Setup slider to dynamically adjust node size
-            const nodeSizeSlider = document.getElementById('nodeSizeSlider');
-            nodeSizeSlider.addEventListener('input', () => {
-                const value = parseInt(nodeSizeSlider.value);
-                document.getElementById('sliderValue').textContent = value;
-                window.graph.nodeRelSize(node => {
-                    if (node.type === 'instance') {
-                        return 0.1 + 7 * Math.sqrt(node.connectionCount);
-                    } else {
-                        return 0.2 + (Math.log(node.followerCount + 1) * value);
-                    }
-                });
-            });
         }
         catch (error) {
             console.error('Initialization failed:', error); 
@@ -324,6 +311,27 @@
         graph.graphData(filteredData);
     }
 
-    
+    window.addEventListener('resize', () => {
+        if (window.graph) {
+            window.graph.width(container.clientWidth);
+            window.graph.height(container.clientHeight);
+        }
+    });
+
+    // Update the node size based on the slider value
+    // Event listener for the node size slider
+    document.getElementById('nodeSizeSlider').addEventListener('input', function() {
+        const value = parseInt(this.value);
+        document.getElementById('sliderValue').textContent = value;
+        if (window.graph) {
+            window.graph.nodeRelSize(node => {
+                if (node.type === 'instance') {
+                    return 0.1 + 7 * Math.sqrt(node.connectionCount) * value / 1000;
+                } else {
+                    return 0.2 + (Math.log(node.followerCount + 1) * 42) * value / 1000;
+                }
+            });
+        }
+    });
 
 </script>
