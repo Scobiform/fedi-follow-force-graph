@@ -115,7 +115,7 @@ nav p {
   z-index: 999;
   position: absolute;
   bottom: 0;
-  width: min-content;
+  width: max-content;
 }
 
 #settingsPanel h2 {
