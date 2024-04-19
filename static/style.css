@@ -3,7 +3,7 @@
   --secondary-color: #f4f4f4;
   --british-racing-green: #004225;
   --border-color: rgba(255, 235, 119, 0.274);
-  --border-radius: var(--border-radius);
+  --border-radius: 0.42rem;
   --transition: 0.3s ease-in-out;
   --opacity: 0.6;
   --font: system-ui, sans-serif;
