@@ -169,50 +169,38 @@
             .nodeCanvasObject((node, ctx, globalScale) => {
                 const label = node.username;
                 const fontSize = 12 / globalScale;
-                let imgSize;
+                let imgSize = node.type === 'instance' ? 70 + 7 * Math.sqrt(node.connectionCount) : 28 + (Math.log(node.followerCount + 1) * 7);
 
-                // Calculate the image size based on node type or connections
-                if (node.type === 'instance') {
-                    imgSize = 70 + 7 * Math.sqrt(node.connectionCount);
-                } else {
-                    imgSize = 28 + (Math.log(node.followerCount + 1) * 7);
-                }
+                ctx.font = `${fontSize}px Sans-Serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
 
-                // Set the color based on node type
-                if (node.type === 'instance') {
-                    ctx.fillStyle = 'green';
-                } else if (node.type === 'follower') {
-                    ctx.fillStyle = 'red';
-                } else {
-                    ctx.fillStyle = 'blue';
-                }
+                // Set the fill style based on the node type
+                ctx.fillStyle = node.type === 'instance' ? 'green' : (node.type === 'follower' ? 'red' : 'blue');
 
-                // Draw a circle for all node types
+                // Draw a circle for all nodes
                 ctx.beginPath();
-                ctx.arc(node.x, node.y, imgSize / 2, 0, 2 * Math.PI); // Draw a circle
+                ctx.arc(node.x, node.y, imgSize / 2, 0, 2 * Math.PI);
                 ctx.fill();
 
-                // Text styling
-                ctx.fillStyle = 'white'; // Text color inside the nodes
-                ctx.textAlign = 'center'; // Ensure text is centered
-                ctx.textBaseline = 'middle'; // Align text vertically in the middle
-                ctx.fillText(label, node.x, node.y);
-
-                // Handle avatars for non-instance nodes
+                // Draw circular avatars for non-instance nodes
                 if (node.type !== 'instance' && node.avatar) {
-                    if (node.img) {
-                        ctx.drawImage(node.img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
-                    } else {
+                    if (!node.img) {
                         const img = new Image();
                         img.src = node.avatar;
                         img.onload = () => {
-                            node.img = img; // Cache the image in the node
-                            ctx.drawImage(img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
+                            node.img = img;  // Cache the image in the node
+                            drawAvatarCircle(ctx, node.x, node.y, imgSize / 2, img);
                         };
+                    } else {
+                        drawAvatarCircle(ctx, node.x, node.y, imgSize / 2, node.img);
                     }
                 }
-            })
 
+                // Draw the text label
+                ctx.fillStyle = 'white';
+                ctx.fillText(label, node.x, node.y);
+            });
         // Show node info on click
         .onNodeClick(node => console.log(node))
         // Paint the node pointer area with a circle
@@ -247,6 +235,16 @@
 
 
         return Graph;
+    }
+
+    // Function to draw an avatar circle
+    function drawAvatarCircle(ctx, x, y, radius, img) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, 2 * Math.PI);
+        ctx.clip();  // Clip to the circle
+        ctx.drawImage(img, x - radius, y - radius, radius * 2, radius * 2);
+        ctx.restore();  // Restore to the original state to draw text or other shapes later
     }
 
     // Resize the graph when the window is resized
