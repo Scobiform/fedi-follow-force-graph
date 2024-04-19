@@ -60,7 +60,8 @@ button {
   transition: background-color var(--transition);
   text-transform: uppercase;
   font-size: xx-small;
-  margin: 0.07rem;
+  margin: 0.14rem;
+  border-radius: 0.42rem;
 }
 
 button:hover {
