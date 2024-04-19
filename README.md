@@ -76,5 +76,9 @@ You will need a valid callback address that is reachable from the internet. You 
 
 AGPL-3.0
 
-// Add screen.png 
+## Contributions
+
+Contributions are welcome! Please submit a pull request or open an issue if you would like to contribute to the project.
+
+## Screenshots
 <img src="https://github.com/Scobiform/fedi-follow-force-graph/blob/master/static/screen.png" alt="fedi follow force graph screen" style="width: 100%"/>
