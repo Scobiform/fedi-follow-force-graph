@@ -132,6 +132,7 @@
             });
         }
 
+        // Function to fetch all items (followers or followings) for a user
         async function loadGraph(userId) {
             // Fetch followers and followings
             const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
