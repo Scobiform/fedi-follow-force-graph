@@ -66,10 +66,10 @@ async def home():
         graph_component = await get_graph(user, instance=config['instance_url'])
 
         app_name =  config['app_name']
-        api_base_url = config['instance_url']
+        app_url = os.getenv('APP_URL')
 
         # Pass data to the template
-        return await render_template('index.html', logged_in=True, user=user, graph=graph_component, app_name=app_name, api_base_url=api_base_url)
+        return await render_template('index.html', logged_in=True, user=user, graph=graph_component, app_name=app_name, app_url=app_url)
     else:
         # Render the template without user data
         return await render_template('index.html', logged_in=False)
