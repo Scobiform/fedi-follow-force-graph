@@ -88,3 +88,10 @@ nav p {
   -webkit-tap-highlight-color: transparent;
   background: none !important
 }
+
+/* Settings panel */
+.settings-panel {
+  z-index: 999;
+  position: absolute;
+  bottom: 0;
+}
