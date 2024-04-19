@@ -42,9 +42,9 @@
             document.getElementById('nodeSizeSlider').addEventListener('input', function() {
                 const value = parseInt(this.value);
                 document.getElementById('sliderValue').textContent = value;
-                if(window.graph && window.graph.nodeRelSize) {
+                if (window.graph && window.graph.graphData) {
                     window.graph.nodeRelSize(value);
-                    window.graph.refresh(); // Ensure to call refresh if required by your graph library
+                    window.graph.graphData(graphData);  // Reapply the graph data to update the graph
                 }
             });
         }
