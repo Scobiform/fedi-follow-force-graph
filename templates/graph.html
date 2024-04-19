@@ -26,7 +26,7 @@
     const userId = '{{ user.id | tojson | safe }}';
     const userAvatar = '{{ user.avatar }}';
     const userName = '{{ user.username | tojson | safe }}';
-    const instance = '{{ instance | tojson | safe }}';
+    const instance = '{{ instance }}';
 
     let avatarSizeMultiplier = 70;
     let textFontSize = 10.5;
@@ -41,7 +41,7 @@
             const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
             const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
             // Generate graph data
-            graphData = generateGraphData(userId, userName, userAvatar, followers, followings, instance);
+            graphData = generateGraphData(userId, userName, userAvatar, followers, followings);
             // Calculate the number of connections for each node
             calculateNodeConnections(graphData.nodes, graphData.links);
             window.graph = initGraph(graphData);
