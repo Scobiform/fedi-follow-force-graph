@@ -141,6 +141,17 @@ nav p {
   font-size: 0.7rem;
 }
 
+input[type="text"] {
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  outline: none;
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  padding: 0.42rem;
+  margin: 0.14rem;
+}
+
 input[type="range"] {
   -webkit-appearance: none;  /* Override default CSS styles */
   appearance: none;
