@@ -84,7 +84,7 @@
                 .catch(error => console.error('Error:', error));
         });
 
-        function displayResults(results) {
+        async function displayResults(results) {
             const container = document.getElementById('searchResults');
             container.innerHTML = ''; // Clear previous results
             results.forEach(result => {
