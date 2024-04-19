@@ -149,9 +149,9 @@ nav p {
 }
 
 #settingsPanel input {
-  font-size: 0.7rem;
   margin: 0;
   padding: 0.42rem;
+  border-radius: var(--border-radius);
 }
 
 #settingsPanel label {
