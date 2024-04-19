@@ -29,58 +29,44 @@
     let textFontSize = 4.2;
     let instanceSizeMultiplier = 560;
 
+    // Wait for the DOM to load before initializing the graph
     document.addEventListener('DOMContentLoaded', async function() {
-        const userId = 'userId';  // Your user's ID
-        const apiBaseUrl = 'https://api.example.com';  // Base API URL
-        const userName = 'userName';  // User's name
-        const userAvatar = 'userAvatar';  // User's avatar URL
-        let graphData;
-
+        const elementResizeDetector = elementResizeDetectorMaker();
         try {
-            const storedGraphData = sessionStorage.getItem('graphData');
-            if (storedGraphData) {
-                graphData = JSON.parse(storedGraphData);
-                console.log('Loaded graph data from session storage.');
-            } else {
-                // Fetch followers and followings
-                const followers = await fetchAllItems(userId, 'followers', apiBaseUrl);
-                const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
-                // Generate graph data
-                graphData = generateGraphData(userId, userName, userAvatar, followers, followings);
-                // Calculate the number of connections for each node
-                calculateNodeConnections(graphData.nodes, graphData.links);
-                // Store the new graph data in session storage
-                sessionStorage.setItem('graphData', JSON.stringify(graphData));
-                console.log('Fetched and stored new graph data.');
-            }
-            
-            // Initialize the graph
-            window.graph = initGraph(graphData);
 
-            const elementResizeDetector = elementResizeDetectorMaker();
+            // Fetch followers and followings
+            const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
+            const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
+            // Generate graph data
+            graphData = generateGraphData(userId, userName, userAvatar, followers, followings);
+            // Calculate the number of connections for each node
+            calculateNodeConnections(graphData.nodes, graphData.links);
+            window.graph = initGraph(graphData);
             // Resize the graph when the window is resized
             elementResizeDetector.listenTo(document.getElementById('graph'), function(element) {
-                var width = element.clientWidth;
-                var height = element.clientHeight;
-                window.graph.width(width);
-                window.graph.height(height);
+                    var width = element.clientWidth;
+                    var height = element.clientHeight;
+                    window.graph.width(width);
+                    window.graph.height(height);
             });
 
             // Function to update the node size based on the slider value
             const slider = document.getElementById('nodeSizeSlider');
+
             slider.addEventListener('input', function() {
                 const newSize = parseInt(this.value, 10);
-                console.log('New node size:', newSize);
+                console.log('New node size:', newSize);  // Debugging output
+
                 if (window.graph && window.graph.graphData) {
                     window.graph.nodeRelSize(newSize);  // Update node size
                     window.graph.graphData(graphData);  // Reapply the graph data to update the graph
                 }
             });
-        } catch (error) {
+        }
+        catch (error) {
             console.error('Initialization failed:', error); 
         }
     });
-
 
     // Function to fetch all items from an endpoint
     async function fetchAllItems(userId, endpoint, apiBaseUrl) {
