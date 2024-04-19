@@ -41,7 +41,7 @@
             document.getElementById('nodeSizeSlider').addEventListener('input', function() {
                 const value = parseInt(this.value);
                 document.getElementById('sliderValue').textContent = value;
-                graph.nodeRelSize(value);
+                window.graph.nodeRelSize(value);
             });
         }
         catch (error) {
