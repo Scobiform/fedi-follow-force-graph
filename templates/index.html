@@ -110,13 +110,28 @@
 
         function displayResults(results) {
             const container = document.getElementById('searchResults');
-            container.innerHTML = ''; // Clear previous results
+            container.innerHTML = ''; 
+
             results.forEach(result => {
+                const link = document.createElement('a');
+                link.href = "#"; 
+                link.textContent = result.username;
+                link.classList.add('user-link'); 
+                
+                // Event listener for clicking on each user link
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); 
+                    // Call your function to fetch all items, generate the graph, and init it
+                    loadGraph(result.id); 
+                });
+
+                // Append the link to a div container (for styling or additional structure)
                 const div = document.createElement('div');
-                div.textContent = result.username; // Assuming the 'username' is part of the returned data
+                div.appendChild(link);
                 container.appendChild(div);
             });
         }
+        
     </script>
 
 
