@@ -123,3 +123,15 @@ nav p {
   padding: 0;
   font-size: 0.7rem;
 }
+
+#settingsPanel button {
+  font-size: 0.7rem;
+}
+
+#settingsPanel input {
+  font-size: 0.7rem;
+}
+
+#settingsPanel label {
+  font-size: 0.7rem;
+}
