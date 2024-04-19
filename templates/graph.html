@@ -167,6 +167,11 @@
             })
             .linkWidth(link => link.type === 'instance' ? 2 : 1) 
             .nodeCanvasObject((node, ctx, globalScale) => {
+                // Draw a circle for all nodes
+                
+                // Save the current state of the context
+                ctx.save();
+
                 const label = node.username;
                 const fontSize = 12 / globalScale;
                 let imgSize = node.type === 'instance' ? 70 + 7 * Math.sqrt(node.connectionCount) : 28 + (Math.log(node.followerCount + 1) * 7);
@@ -200,6 +205,8 @@
                 // Draw the text label
                 ctx.fillStyle = 'white';
                 ctx.fillText(label, node.x, node.y);
+
+                ctx.restore();
             })
         // Show node info on click
         .onNodeClick(node => console.log(node))
