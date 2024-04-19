@@ -93,7 +93,8 @@
 
         function performSearch() {
             const query = document.getElementById('searchUser').value;
-            fetch(`${baseUrl}/search?query=${encodeURIComponent(query)}&instance=${encodeURIComponent('{{ user.url }}')}`)
+            const userInstance = '{{ user.url }}';
+            fetch(`${baseUrl}/search?query=${encodeURIComponent(query)}&instance=${encodeURIComponent(userInstance)}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Failed to fetch data from the server');
