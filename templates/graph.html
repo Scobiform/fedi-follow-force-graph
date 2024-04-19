@@ -41,7 +41,7 @@
             const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
             const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
             // Generate graph data
-            graphData = generateGraphData(userId, userName, userAvatar, followers, followings);
+            graphData = generateGraphData(userId, userName, userAvatar, followers, followings, instance);
             // Calculate the number of connections for each node
             calculateNodeConnections(graphData.nodes, graphData.links);
             window.graph = initGraph(graphData);
