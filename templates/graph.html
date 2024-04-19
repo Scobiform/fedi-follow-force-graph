@@ -253,8 +253,10 @@
         .nodePointerAreaPaint((node, color, ctx) => {
             // Determine the size of the node based on type and attributes
             const imgSize = node.type === 'instance' ? 
-                            420 + 7 * Math.sqrt(node.connectionCount) : 
-                            70 + (Math.log(node.followerCount + 7) * 7
+                            instanceSizeMultiplier
+                             + 7 * Math.sqrt(node.connectionCount) : 
+                            avatarSizeMultiplier
+                             + (Math.log(node.followerCount + 7) * 7
             );
             ctx.fillStyle = color;
             // Draw a circle for the hit area, which matches the visual representation of the node
