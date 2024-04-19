@@ -96,13 +96,20 @@
         }
 
         async function loadGraph(userId) {
-            const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
-            const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
-            // Generate graph data
-            graphData = generateGraphData(userId, userName, userAvatar, followers, followings);
-            // Calculate the number of connections for each node
-            calculateNodeConnections(graphData.nodes, graphData.links);
-            window.graph = initGraph(graphData);
+            try {
+                const followers = await fetchAllItems(userId, 'followers', 'https://your-api-url.com'); 
+                const followings = await fetchAllItems(userId, 'following', 'https://your-api-url.com');
+                const userName = '{{ user.username }}'; 
+                const userAvatar = '{{ user.avatar }}';
+                
+                // Generate graph data
+                const graphData = generateGraphData(userId, userName, userAvatar, followers, followings);
+                // Calculate the number of connections for each node
+                calculateNodeConnections(graphData.nodes, graphData.links);
+                window.graph = initGraph(graphData);
+            } catch (error) {
+                console.error('Failed to load graph data:', error);
+            }
         }
 
         async function handleKeyUp(event) {
