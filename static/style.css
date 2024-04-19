@@ -1,7 +1,6 @@
 :root {
   --primary-color: #4B0046;
   --secondary-color: #f4f4f4;
-  --night: #01130B;
   --british-racing-green: #004225;
   --border-color: rgba(255, 235, 119, 0.274);
   --border-radius: 0rem;
@@ -25,7 +24,7 @@ body {
   font-family: var(--font);
   line-height: 1.6;
   font-size: 1rem;
-  background-color: var(--night);
+  background-color: var(--primary-color);
   color: var(--secondary-color);
 }
 
@@ -168,7 +167,7 @@ input[type="range"]::-webkit-slider-thumb {
 input[type="range"]::-moz-range-thumb {
   width: 0.7rem;
   height: 20px;
-  background: var(--night);
+  background: var(--primary-color);
   cursor: pointer;
 }
 
