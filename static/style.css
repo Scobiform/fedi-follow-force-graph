@@ -188,6 +188,6 @@ input[type="range"]::-moz-range-thumb {
   mix-blend-mode: luminosity;
   background: url(/static/images/background.gif);
   pointer-events: none;
-  opacity: 0.14;
+  opacity: 0.021;
 }
 
