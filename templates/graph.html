@@ -1,8 +1,9 @@
 <div id="graph"></div>
 <div id="settingsPanel">
-    <label for="nodeSizeSlider">Node Size: </label>
-    <input type="range" id="nodeSizeSlider" min="1" max="1000" value="420" step="1">
-    <span id="sliderValue">420</span>
+    <label for="nodeSizeSlider">Avatar Size: </label>
+    <input type="range" id="nodeSizeSlider" min="10" max="100" value="70" step="1">
+    <span id="sliderValue">70</span>
+</div>
 <script>
 
     // This script is loaded when the graph page is opened
@@ -16,6 +17,8 @@
     const userId = '{{ user.id | tojson | safe }}';
     const userAvatar = '{{ user.avatar }}';
     const userName = '{{ user.username | tojson | safe }}';
+
+    let avatarSizeMultiplier = 70;  // Starting size, updated by the slider
 
     // Wait for the DOM to load before initializing the graph
     document.addEventListener('DOMContentLoaded', async function() {
@@ -37,32 +40,26 @@
                     window.graph.width(width);
                     window.graph.height(height);
             });
+
+            // Function to update the node size based on the slider value
+            const slider = document.getElementById('nodeSizeSlider');
+            const sliderValueDisplay = document.getElementById('sliderValue');
+
+            slider.addEventListener('input', function() {
+                const newSize = parseInt(this.value, 10);
+                sliderValueDisplay.textContent = newSize;  // Update display
+                console.log('New node size:', newSize);  // Debugging output
+
+                if (window.graph && window.graph.graphData) {
+                    window.graph.nodeRelSize(newSize);  // Update node size
+                    window.graph.graphData(graphData);  // Reapply the graph data to update the graph
+                }
+            });
         }
         catch (error) {
             console.error('Initialization failed:', error); 
         }
     });
-
-    document.getElementById('nodeSizeSlider').addEventListener('input', function() {
-        const newSize = parseInt(this.value, 10); 
-        document.getElementById('sliderValue').textContent = newSize;  // Update display
-
-        // Update the size of each node based on the new slider value
-        window.graph.graphData.nodes.forEach(node => {
-            if (node.type === 'instance') {
-                node.size = newSize + 7 * Math.sqrt(node.connectionCount); 
-            } else {
-                node.size = newSize + (Math.log(node.followerCount + 1) * 42); 
-            }
-        });
-
-        updateGraph();
-    });
-
-    // Function to update the graph with new node sizes
-    function updateGraph() {
-        window.graph.graphData(graphData);
-    }
 
     // Function to fetch all items from an endpoint
     async function fetchAllItems(userId, endpoint, apiBaseUrl) {
@@ -196,7 +193,7 @@
                 ctx.save();
                 const label = node.username;
                 const fontSize = 10.5 / globalScale;
-                let imgSize = node.type === 'instance' ? 420 + 7 * Math.sqrt(node.connectionCount) : 70 + (Math.log(node.followerCount + 7) * 42);
+                let imgSize = node.type === 'instance' ? 420 + 7 * Math.sqrt(node.connectionCount) : avatarSizeMultiplier  + (Math.log(node.followerCount + 7) * 42);
 
                 ctx.font = `${fontSize}px Sans-Serif`;
                 ctx.textAlign = 'center';
@@ -256,17 +253,9 @@
             }
         })
         .onNodeDragEnd(node => {
-            node.fx = node.x;
-            node.fy = node.y;
+            //node.fx = node.x;
+            //node.fy = node.y;
         })
-        .nodeRelSize(node => {
-            if (node.type === 'instance') {
-                return 0.1 + 7 * Math.sqrt(node.connectionCount);
-            } else {
-                return 0.2 + (Math.log(node.followerCount + 1) * 42);
-            }
-        })
-
         ;
 
         // # Add forces to the graph
@@ -332,6 +321,19 @@
         graph.graphData(filteredData);
     }
 
+    document.addEventListener('DOMContentLoaded', function() {
+        const slider = document.getElementById('nodeSizeSlider');
+        const sliderValueDisplay = document.getElementById('sliderValue');
+
+        slider.addEventListener('input', function() {
+            avatarSizeMultiplier = parseInt(this.value, 10); // Update the global avatar size multiplier
+            sliderValueDisplay.textContent = avatarSizeMultiplier; // Update the display next to the slider
+
+            if (window.graph && window.graph.graphData) {
+                window.graph.graphData(graphData); // Reapply the graph data to update the graph
+            }
+        });
+    });
     
 
 </script>
