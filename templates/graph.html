@@ -7,52 +7,56 @@
 
     var graphData;
     const container = document.getElementById('graph');
+    const apiBaseUrl = '{{ api_base_url }}';
+    const userJson = '{{ user | tojson | safe }}';  
+    const userId = '{{ user.id | tojson | safe }}';
+    const userAvatar = '{{ user.avatar }}';
+    const userName = '{{ user.username | tojson | safe }}';
 
+    // Wait for the DOM to load before initializing the graph
     document.addEventListener('DOMContentLoaded', async function() {
-    const elementResizeDetector = elementResizeDetectorMaker();
-    try {
+        const elementResizeDetector = elementResizeDetectorMaker();
+        try {
 
-        const apiBaseUrl = '{{ api_base_url }}';
-        const userJson = '{{ user | tojson | safe }}';  
-        const userId = '{{ user.id | tojson | safe }}';
-        const userAvatar = '{{ user.avatar }}';
-        const userName = '{{ user.username | tojson | safe }}';
-
-        // Fetch followers and followings
-        const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
-        const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
-        // Generate graph data
-        graphData = generateGraphData(userId, userName, userAvatar, followers, followings);
-        // Calculate the number of connections for each node
-        calculateNodeConnections(graphData.nodes, graphData.links);
-        window.graph = initGraph(graphData);
-        // Resize the graph when the window is resized
-        elementResizeDetector.listenTo(document.getElementById('graph'), function(element) {
-                var width = element.clientWidth;
-                var height = element.clientHeight;
-                window.graph.width(width);
-                window.graph.height(height);
-    });
-    } catch (error) {
-        console.error('Initialization failed:', error); 
-    }
+            // Fetch followers and followings
+            const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
+            const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
+            // Generate graph data
+            graphData = generateGraphData(userId, userName, userAvatar, followers, followings);
+            // Calculate the number of connections for each node
+            calculateNodeConnections(graphData.nodes, graphData.links);
+            window.graph = initGraph(graphData);
+            // Resize the graph when the window is resized
+            elementResizeDetector.listenTo(document.getElementById('graph'), function(element) {
+                    var width = element.clientWidth;
+                    var height = element.clientHeight;
+                    window.graph.width(width);
+                    window.graph.height(height);
+            });
+        }
+        catch (error) {
+            console.error('Initialization failed:', error); 
+        }
     });
 
+    // Function to fetch all items from an endpoint
     async function fetchAllItems(userId, endpoint, apiBaseUrl) {
-    let items = [];
+        let items = [];
 
-    let url = `${apiBaseUrl}/${endpoint}?user_id=${userId}`;
-    
-    const response = await fetch(url);
+        let url = `${apiBaseUrl}/${endpoint}?user_id=${userId}`;
+        
+        const response = await fetch(url);
 
-    const data = await response.json();
-    console.log(`Received data length: ${data.length}`); // Debugging output
+        const data = await response.json();
+        console.log(`Received data length: ${data.length}`); // Debugging output
 
-    items = items.concat(data); // Add new items to the array
+        // Add new items to the array
+        items = items.concat(data);
 
-    return items; // Return all fetched items
+        return items;
     }
 
+    // Function to generate graph data from user, followers, and followings
     function generateGraphData(userId, userName, userAvatar, followers, followings) {
         const regex = /https?:\/\/([^/:]+)/; // Regex to extract domain from URL
 
@@ -150,6 +154,7 @@
         });
     }
 
+    // Function to initialize the graph
     function initGraph(graphData) {
         // Initialize the graph
         const Graph = ForceGraph()(document.getElementById('graph'))
