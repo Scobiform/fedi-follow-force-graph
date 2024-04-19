@@ -170,22 +170,31 @@
                 const label = node.username;
                 const fontSize = 12 / globalScale;
                 const baseImgSize = 28;
-                let imgSize = baseImgSize + (Math.log(node.followerCount + 1) * 7); // Increase size logarithmically
+                let imgSize = baseImgSize + (Math.log(node.followerCount + 1) * 7) * Math.sqrt(node.connectionCount);
 
                 ctx.font = `${fontSize}px Sans-Serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
 
-                // Differentiate the appearance based on node type
                 if (node.type === 'instance') {
-                    imgSize = 70 + 7 * Math.sqrt(node.connectionCount);
-                    ctx.fillStyle = 'green';
+                    // Calculate size dynamically based on connection count
+                    imgSize = 70 + 7 * Math.sqrt(node.connectionCount); // Increase size logarithmically
+                    ctx.fillStyle = 'green'; // Distinct color for instance nodes
+
+                    // Draw a circle instead of a square
                     ctx.beginPath();
-                    ctx.rect(node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize); // Draw a square
+                    ctx.arc(node.x, node.y, imgSize / 2, 0, 2 * Math.PI); // Draw a circle
                     ctx.fill();
+
+                    // Adjust text color and positioning
                     ctx.fillStyle = 'white'; // Text color for instance nodes
+                    ctx.textAlign = 'center'; // Ensure text is centered
+                    ctx.textBaseline = 'middle'; // Align text vertically in the middle
                     ctx.fillText(label, node.x, node.y);
                 } else {
+                    // Dynamic sizing for non-instance nodes
+                    imgSize = 28 + (Math.log(node.followerCount + 1) * 7);
+
                     if (node.avatar && node.img) {
                         ctx.drawImage(node.img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
                     } else if (node.avatar && !node.img) {
@@ -196,8 +205,9 @@
                             ctx.drawImage(img, node.x - imgSize / 2, node.y - imgSize / 2, imgSize, imgSize);
                         };
                     }
-                    
-                    ctx.fillStyle = (node.type === 'follower') ? 'red' : 'blue'; 
+
+                    // Adjust text color and positioning for non-instance nodes
+                    ctx.fillStyle = (node.type === 'follower') ? 'red' : 'blue';
                     ctx.fillText(label, node.x, node.y + imgSize / 2 + 5);
                 }
             })
@@ -274,4 +284,7 @@
         // Update the graph with the filtered data.
         graph.graphData(filteredData);
     }
+
+
+
 </script>
