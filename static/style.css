@@ -186,7 +186,6 @@ input[type="range"]::-moz-range-thumb {
   height: 100%;
   z-index: 999;
   mix-blend-mode: luminosity;
-  background: url(/static/images/fffg.gif);
   pointer-events: none;
   opacity: 0.021;
   background-position: center;
