@@ -46,7 +46,12 @@
 
             <!-- Search component ToDo: Create component -->
             <from id="searchForUser">
-                <input type="text" id="searchUser" placeholder="Search for a user" aria-label="Search for a user">
+                <input type="text" 
+                    id="searchUser" 
+                    placeholder="Search for a user" 
+                    aria-label="Search for a user"
+                    onkeyup="handleKeyUp(event)"
+                >
                 <button type="submit">Search</button>
             </form>
             <div id="searchResults"></div>
@@ -95,6 +100,25 @@
             // Calculate the number of connections for each node
             calculateNodeConnections(graphData.nodes, graphData.links);
             window.graph = initGraph(graphData);
+        }
+
+        function handleKeyUp(event) {
+            clearTimeout(timeout);
+
+            // Check if the enter key is pressed
+            if (event.key === "Enter") {
+                submitForm();
+            } else {
+                // Set a new timeout to submit the form after a delay
+                timeout = setTimeout(() => {
+                    submitForm();
+                }, delay);
+            }
+        }
+
+        function submitForm() {
+            const form = document.getElementById('searchForUser');
+            form.submit();
         }
     </script>
 
