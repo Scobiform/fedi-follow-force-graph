@@ -246,7 +246,7 @@
             // Open the user's profile in a new tab
             if (node.type === 'follower' || node.type === 'following') {
                 // Open the user's profile in a new tab @username@instance
-                window.open(`https://${instance}/@${node.username}@${node.instance}`, '_blank');
+                window.open(`https://'+${instance}+'/@${node.username}@${node.instance}`, '_blank');
             }
         })
         // Paint the node pointer area with a circle
