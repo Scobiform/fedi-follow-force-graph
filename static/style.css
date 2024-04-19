@@ -90,7 +90,7 @@ nav p {
 }
 
 /* Settings panel */
-.settings-panel {
+#settingsPanel {
   z-index: 999;
   position: absolute;
   bottom: 0;
