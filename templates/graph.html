@@ -21,6 +21,7 @@
     document.addEventListener('DOMContentLoaded', async function() {
         const elementResizeDetector = elementResizeDetectorMaker();
         try {
+
             // Fetch followers and followings
             const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
             const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
@@ -36,26 +37,24 @@
                     window.graph.width(width);
                     window.graph.height(height);
             });
+
+            // Function to update the node size based on the slider value
+            const slider = document.getElementById('nodeSizeSlider');
+            const sliderValueDisplay = document.getElementById('sliderValue');
+
+            slider.addEventListener('input', function() {
+                const newSize = parseInt(this.value, 10);
+                sliderValueDisplay.textContent = newSize;  // Update display
+
+                if (window.graph && window.graph.graphData) {
+                    window.graph.nodeSize(newSize);  // Update node size
+                    window.graph.graphData(graphData);  // Reapply the graph data to update the graph
+                }
+            });
         }
         catch (error) {
             console.error('Initialization failed:', error); 
         }
-    });
-
-    // Function to update the node size based on the slider value
-    document.addEventListener('DOMContentLoaded', function() {
-        const slider = document.getElementById('nodeSizeSlider');
-        const sliderValueDisplay = document.getElementById('sliderValue');
-
-        slider.addEventListener('input', function() {
-            const newSize = parseInt(this.value, 10);
-            sliderValueDisplay.textContent = newSize;  // Update display
-
-            if (window.graph && window.graph.nodeRelSize) {
-                window.graph.nodeRelSize(newSize);  // Update the node size in the graph
-                window.graph.refresh();  // Refresh the graph to apply the changes
-            }
-        });
     });
 
     // Function to fetch all items from an endpoint
