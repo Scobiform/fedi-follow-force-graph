@@ -19,9 +19,9 @@ config = None
 graph_data = None
 
 # Components
-async def get_graph(user, api_base_url):
+async def get_graph(user, instance):
     ''' Pass the user data to the template.'''
-    return await render_template('graph.html', user=user, api_base_url=os.getenv('APP_URL'))
+    return await render_template('graph.html', user=user, api_base_url=os.getenv('APP_URL'), instance=instance)
 
 @app.before_serving
 async def setup_app():
@@ -63,7 +63,7 @@ async def home():
         user = mastodon.account_verify_credentials()
 
         # Pass the user to the template
-        graph_component = await get_graph(user, api_base_url=config['instance_url'])
+        graph_component = await get_graph(user, instance=config['instance_url'])
 
         app_name =  config['app_name']
 

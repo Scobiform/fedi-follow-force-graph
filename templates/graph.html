@@ -2,13 +2,16 @@
 <div id="settingsPanel">
     <h2>Graph Settings</h2>
     <label for="nodeSizeSlider">Avatar Size: </label>
-    <input type="range" id="nodeSizeSlider" min="0.7" max="4200" value="70" step="0.7">
+    <input type="range" id="nodeSizeSlider" min="0.7" max="4200" value="70" step="0.7" aria-label="Avatar Size">
     <span id="sliderValue">70</span>
 
     <label for="textFontSizeSlider">Text Size: </label>
-    <input type="range" id="textFontSizeSlider" min="0.1" max="42" value="10.5" step="0.1">
+    <input type="range" id="textFontSizeSlider" min="0.1" max="42" value="10.5" step="0.1" aria-label="Text Size">
     <span id="textSliderValue">10.5</span>
 
+    <label fore="instanceSizeSlider">Instance Size: </label>
+        <input type="range" id="instanceSizeSlider" min="0.7" max="4200" value="420" step="0.7" aria-label="Instance Size">
+    <span id="instanceSliderValue">420</span>
 </div>
 <script>
 
@@ -23,9 +26,11 @@
     const userId = '{{ user.id | tojson | safe }}';
     const userAvatar = '{{ user.avatar }}';
     const userName = '{{ user.username | tojson | safe }}';
+    const instance = '{{ instance | tojson | safe }}';
 
     let avatarSizeMultiplier = 70;
     let textFontSize = 10.5;
+    let instanceSizeMultiplier = 420;
 
     // Wait for the DOM to load before initializing the graph
     document.addEventListener('DOMContentLoaded', async function() {
@@ -86,7 +91,7 @@
     }
 
     // Function to generate graph data from user, followers, and followings
-    function generateGraphData(userId, userName, userAvatar, followers, followings) {
+    function generateGraphData(userId, userName, userAvatar, followers, followings, instance) {
         const regex = /https?:\/\/([^/:]+)/; // Regex to extract domain from URL
 
         // Initialize user node with avatar and follower/following counts
@@ -97,6 +102,7 @@
             avatar: userAvatar,
             followerCount: followers.length, // Assuming followers and followings are arrays
             followingCount: followings.length,
+            instance: instance.match(regex)[1]
         }];
 
         const instanceMap = new Map();
@@ -200,7 +206,7 @@
                 ctx.save();
                 const label = node.username;
                 const fontSize = textFontSize / globalScale;
-                let imgSize = node.type === 'instance' ? 420 + 7 * Math.sqrt(node.connectionCount) : avatarSizeMultiplier  + (Math.log(node.followerCount + 7) * 42);
+                let imgSize = node.type === 'instance' ? instanceSizeMultiplier + 7 * Math.sqrt(node.connectionCount) : avatarSizeMultiplier  + (Math.log(node.followerCount + 7) * 42);
 
                 ctx.font = `${fontSize}px Sans-Serif`;
                 ctx.textAlign = 'center';
@@ -235,7 +241,14 @@
                 ctx.restore();
             })
         // Show node info on click
-        .onNodeClick(node => console.log(node))
+        .onNodeClick((node, color) => {
+            console.log(node);
+            // Open the user's profile in a new tab
+            if (node.type === 'follower' || node.type === 'following') {
+                // Open the user's profile in a new tab @username@instance
+                window.open(`https://${node.instance}/@${node.username}`, '_blank');
+            }
+        })
         // Paint the node pointer area with a circle
         .nodePointerAreaPaint((node, color, ctx) => {
             // Determine the size of the node based on type and attributes
@@ -330,11 +343,15 @@
 
     // Function to update graph values based on the slider
     document.addEventListener('DOMContentLoaded', function() {
+
         const slider = document.getElementById('nodeSizeSlider');
         const sliderValueDisplay = document.getElementById('sliderValue');
 
         const textSlider = document.getElementById('textFontSizeSlider');
         const textSliderValueDisplay = document.getElementById('textSliderValue');
+
+        const instanceSlider = document.getElementById('instanceSizeSlider');
+        const instanceSliderValueDisplay = document.getElementById('instanceSliderValue');
 
         slider.addEventListener('input', function() {
             avatarSizeMultiplier = parseInt(this.value, 10); 
@@ -355,7 +372,16 @@
                 window.graph.graphData(graphData); 
             }
         });
-    });
-    
 
+        instanceSlider.addEventListener('input', function() {
+            instanceSizeMultiplier = parseInt(this.value, 10); 
+            instanceSliderValueDisplay.textContent = instanceSizeMultiplier; 
+
+            // Reapply the graph data to update the graph
+            if (window.graph && window.graph.graphData) {
+                window.graph.graphData(graphData); 
+            }
+        });
+
+    });
 </script>
