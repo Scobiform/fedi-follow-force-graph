@@ -33,25 +33,6 @@
             <button onclick="filterNodes('instance');">Show Instances</button>
             <button onclick="filterNodes('all');">Show All</button>
         </nav>
-        <section>
-            <p>Click on a node to see more information about it.</p>
-            <p>Use the buttons above to filter the nodes.</p>
-        </section>
-        <section>
-            <label for="nodeSizeSlider">Node Size: </label>
-            <input type="range" id="nodeSizeSlider" min="1" max="1000" value="420" step="1">
-            <span id="sliderValue">420</span>
-
-            <script>
-                document.getElementById('nodeSizeSlider').addEventListener('input', function() {
-                    var newSize = parseInt(this.value, 10);  
-                    document.getElementById('sliderValue').textContent = newSize;  
-                    graph.nodeRelSize(newSize);
-                });
-            </script>
-        </section>
-
-
 
     </div>
 
