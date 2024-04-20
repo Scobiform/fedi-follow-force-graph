@@ -156,7 +156,6 @@ nav p {
 }
 
 .spinner {
-  border: 16px solid var(--border-color);
   border-top: 16px solid var(--british-racing-green);
   border-radius: 50%;
   width: 120px;
