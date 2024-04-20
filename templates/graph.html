@@ -199,6 +199,8 @@
 
     // Function to initialize the graph
     function initGraph(graphData) {
+
+        
         // Initialize the graph
         const Graph = ForceGraph()(document.getElementById('graph'))
             .height(container.clientHeight)
@@ -288,7 +290,7 @@
 
         // # Add forces to the graph
         // Dynamic collision radius based on node type
-        Graph.d3Force('collide', d3.forceCollide().radius(node => node.type === 'instance' ? 60 : 42))
+        Graph.d3Force('collide', d3.forceCollide().radius(node => node.type === 'instance' ? 70 : 42))
             // Increased repulsive force
             .d3Force('charge', d3.forceManyBody().strength(-42000)) 
             // Increased distance and adjusted strength for links 
@@ -301,7 +303,6 @@
 
         Graph.d3Force('collide', d3.forceCollide().radius(node => node.type === 'follower' ? 420 : 42))
         Graph.d3Force('collide', d3.forceCollide().radius(node => node.type === 'following' ? 420 : 42))
-
         Graph.d3Force('collide', d3.forceCollide().radius(node => node.type === 'user' ? 420 : 42))
 
 
