@@ -178,11 +178,11 @@ nav p {
   text-align: center;
   right: 1.4rem;
   width: 98px;
-  bottom: 1.4rem;
   max-height: 30vh;
   overflow-y: scroll;
   /* do not ashow scrollbar */
   scrollbar-width: none;
+  top: 1vh;
 }
 
 #settingsPanel h2 {
