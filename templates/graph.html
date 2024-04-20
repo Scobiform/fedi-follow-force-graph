@@ -8,7 +8,14 @@
     <input type="range" id="textFontSizeSlider" min="0.1" max="42" value="4.2" step="0.1" aria-label="Text Size">
  
     <label fore="instanceSizeSlider">Instance Size: </label>
-        <input type="range" id="instanceSizeSlider" min="0.7" max="2800" value="560" step="0.7" aria-label="Instance Size">
+    <input type="range" id="instanceSizeSlider" min="0.7" max="2800" value="560" step="0.7" aria-label="Instance Size">
+
+    <label for="instanceColliderSlider">Instance Collider: </label>
+    <input type="range" id="instanceColliderSlider" min="0.7" max="2800" value="560" step="0.7" aria-label="Instance Collider">
+
+    <label for="instanceLinkDistanceSlider">Instance Link Distance: </label>
+    <input type="range" id="instanceLinkDistanceSlider" min="0.7" max="2800" value="560" step="0.7" aria-label="Instance Link Distance">
+    
 </div>
 <div id="spinnerContainer" style="{{ 'display: block;' if show_spinner else 'display: none;' }}">
     <div class="spinner"></div>
@@ -32,6 +39,8 @@
     let avatarSizeMultiplier = 210;
     let textFontSize = 4.2;
     let instanceSizeMultiplier = 560;
+    let instanceColliderMultiplier = 560;
+    let instanceLinkDistanceMultiplier = 560;
 
     // Wait for the DOM to load before initializing the graph
     document.addEventListener('DOMContentLoaded', async function() {
@@ -199,8 +208,6 @@
 
     // Function to initialize the graph
     function initGraph(graphData) {
-
-
         // Initialize the graph
         const Graph = ForceGraph()(document.getElementById('graph'))
             .height(container.clientHeight)
@@ -290,7 +297,7 @@
 
         // # Add forces to the graph
         // Dynamic collision radius based on node type
-        Graph.d3Force('collide', d3.forceCollide().radius(node => node.type === 'instance' ? 700 : 420))
+        Graph.d3Force('collide', d3.forceCollide().radius(node => node.type === 'instance' ? instanceColliderMultiplier : 420))
             // Increased repulsive force
             .d3Force('charge', d3.forceManyBody().strength(-42000)) 
             // Increased distance and adjusted strength for links 
@@ -299,7 +306,7 @@
             .d3Force('y', d3.forceY(container.clientHeight / 2).strength(0.05))
             .d3Force('center', d3.forceCenter(container.clientWidth / 2, container.clientHeight / 2))
             // Link distance based on type
-            .d3Force('link', d3.forceLink().distance(link => link.type === 'instance' ? 200 : 100).strength(0.5));
+            .d3Force('link', d3.forceLink().distance(link => link.type === 'instance' ? instanceLinkDistanceMultiplier : 100).strength(0.5));
 
 
         return Graph;
@@ -346,7 +353,6 @@
         graph.graphData(filteredData);
     }
 
-
     // Function to update graph values based on the slider
     document.addEventListener('DOMContentLoaded', function() {
 
@@ -355,6 +361,10 @@
         const textSlider = document.getElementById('textFontSizeSlider');
 
         const instanceSlider = document.getElementById('instanceSizeSlider');
+
+        const instanceColliderSlider = document.getElementById('instanceColliderSlider');
+
+        const instanceLinkDistanceSlider = document.getElementById('instanceLinkDistanceSlider');
 
         slider.addEventListener('input', function() {
             avatarSizeMultiplier = parseInt(this.value, 10); 
@@ -377,6 +387,24 @@
         instanceSlider.addEventListener('input', function() {
             instanceSizeMultiplier = parseInt(this.value, 10); 
 
+
+            // Reapply the graph data to update the graph
+            if (window.graph && window.graph.graphData) {
+                window.graph.graphData(graphData); 
+            }
+        });
+
+        instanceColliderSlider.addEventListener('input', function() {
+            instanceColliderMultiplier = parseInt(this.value, 10); 
+
+            // Reapply the graph data to update the graph
+            if (window.graph && window.graph.graphData) {
+                window.graph.graphData(graphData); 
+            }
+        });
+
+        instanceLinkDistanceSlider.addEventListener('input', function() {
+            instanceLinkDistanceMultiplier = parseInt(this.value, 10); 
 
             // Reapply the graph data to update the graph
             if (window.graph && window.graph.graphData) {
