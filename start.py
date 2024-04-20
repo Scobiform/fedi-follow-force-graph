@@ -167,9 +167,7 @@ async def fetch_followers():
             if followers:
                 all_followers.extend(followers)
 
-        local_followers = [user for user in all_followers if ('@' in user['acct'] and user['acct'].split('@')[1] == config['instance_url']) or '@' not in user['acct']]
-
-        return jsonify(local_followers)
+        return jsonify(all_followers)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -188,10 +186,8 @@ async def fetch_following():
             following = mastodon.fetch_next(following)
             if following:
                 all_following.extend(following)
-            
-        local_following = [user for user in all_following if ('@' in user['acct'] and user['acct'].split('@')[1] == config['instance_url']) or '@' not in user['acct']]
 
-        return jsonify(local_following)
+        return jsonify(all_following)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -217,6 +213,10 @@ async def search():
 
     try:
         results = mastodon.account_search(query, limit=10)
+        
+        # Filter results for same instance as user
+        results = [result for result in results if re.search(r"//([^/@]+)", result['url']).group(1) == instance]
+        
         return jsonify(results)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
