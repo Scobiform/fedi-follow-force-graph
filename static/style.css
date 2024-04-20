@@ -57,7 +57,7 @@ ul {
 /* Styling the scrollbar handle */
 ::-webkit-scrollbar-thumb {
   background-color: var(--british-racing-green);
-  border: 2px solid var(--primary-color); 
+  border: 2px solid var(--secondary-color); 
   border-radius: var(--border-radius);
 }
 
