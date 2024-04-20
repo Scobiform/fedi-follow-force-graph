@@ -275,16 +275,30 @@
 
         // # Add forces to the graph
         // Dynamic collision radius based on node type
-        Graph.d3Force('collide', d3.forceCollide().radius(node => node.type === 'instance' ? 60 : 42))
+        Graph.d3Force('collide', d3.forceCollide().radius(node => {
+            if (node.type === 'instance') {
+                return instanceSizeMultiplier + 7 * Math.sqrt(node.connectionCount);
+            } else {
+                return avatarSizeMultiplier + (Math.log(node.followerCount + 1) * 63);
+            }
+        }))
             // Increased repulsive force
             .d3Force('charge', d3.forceManyBody().strength(-42000)) 
-            // Increased distance and adjusted strength for links 
-            .d3Force('link', d3.forceLink().id(d => d.id).distance(200).strength(0.5))
+            // Centering forces
             .d3Force('x', d3.forceX(container.clientWidth / 2).strength(0.05))
             .d3Force('y', d3.forceY(container.clientHeight / 2).strength(0.05))
             .d3Force('center', d3.forceCenter(container.clientWidth / 2, container.clientHeight / 2))
-            // Link distance based on type
-            .d3Force('link', d3.forceLink().distance(link => link.type === 'instance' ? 200 : 100).strength(0.5));
+            // Link forces with conditional distance based on link type and node attributes
+            .d3Force('link', d3.forceLink()
+                .id(d => d.id)
+                .distance(link => {
+                    // Optionally adjust link distances based on node attributes if required
+                    if (link.type === 'instance') return 200 + 5 * Math.sqrt(link.source.connectionCount);
+                    else if (link.type === 'followers') return 150 + 2 * Math.sqrt(link.source.followerCount);
+                    else if (link.type === 'followings') return 100 + 2 * Math.sqrt(link.source.followerCount);
+                    else return 50; // Default distance for other or undefined types
+                })
+                .strength(0.5));
 
         return Graph;
     }
@@ -374,4 +388,5 @@
         });
 
     });
+
 </script>
