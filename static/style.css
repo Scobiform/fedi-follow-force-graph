@@ -114,6 +114,7 @@ button[type="submit"] {
   right: 0;
   position: absolute;
   z-index: 777;
+  max-height: 70vh;
 }
 
 /* Navigation */
@@ -158,6 +159,7 @@ nav p {
   right: 1.4rem;
   width: 98px;
   bottom: 1.4rem;
+  max-height: 30vh
 }
 
 #settingsPanel h2 {
@@ -188,7 +190,7 @@ nav p {
   color: var(--secondary-color);
   padding: 0.42rem;
   overflow-y: scroll;
-  max-height: 140px;
+  max-height: 14vh;
 }
 
 input[type="text"] {
