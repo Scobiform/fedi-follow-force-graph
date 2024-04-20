@@ -151,6 +151,19 @@ async def webhook():
     else:
         return 'Push was not to master branch', 200
 
+@app.route('/user', methods=['GET'])
+async def fetch_user():
+    ''' Fetch a user from the instance.'''
+    user_id = request.args.get('user_id', type=int)
+    if not user_id:
+        return jsonify({'error': 'User ID is required'}), 400
+
+    try:
+        user = mastodon.account(user_id)
+        return jsonify(user)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/followers', methods=['GET'])
 async def fetch_followers():
     ''' Fetch the followers of a user.'''

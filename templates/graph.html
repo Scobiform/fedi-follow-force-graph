@@ -388,4 +388,19 @@
 
     });
 
+    // Funnction to fetch a user
+    async function fetchUser(userId) {
+        let user = {};
+
+        let url = `${apiBaseUrl}/user?user_id=${userId}`;
+
+        try {
+            const response = await fetch(url);
+            user = await response.json();
+        } catch (error) {
+            console.error('Failed to fetch profile:', error);
+        }
+
+        return user;
+    }
 </script>
