@@ -217,7 +217,7 @@ async def search():
         # Filter results for same instance as user
         results = [result for result in results if re.search(r"//([^/@]+)", result['url']).group(1) == instance]
         # Filter out profiles that are not public
-        results = [result for result in results if result['locked'] == False]
+        results = [result for result in results if result['indexable'] == False]
         
         return jsonify(results)
     except Exception as e:
