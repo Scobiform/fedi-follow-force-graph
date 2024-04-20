@@ -299,6 +299,8 @@
             // Link distance based on type
             .d3Force('link', d3.forceLink().distance(link => link.type === 'instance' ? 200 : 100).strength(0.5));
 
+        Graph.d3Force('collide', d3.forceCollide().radius(node => node.type === 'follower' ? 420 : 42))
+
         return Graph;
     }
 
