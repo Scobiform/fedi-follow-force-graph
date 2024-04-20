@@ -314,29 +314,20 @@
 
     // Function to filter nodes based on type    
     window.filterNodes = function(filterType) {
-        // This will hold the IDs of nodes that should be visible based on the filtering criteria.
         const visibleNodes = new Set();
 
         // Add directly visible nodes based on filter type.
         graphData.nodes.forEach(node => {
-            if (filterType === 'all' || node.type === filterType || node.type === 'user') {
+            if (filterType === 'all' || node.type === filterType) {
                 visibleNodes.add(node.id);
             }
         });
 
-        // Filter links based on visible nodes.
+        // Filter links to include only those whose source and target are both visible nodes
         const filteredLinks = graphData.links.filter(link => {
             let sourceId = (typeof link.source === 'object') ? link.source.id : link.source;
             let targetId = (typeof link.target === 'object') ? link.target.id : link.target;
             return visibleNodes.has(sourceId) && visibleNodes.has(targetId);
-        });
-
-        // Ensure instance nodes linked to any visible node are also shown
-        filteredLinks.forEach(link => {
-            let sourceId = (typeof link.source === 'object') ? link.source.id : link.source;
-            let targetId = (typeof link.target === 'object') ? link.target.id : link.target;
-            visibleNodes.add(sourceId);
-            visibleNodes.add(targetId);
         });
 
         // Prepare the filtered data for nodes and links.
