@@ -95,6 +95,14 @@
                 const query = document.getElementById('searchUser').value;
                 const userInstance = '{{ user.url }}';
 
+                // Check if the query is empty
+                if (!query) {
+                    return;
+                }
+
+                // Get the spinner element
+                const spinner = document.getElementById('spinnerContainer');
+
                 // Show the spinner before starting the fetch operation
                 spinner.style.display = 'block';
 
