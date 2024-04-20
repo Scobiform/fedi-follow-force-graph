@@ -294,6 +294,7 @@
                 .distance(link => {
                     // Optionally adjust link distances based on node attributes if required
                     if (link.type === 'instance') return 4200 + 5 * Math.sqrt(link.source.connectionCount);
+                    else if (link.type === 'user') return 14000 + 2 * Math.sqrt(link.source.followerCount);
                     else if (link.type === 'followers') return 2100 + 2 * Math.sqrt(link.source.followerCount);
                     else if (link.type === 'followings') return 1400 + 2 * Math.sqrt(link.source.followerCount);
                     else return 10000; // Default distance for other or undefined types
