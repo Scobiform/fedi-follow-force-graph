@@ -150,16 +150,16 @@ nav p {
 
 #spinnerContainer {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  bottom: 0.42rem;
+  left: 0.42rem;
   transform: translate(-50%, -50%);
 }
 
 .spinner {
   border-top: 16px solid var(--british-racing-green);
   border-radius: 50%;
-  width: 120px;
-  height: 120px;
+  width: 2.1rem;
+  height: 2.1rem;
   animation: spin 2s linear infinite;
 }
 
