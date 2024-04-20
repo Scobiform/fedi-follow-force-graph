@@ -217,7 +217,7 @@ async def search():
         # Filter results for same instance as user
         #results = [result for result in results if re.search(r"//([^/@]+)", result['url']).group(1) == instance]
         # Filter results for indexable accounts
-        #results = [result for result in results if result['indexable'] == True]
+        results = [result for result in results if result['discoverable'] == True]
 
         
         return jsonify(results)
