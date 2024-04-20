@@ -43,6 +43,28 @@ ul {
   padding: 0;
 }
 
+/* Styling the scrollbar track */
+::-webkit-scrollbar {
+  width: 7px; 
+  height: 7px; /* Needed for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track {
+  background: var(--secondary-color); 
+  border: 1px solid var(--border-color);
+}
+
+/* Styling the scrollbar handle */
+::-webkit-scrollbar-thumb {
+  background-color: var(--british-racing-green);
+  border: 2px solid var(--primary-color); 
+  border-radius: var(--border-radius);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--primary-color);
+}
+
 .container {
   max-width: 1200px;
   margin: auto;
