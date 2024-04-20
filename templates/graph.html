@@ -275,16 +275,19 @@
 
         // # Add forces to the graph
         // Dynamic collision radius based on node type
-        Graph.d3Force('collide', d3.forceCollide().radius(node => node.type === 'instance' ? instanceSizeMultiplier : avatarSizeMultiplier / 2 + 7 * Math.sqrt(node.connectionCount)))
-            // Increased repulsive force
+        Graph.d3Force('collide', d3.forceCollide().radius(node => {
+                return node.type === 'instance' ? instanceSizeMultiplier : avatarSizeMultiplier / 2 + 7 * Math.sqrt(node.connectionCount);
+        }))
+            // Increased charge strength for better separation
             .d3Force('charge', d3.forceManyBody().strength(-42000)) 
             // Increased distance and adjusted strength for links 
             .d3Force('link', d3.forceLink().id(d => d.id).distance(200).strength(0.5))
+            // Center the graph in the middle of the container
             .d3Force('x', d3.forceX(container.clientWidth / 2).strength(0.05))
             .d3Force('y', d3.forceY(container.clientHeight / 2).strength(0.05))
             .d3Force('center', d3.forceCenter(container.clientWidth / 2, container.clientHeight / 2))
             // Link distance based on type
-            .d3Force('link', d3.forceLink().distance(link => link.type === 'instance' ? 200 : 100).strength(0.5));
+            .d3Force('link', d3.forceLink().distance(link => link.type === 'instance' ? instanceSizeMultiplier * 200 : 100).strength(0.5));
 
         return Graph;
     }
