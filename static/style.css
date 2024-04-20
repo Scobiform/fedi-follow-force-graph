@@ -167,6 +167,7 @@ nav p {
   color: var(--secondary-color);
   padding: 0.42rem;
   overflow-y: scroll;
+  max-height: 140px;
 }
 
 input[type="text"] {
