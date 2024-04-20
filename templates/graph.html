@@ -372,16 +372,6 @@
 }
 
 
-    // Prepare the filtered data for nodes and links.
-    const filteredData = {
-        nodes: graphData.nodes.filter(node => visibleNodes.has(node.id)),
-        links: filteredLinks
-    };
-
-    // Update the graph with the filtered data.
-    graph.graphData(filteredData);
-}
-
     // Function to update graph values based on the slider
     document.addEventListener('DOMContentLoaded', function() {
 
