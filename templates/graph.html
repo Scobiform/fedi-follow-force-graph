@@ -308,7 +308,6 @@
             // Link distance based on type
             .d3Force('link', d3.forceLink().distance(link => link.type === 'instance' ? instanceLinkDistanceMultiplier : 100).strength(0.5));
 
-
         return Graph;
     }
 
