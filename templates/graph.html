@@ -369,6 +369,8 @@
 
         const instanceLinkDistanceSlider = document.getElementById('instanceLinkDistanceSlider');
 
+        const linkDistanceSlider = document.getElementById('linkDistanceSlider');
+
         slider.addEventListener('input', function() {
             avatarSizeMultiplier = parseInt(this.value, 10); 
 
@@ -408,6 +410,15 @@
 
         instanceLinkDistanceSlider.addEventListener('input', function() {
             instanceLinkDistanceMultiplier = parseInt(this.value, 10); 
+
+            // Reapply the graph data to update the graph
+            if (window.graph && window.graph.graphData) {
+                window.graph.graphData(graphData); 
+            }
+        });
+
+        linkDistanceSlider.addEventListener('input', function() {
+            linkDistanceMultiplier = parseInt(this.value, 10); 
 
             // Reapply the graph data to update the graph
             if (window.graph && window.graph.graphData) {
