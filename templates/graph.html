@@ -315,8 +315,6 @@
             .d3Force('center', d3.forceCenter(container.clientWidth / 2, container.clientHeight / 2));
            
         Graph.d3Force('link', d3.forceLink().distance(link => link.type === 'instance' ? instanceLinkDistanceMultiplier : linkDistanceMultiplier).strength(0.5));
-        
-        Graph.d3Force('link').distance(link => link.type === 'user' ? userLinkDistanceMultiplier : linkDistanceMultiplier).strength(0.5);
 
         return Graph;
     }
@@ -377,8 +375,6 @@
 
         const linkDistanceSlider = document.getElementById('linkDistanceSlider');
 
-        const userLinkDistanceSlider = document.getElementById('userLinkDistanceSlider');
-
         slider.addEventListener('input', function() {
             avatarSizeMultiplier = parseInt(this.value, 10); 
 
@@ -427,15 +423,6 @@
 
         linkDistanceSlider.addEventListener('input', function() {
             linkDistanceMultiplier = parseInt(this.value, 10); 
-
-            // Reapply the graph data to update the graph
-            if (window.graph && window.graph.graphData) {
-                window.graph.graphData(graphData); 
-            }
-        });
-
-        userLinkDistanceSlider.addEventListener('input', function() {
-            userLinkDistanceMultiplier = parseInt(this.value, 10); 
 
             // Reapply the graph data to update the graph
             if (window.graph && window.graph.graphData) {
