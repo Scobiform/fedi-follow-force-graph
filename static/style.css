@@ -190,6 +190,16 @@ nav p {
   padding: 0.42rem;
   overflow-y: scroll;
   max-height: 21vh;
+  font-size: xx-small;
+}
+
+#searchResults a {
+  color: var(--secondary-color);
+  text-decoration: none;
+}
+
+#searchResults a:hover {
+  color: var(--british-racing-green);
 }
 
 input[type="text"] {
