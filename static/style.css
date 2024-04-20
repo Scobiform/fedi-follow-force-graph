@@ -162,7 +162,6 @@ nav p {
 
 /* Search */
 #searchResults {
-  position: absolute;
   z-index: 999;
   color: var(--secondary-color);
   padding: 0.42rem;
