@@ -94,18 +94,27 @@
             function performSearch() {
                 const query = document.getElementById('searchUser').value;
                 const userInstance = '{{ user.url }}';
+
+                // Show the spinner before starting the fetch operation
+                spinner.style.display = 'block';
+
                 fetch(`${baseUrl}/search?query=${encodeURIComponent(query)}&instance=${encodeURIComponent(userInstance)}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Failed to fetch data from the server');
                         }
+
                         return response.json();
                     })
                     .then(data => {
                         displayResults(data);
                         console.log(data);
                     })
-                    .catch(error => console.error('Error:', error));
+                    .catch(error => console.error('Error:', error))
+                    .finally(() => {
+                        // Hide the spinner in case of an error
+                        spinner.style.display = 'none';
+                    });
             }
 
             function displayResults(results) {
