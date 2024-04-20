@@ -212,8 +212,8 @@ async def search():
     )
 
     try:
-        results = mastodon.account_search(query, limit=10)
-        
+        results = mastodon.account_search(query, limit=420)
+
         # Filter results for same instance as user
         results = [result for result in results if re.search(r"//([^/@]+)", result['url']).group(1) == instance]
         
