@@ -66,85 +66,86 @@
     <div class="footer">
 
     </div>
-    
-    <script>
-        
-        let timeout = null;
-        const delay = 1000; // Delay in milliseconds
-        const baseUrl = '{{ app_url}}';
+    {% if logged_in %}
+        <script>
+            
+            let timeout = null;
+            const delay = 1000; // Delay in milliseconds
+            const baseUrl = '{{ app_url}}';
 
-        document.getElementById('searchForUser').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
-            performSearch(); // Perform search directly without waiting
-        });
-
-        function handleKeyUp(event) {
-            clearTimeout(timeout); // Clear the existing timeout
-
-            if (event.key === "Enter") {
-                event.preventDefault(); // Prevent form submission via Enter key
-                performSearch(); // Immediately perform the search
-            } else {
-                timeout = setTimeout(() => {
-                    performSearch(); // Perform the search after a delay when user stops typing
-                }, delay);
-            }
-        }
-
-        function performSearch() {
-            const query = document.getElementById('searchUser').value;
-            const userInstance = '{{ user.url }}' || '';
-            fetch(`${baseUrl}/search?query=${encodeURIComponent(query)}&instance=${encodeURIComponent(userInstance)}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch data from the server');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    displayResults(data);
-                    console.log(data);
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        function displayResults(results) {
-            const container = document.getElementById('searchResults');
-            container.innerHTML = ''; 
-
-            results.forEach(result => {
-                const link = document.createElement('a');
-                link.href = "#"; 
-                link.textContent = result.username;
-                link.classList.add('user-link'); 
-                
-                // Event listener for clicking on each user link
-                link.addEventListener('click', function(event) {
-                    event.preventDefault(); 
-                    // Call your function to fetch all items, generate the graph, and init it
-                    loadGraph(result.id); 
-                });
-
-                // Append the link to a div container (for styling or additional structure)
-                const div = document.createElement('div');
-                div.appendChild(link);
-                container.appendChild(div);
+            document.getElementById('searchForUser').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission
+                performSearch(); // Perform search directly without waiting
             });
-        }
 
-        // Function to fetch all items (followers or followings) for a user
-        async function loadGraph(userId) {
-            // Fetch followers and followings
-            const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
-            const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
-            // Generate graph data
-            graphData = generateGraphData(userId, userName, userAvatar, followers, followings);
-            // Calculate the number of connections for each node
-            calculateNodeConnections(graphData.nodes, graphData.links);
-            window.graph = initGraph(graphData);
-        }
-        
-    </script>
+            function handleKeyUp(event) {
+                clearTimeout(timeout); // Clear the existing timeout
+
+                if (event.key === "Enter") {
+                    event.preventDefault(); // Prevent form submission via Enter key
+                    performSearch(); // Immediately perform the search
+                } else {
+                    timeout = setTimeout(() => {
+                        performSearch(); // Perform the search after a delay when user stops typing
+                    }, delay);
+                }
+            }
+
+            function performSearch() {
+                const query = document.getElementById('searchUser').value;
+                const userInstance = '{{ user.url }}';
+                fetch(`${baseUrl}/search?query=${encodeURIComponent(query)}&instance=${encodeURIComponent(userInstance)}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch data from the server');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        displayResults(data);
+                        console.log(data);
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            function displayResults(results) {
+                const container = document.getElementById('searchResults');
+                container.innerHTML = ''; 
+
+                results.forEach(result => {
+                    const link = document.createElement('a');
+                    link.href = "#"; 
+                    link.textContent = result.username;
+                    link.classList.add('user-link'); 
+                    
+                    // Event listener for clicking on each user link
+                    link.addEventListener('click', function(event) {
+                        event.preventDefault(); 
+                        // Call your function to fetch all items, generate the graph, and init it
+                        loadGraph(result.id); 
+                    });
+
+                    // Append the link to a div container (for styling or additional structure)
+                    const div = document.createElement('div');
+                    div.appendChild(link);
+                    container.appendChild(div);
+                });
+            }
+
+            // Function to fetch all items (followers or followings) for a user
+            async function loadGraph(userId) {
+                // Fetch followers and followings
+                const followers = await fetchAllItems(userId, 'followers', apiBaseUrl); 
+                const followings = await fetchAllItems(userId, 'following', apiBaseUrl);
+                // Generate graph data
+                graphData = generateGraphData(userId, userName, userAvatar, followers, followings);
+                // Calculate the number of connections for each node
+                calculateNodeConnections(graphData.nodes, graphData.links);
+                window.graph = initGraph(graphData);
+            }
+            
+        </script>
+    {% endif %}
 
 
 
