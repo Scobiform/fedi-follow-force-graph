@@ -50,8 +50,6 @@ ul {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--primary-color); 
-  border: 1px solid var(--border-color);
   opacity: var(--opacity);
 }
 
