@@ -157,7 +157,7 @@
 
                 fetchUser(userId).then(user => {
                     // Call your function to generate the graph data
-                    const graphData = generateGraphData(userId, user.username, user.avatar, followers, followings);
+                    graphData = generateGraphData(userId, user.username, user.avatar, followers, followings);
                     // Calculate the number of connections for each node
                     calculateNodeConnections(graphData.nodes, graphData.links);
                     // Initialize the graph
