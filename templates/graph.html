@@ -18,6 +18,9 @@
 
     <label for="linkDistanceSlider">Link Distance: </label>
     <input type="range" id="linkDistanceSlider" min="0.7" max="42000" value="560" step="0.7" aria-label="Link Distance">
+
+    <label for="userLinkDistanceSlider">User Link Distance: </label>
+    <input type="range" id="userLinkDistanceSlider" min="0.7" max="42000" value="560" step="0.7" aria-label="User Link Distance">
     
 </div>
 <div id="spinnerContainer" style="{{ 'display: block;' if show_spinner else 'display: none;' }}">
@@ -45,6 +48,7 @@
     let instanceColliderMultiplier = 560;
     let instanceLinkDistanceMultiplier = 560;
     let linkDistanceMultiplier = 42;
+    let userLinkDistanceMultiplier = 42;
 
     // Wait for the DOM to load before initializing the graph
     document.addEventListener('DOMContentLoaded', async function() {
@@ -311,6 +315,8 @@
             .d3Force('center', d3.forceCenter(container.clientWidth / 2, container.clientHeight / 2));
            
         Graph.d3Force('link', d3.forceLink().distance(link => link.type === 'instance' ? instanceLinkDistanceMultiplier : linkDistanceMultiplier).strength(0.5));
+        
+        Graph.d3Force('link').distance(link => link.type === 'user' ? userLinkDistanceMultiplier : linkDistanceMultiplier).strength(0.5);
 
         return Graph;
     }
