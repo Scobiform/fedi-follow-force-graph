@@ -314,63 +314,40 @@
 
     // Function to filter nodes based on type    
     window.filterNodes = function(filterType) {
-    // This will hold the IDs of nodes that should be visible based on the filtering criteria.
-    const visibleNodes = new Set();
+        // This will hold the IDs of nodes that should be visible based on the filtering criteria.
+        const visibleNodes = new Set();
 
-    // Define the logic to add nodes to visibleNodes based on the filterType
-    graphData.nodes.forEach(node => {
-        switch (filterType) {
-            case 'all':
+        // Add directly visible nodes based on filter type.
+        graphData.nodes.forEach(node => {
+            if (filterType === 'all' || node.type === filterType || node.type === 'user') {
                 visibleNodes.add(node.id);
-                break;
-            case 'instances':
-                if (node.type === 'instance') {
-                    visibleNodes.add(node.id);
-                }
-                break;
-            case 'follower-and-instances':
-                if (node.type === 'follower' || node.type === 'instance') {
-                    visibleNodes.add(node.id);
-                }
-                break;
-            case 'following-and-instances':
-                if (node.type === 'following' || node.type === 'instance') {
-                    visibleNodes.add(node.id);
-                }
-                break;
-        }
-    });
+            }
+        });
 
-    // Filter links to include only those whose source and target are in visibleNodes
-    const filteredLinks = graphData.links.filter(link => {
-        let sourceId = (typeof link.source === 'object') ? link.source.id : link.source;
-        let targetId = (typeof link.target === 'object') ? link.target.id : link.target;
-        return visibleNodes.has(sourceId) && visibleNodes.has(targetId);
-    });
+        // Filter links based on visible nodes.
+        const filteredLinks = graphData.links.filter(link => {
+            let sourceId = (typeof link.source === 'object') ? link.source.id : link.source;
+            let targetId = (typeof link.target === 'object') ? link.target.id : link.target;
+            return visibleNodes.has(sourceId) && visibleNodes.has(targetId);
+        });
 
-    // Ensure that nodes linked to visible 'instance' nodes also become visible, if relevant
-    if (filterType === 'follower-and-instances' || filterType === 'following-and-instances' || filterType === 'instances') {
+        // Ensure instance nodes linked to any visible node are also shown
         filteredLinks.forEach(link => {
             let sourceId = (typeof link.source === 'object') ? link.source.id : link.source;
             let targetId = (typeof link.target === 'object') ? link.target.id : link.target;
-            if (graphData.nodes.find(node => node.id === sourceId && node.type === 'instance') ||
-                graphData.nodes.find(node => node.id === targetId && node.type === 'instance')) {
-                visibleNodes.add(sourceId);
-                visibleNodes.add(targetId);
-            }
+            visibleNodes.add(sourceId);
+            visibleNodes.add(targetId);
         });
+
+        // Prepare the filtered data for nodes and links.
+        const filteredData = {
+            nodes: graphData.nodes.filter(node => visibleNodes.has(node.id)),
+            links: filteredLinks
+        };
+
+        // Update the graph with the filtered data.
+        graph.graphData(filteredData);
     }
-
-    // Prepare the filtered data for nodes and links
-    const filteredData = {
-        nodes: graphData.nodes.filter(node => visibleNodes.has(node.id)),
-        links: filteredLinks
-    };
-
-    // Update the graph with the filtered data
-    graph.graphData(filteredData);
-}
-
 
     // Function to update graph values based on the slider
     document.addEventListener('DOMContentLoaded', function() {
