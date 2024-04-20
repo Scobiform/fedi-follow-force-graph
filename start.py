@@ -214,6 +214,12 @@ async def search():
     try:
         results = mastodon.account_search(query, limit=420)
 
+        # Filter results for same instance as user
+        results = [result for result in results if re.search(r"//([^/@]+)", result['url']).group(1) == instance]
+        # Filter results for indexable accounts
+        #results = [result for result in results if result['indexable'] == True]
+
+        
         return jsonify(results)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
