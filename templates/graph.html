@@ -276,7 +276,10 @@
         // # Add forces to the graph
         // Dynamic collision radius based on node type
         Graph.d3Force('collide', d3.forceCollide().radius(node => {
-                return node.type === 'instance' ? instanceSizeMultiplier : avatarSizeMultiplier / 2 + 7 * Math.sqrt(node.connectionCount);
+                if (node.type === 'instance') {
+                    return instanceSizeMultiplier;
+                }
+                return avatarSizeMultiplier / 2 + 7 * Math.sqrt(node.connectionCount);
         }))
             // Increased charge strength for better separation
             .d3Force('charge', d3.forceManyBody().strength(-42000)) 
