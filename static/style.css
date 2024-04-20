@@ -166,9 +166,7 @@ nav p {
   z-index: 999;
   color: var(--secondary-color);
   padding: 0.42rem;
-  width: 28rem;
-  right: 0;
-  bottom: 0;
+  overflow-y: scroll;
 }
 
 input[type="text"] {
