@@ -93,7 +93,7 @@
 
         function performSearch() {
             const query = document.getElementById('searchUser').value;
-            const userInstance = '{{ user.url }}';
+            const userInstance = '{{ user.url }}' || '';
             fetch(`${baseUrl}/search?query=${encodeURIComponent(query)}&instance=${encodeURIComponent(userInstance)}`)
                 .then(response => {
                     if (!response.ok) {
