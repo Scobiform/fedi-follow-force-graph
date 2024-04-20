@@ -231,9 +231,7 @@
 
                 // Set the text color only white for instance nodes
                 ctx.fillStyle = node.type === 'instance' ? '#F9F5F1' : ctx.fillStyle;
-
-                // Draw the text label based on the node type (instance larger)
-                ctx.fillText(label, node.x, node.y + imgSize / 2 + fontSize);
+                ctx.fillText(label, node.x, node.y);
 
                 ctx.restore();
             })
