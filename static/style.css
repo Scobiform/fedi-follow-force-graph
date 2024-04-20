@@ -182,7 +182,6 @@ nav p {
   overflow-y: scroll;
   /* do not ashow scrollbar */
   scrollbar-width: none;
-  top: 1vh;
 }
 
 #settingsPanel h2 {
