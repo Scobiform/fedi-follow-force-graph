@@ -190,7 +190,7 @@ nav p {
   color: var(--secondary-color);
   padding: 0.42rem;
   overflow-y: scroll;
-  max-height: 14vh;
+  max-height: 21vh;
 }
 
 input[type="text"] {
