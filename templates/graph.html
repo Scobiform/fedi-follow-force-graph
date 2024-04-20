@@ -10,6 +10,10 @@
     <label fore="instanceSizeSlider">Instance Size: </label>
         <input type="range" id="instanceSizeSlider" min="0.7" max="2800" value="560" step="0.7" aria-label="Instance Size">
 </div>
+<div id="spinnerContainer" style="{{ 'display: block;' if show_spinner else 'display: none;' }}">
+    <div class="spinner"></div>
+</div>
+</div>
 <script>
 
     // This script is loaded when the graph page is opened
@@ -73,14 +77,23 @@
         let items = [];
 
         let url = `${apiBaseUrl}/${endpoint}?user_id=${userId}`;
+
+        // Show spinner
+        document.getElementById('spinnerContainer').style.display = 'block';
         
-        const response = await fetch(url);
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            console.log(`Received data length: ${data.length}`); // Debugging output
 
-        const data = await response.json();
-        console.log(`Received data length: ${data.length}`); // Debugging output
-
-        // Add new items to the array
-        items = items.concat(data);
+            // Add new items to the array
+            items = items.concat(data);
+        } catch (error) {
+            console.error('Failed to fetch items:', error);
+        } finally {
+            // Hide spinner
+            document.getElementById('spinnerContainer').style.display = 'none';
+        }
 
         return items;
     }
