@@ -316,9 +316,12 @@
     window.filterNodes = function(filterType) {
         const visibleNodes = new Set();
 
+        // Parse the filterType argument to handle multiple types if needed
+        const typesToShow = filterType.split('+'); // Split filter types by '+'
+
         // Add directly visible nodes based on filter type.
         graphData.nodes.forEach(node => {
-            if (filterType === 'all' || node.type === filterType) {
+            if (filterType === 'all' || typesToShow.includes(node.type)) {
                 visibleNodes.add(node.id);
             }
         });
@@ -339,6 +342,7 @@
         // Update the graph with the filtered data.
         graph.graphData(filteredData);
     }
+
 
     // Function to update graph values based on the slider
     document.addEventListener('DOMContentLoaded', function() {
