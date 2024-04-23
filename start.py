@@ -7,9 +7,10 @@ import aiofiles
 from dotenv import load_dotenv
 from mastodon import Mastodon
 from quart import Quart, abort, jsonify, render_template, render_template_string, request, redirect, session, url_for
+from quart_auth import QuartAuth, login_required
 from app.configuration import ConfigurationManager
 from app.secrets import SecretManager
-from app.websocket import ConnectionManager
+from app.websocket import ConnectionManager, add_connection, remove_connection, broadcast_message
 
 # Load environment variables from .env file
 load_dotenv() 
@@ -35,10 +36,15 @@ async def setup_app():
     app.secret_key = await secret_manager.get_or_create_app_secret()
     global config
     config = await configuration_manager.load_config()
+    global websocket
+    websocket = ConnectionManager()
 
     # Mastodon client
     global mastodon
     mastodon = await secret_manager.get_or_create_client_secret()
+
+    # Auth
+    QuartAuth(app)
 
     # Logging
     logging_config = config['logging']
@@ -150,6 +156,24 @@ async def webhook():
         return 'OK'
     else:
         return 'Push was not to master branch', 200
+
+@app.websocket("/ws")
+@login_required
+async def ws():
+    current_ws = websocket._get_current_object()
+    add_connection(current_ws)
+    try:
+        while True:
+            # Receive a message from the client
+            message = await websocket.receive()
+            # Broadcast the message to all connected clients
+            await broadcast_message(message)
+    except:
+        # Handle exceptions, e.g., client disconnecting
+        await broadcast_message("Client disconnected.")
+        pass
+    finally:
+        remove_connection(current_ws)
 
 @app.route('/user', methods=['GET'])
 async def fetch_user():
