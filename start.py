@@ -124,7 +124,7 @@ async def callback():
         # Create a QuartAuth user and log them in
         auth_user = AuthUser(str(user.id))
         login_user(auth_user)
-
+        
         return redirect(url_for('home'))
     except Exception as e:
         logging.error(f"Login error: {e}")
@@ -190,6 +190,7 @@ async def ws():
         websocket.remove_connection(current_ws)
 
 @app.route('/user', methods=['GET'])
+@login_required
 async def fetch_user():
     ''' Fetch a user from the instance.'''
     user_id = request.args.get('user_id', type=int)
@@ -203,6 +204,7 @@ async def fetch_user():
         return jsonify({'error': str(e)}), 500
 
 @app.route('/followers', methods=['GET'])
+@login_required
 async def fetch_followers():
     ''' Fetch the followers of a user.'''
     user_id = request.args.get('user_id', type=int)
@@ -223,6 +225,7 @@ async def fetch_followers():
         return jsonify({'error': str(e)}), 500
 
 @app.route('/following', methods=['GET'])
+@login_required
 async def fetch_following():
     ''' Fetch the users that a user is following.'''
     user_id = request.args.get('user_id', type=int)
@@ -243,6 +246,7 @@ async def fetch_following():
         return jsonify({'error': str(e)}), 500
 
 @app.route('/search', methods=['GET'])
+@login_required
 async def search():
     ''' Search for users on the instance.'''
     # session['access_token']
