@@ -23,16 +23,17 @@ Mastodon analytics tool that generates a force graph to visually represent the r
 
 ```plaintext
 
-Python
-    dotenv
-    mastodon.py
-    quart
+Python:
+    dotenv - BSD-3-Clause License
+    Mastodon.py - AGPL-3.0 License
+    Quart - MIT License
+    Quart-Auth - MIT License
 
-JavsScript
-    force-graph
-    d3-quadtree
-    d3-force
-    element-resize-detector
+JavaScript:
+    force-graph - MIT License
+    d3-quadtree - BSD-3-Clause License
+    d3-force - BSD-3-Clause License
+    element-resize-detector - MIT License
 
 ```
 
