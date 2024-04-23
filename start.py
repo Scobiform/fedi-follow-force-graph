@@ -7,7 +7,7 @@ import aiofiles
 from dotenv import load_dotenv
 from mastodon import Mastodon
 from quart import Quart, abort, jsonify, render_template, render_template_string, request, redirect, session, url_for
-from quart_auth import QuartAuth, login_required
+from quart_auth import AuthUser, QuartAuth, login_required, login_user, logout_user
 from app.configuration import ConfigurationManager
 from app.secrets import SecretManager
 from app.websocket import ConnectionManager, add_connection, remove_connection, broadcast_message
@@ -91,6 +91,9 @@ async def login():
 async def logout():
     ''' Logout route for the application.'''
     session.pop('access_token', None)
+    # Log the user out
+    logout_user()
+
     return redirect(url_for('home'))
 
 @app.route('/callback')
@@ -111,6 +114,14 @@ async def callback():
 
         # Save the access token in the session
         session['access_token'] = access_token
+
+        # Fetch the authenticated user
+        user = mastodon.account_verify_credentials()
+
+        # Create a QuartAuth user and log them in
+        auth_user = AuthUser(str(user.id))
+        login_user(auth_user)
+
         return redirect(url_for('home'))
     except Exception as e:
         logging.error(f"Login error: {e}")
