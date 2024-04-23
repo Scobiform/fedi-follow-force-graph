@@ -10,7 +10,7 @@ from quart import Quart, abort, jsonify, render_template, render_template_string
 from quart_auth import AuthUser, QuartAuth, login_required, login_user, logout_user
 from app.configuration import ConfigurationManager
 from app.secrets import SecretManager
-from app.websocket import ConnectionManager, add_connection, remove_connection, broadcast_message
+from app.websocket import ConnectionManager
 
 # Load environment variables from .env file
 load_dotenv() 
@@ -172,19 +172,19 @@ async def webhook():
 @login_required
 async def ws():
     current_ws = websocket._get_current_object()
-    add_connection(current_ws)
+    websocket.add_connection(current_ws)
     try:
         while True:
             # Receive a message from the client
             message = await websocket.receive()
             # Broadcast the message to all connected clients
-            await broadcast_message(message)
+            await websocket.broadcast_message(message)
     except:
         # Handle exceptions, e.g., client disconnecting
-        await broadcast_message("Client disconnected.")
+        await websocket.broadcast_message("Client disconnected.")
         pass
     finally:
-        remove_connection(current_ws)
+        websocket.remove_connection(current_ws)
 
 @app.route('/user', methods=['GET'])
 async def fetch_user():
