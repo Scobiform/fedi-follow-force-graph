@@ -142,7 +142,7 @@ async def health():
             "message": app_status,
             "color": color
         }
-)
+    )
 
 @app.route('/webhook', methods=['POST'])
 async def webhook():

@@ -1,3 +1,4 @@
+
 :root {
   --primary-color: #031404;
   --secondary-color: #f4f4f4;
@@ -12,7 +13,6 @@
 * {
   box-sizing: border-box;
 }
-
 html, body {
   margin: 0;
   padding: 0;
