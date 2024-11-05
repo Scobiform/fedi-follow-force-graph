@@ -1,8 +1,5 @@
 asyncio
 logging
-os
-re
-subprocess
 aiofiles
 python-dotenv
 Mastodon.py
