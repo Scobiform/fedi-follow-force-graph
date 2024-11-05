@@ -1,0 +1,10 @@
+asyncio
+logging
+os
+re
+subprocess
+aiofiles
+python-dotenv
+Mastodon.py
+quart
+quart-auth
